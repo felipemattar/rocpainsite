@@ -6,6 +6,7 @@
 	<link id='-gd-engine-icon' rel='icon' type='image/png' href='favicon.png' />
 	<title>Amigo Autista</title>
 	<style type='text/css'>
+
 		#exampleImage { cursor:zoom-in; }
 		#exampleImage:-webkit-full-screen { cursor:zoom-out; }
 		#exampleImage:-moz-full-screen { cursor:zoom-out; }
@@ -33,6 +34,7 @@
         button {
             outline:none;  
         }
+
 		body {
 			touch-action: none;
 			margin: 0;
@@ -166,7 +168,7 @@
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":3488688,"index.wasm":18105040},"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":3488304,"index.wasm":9732695},"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
@@ -271,51 +273,51 @@
 		})();
 	//]]></script>
 <script>
-function rotate(div) {
-  var className = button_image.getAttribute("class");
-  if(className=="rotate0") {
-    button_image.className = "rotate180";
-  }
-  else{
-    div.className = "rotate0";
-  }
-}
-    
-    
-function toggleFullscreen(elem) {
-  elem = elem || document.documentElement;
-  if (!document.fullscreenElement && !document.mozFullScreenElement &&
-    !document.webkitFullscreenElement && !document.msFullscreenElement) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
-}
+	function rotate(div) {
+	  var className = button_image.getAttribute("class");
+	  if(className=="rotate0") {
+	    button_image.className = "rotate180";
+	  }
+	  else{
+	    div.className = "rotate0";
+	  }
+	}
+	    
+	    
+	function toggleFullscreen(elem) {
+	  elem = elem || document.documentElement;
+	  if (!document.fullscreenElement && !document.mozFullScreenElement &&
+	    !document.webkitFullscreenElement && !document.msFullscreenElement) {
+	    if (elem.requestFullscreen) {
+	      elem.requestFullscreen();
+	    } else if (elem.msRequestFullscreen) {
+	      elem.msRequestFullscreen();
+	    } else if (elem.mozRequestFullScreen) {
+	      elem.mozRequestFullScreen();
+	    } else if (elem.webkitRequestFullscreen) {
+	      elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+	    }
+	  } else {
+	    if (document.exitFullscreen) {
+	      document.exitFullscreen();
+	    } else if (document.msExitFullscreen) {
+	      document.msExitFullscreen();
+	    } else if (document.mozCancelFullScreen) {
+	      document.mozCancelFullScreen();
+	    } else if (document.webkitExitFullscreen) {
+	      document.webkitExitFullscreen();
+	    }
+	  }
+	}
 
-document.getElementById('btnFullscreen').addEventListener('click', function() {
-  toggleFullscreen();
-});
+	document.getElementById('btnFullscreen').addEventListener('click', function() {
+	  toggleFullscreen();
+	});
 
-document.getElementById('exampleImage').addEventListener('click', function() {
-  toggleFullscreen(this);
-});
-</script>
+	document.getElementById('exampleImage').addEventListener('click', function() {
+	  toggleFullscreen(this);
+	});
+	</script>
 </body>
 </html>
 
