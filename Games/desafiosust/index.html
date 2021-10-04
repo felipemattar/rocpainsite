@@ -252,6 +252,7 @@
 				setStatusMode('indeterminate');
 				engine.startGame({
 					'onProgress': function (current, total) {
+						engine.setProgressFunc(printProgress);
 						if (total > 0) {
 							statusProgressInner.style.width = current/total * 100 + '%';
 							setStatusMode('progress');
@@ -271,6 +272,10 @@
 				}, displayFailureNotice);
 			}
 		})();
+		function printProgress(current, total) {
+		    console.log("Loaded " + current + " of " + total + " bytes");
+		}
+			  
 	//]]></script>
 <script>
 	function rotate(div) {
@@ -281,9 +286,7 @@
 	  else{
 	    div.className = "rotate0";
 	  }
-	}
-	    
-	    
+	}  
 	function toggleFullscreen(elem) {
 	  elem = elem || document.documentElement;
 	  if (!document.fullscreenElement && !document.mozFullScreenElement &&
