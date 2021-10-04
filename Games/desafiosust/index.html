@@ -168,7 +168,7 @@
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":2033280,"index.wasm":10206404},"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":3141920,"index.wasm":10206404},"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
@@ -254,8 +254,8 @@
 					'onProgress': function (current, total) {
 						if (total > 0) {
 							statusProgressInner.style.width = current/total * 100 + '%';
-							setStatusMode('progress');
 							console.log("Loaded " + current + " of " + total + " bytes");
+							setStatusMode('progress');
 							if (current === total) {
 								// wait for progress bar animation
 								setTimeout(() => {
@@ -284,6 +284,7 @@
 	  }
 	}  
 	function toggleFullscreen(elem) {
+	  console.log('Engine has started!');
 	  elem = elem || document.documentElement;
 	  if (!document.fullscreenElement && !document.mozFullScreenElement &&
 	    !document.webkitFullscreenElement && !document.msFullscreenElement) {
