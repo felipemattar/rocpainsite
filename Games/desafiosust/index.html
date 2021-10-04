@@ -252,10 +252,10 @@
 				setStatusMode('indeterminate');
 				engine.startGame({
 					'onProgress': function (current, total) {
-						engine.setProgressFunc(printProgress);
 						if (total > 0) {
 							statusProgressInner.style.width = current/total * 100 + '%';
 							setStatusMode('progress');
+							console.log("Loaded " + current + " of " + total + " bytes");
 							if (current === total) {
 								// wait for progress bar animation
 								setTimeout(() => {
@@ -272,10 +272,6 @@
 				}, displayFailureNotice);
 			}
 		})();
-		function printProgress(current, total) {
-		    console.log("Loaded " + current + " of " + total + " bytes");
-		}
-			  
 	//]]></script>
 <script>
 	function rotate(div) {
