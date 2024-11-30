@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>ROCPAIN GAMES</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link id='-gd-engine-icon' rel='icon' type='image/png' href='imagens/favicon.png' />
+</style>
+
+<body>
+        <!-- End page content -->
+        <script>
+            // Script to open and close sidebar
+            function w3_open() {
+                document.getElementById("mySidebar").style.display = "block";
+                document.getElementById("myOverlay").style.display = "block";
+            }
+
+            function w3_close() {
+                document.getElementById("mySidebar").style.display = "none";
+                document.getElementById("myOverlay").style.display = "none";
+            }
+
+            window.onload = function check_language() {
+
+           var ln = navigator.language || navigator.userLanguage;
+           if (ln == 'en') {
+             console.log("english")
+             window.location.replace("index_en.html");
+           } else if (ln == 'pt') {
+             console.log("portugues")
+             window.location.replace("index_pt.html");
+           }else{
+             console.log("desconocido")
+             window.location.replace("index_en.html");
+           }
+
+        }
+        </script>
+    
+</body></html>
