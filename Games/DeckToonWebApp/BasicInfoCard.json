@@ -1,0 +1,2509 @@
+[
+  {
+    "Name": "Infantry",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [],
+    "Description":
+    {
+      "Description": "Basic Card with 1 Attack and 1 Health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 1,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Engineer",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 2,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [],
+    "Description":
+    {
+      "Description": "Basic Card with 2 Attack and 2 Health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 2,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Assassin",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 3,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 3,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [],
+    "Description":
+    {
+      "Description": "Basic Card with 3 Attack and 3 Health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "First_Day_Medic",
+    "Class": "Warrior",
+    "Type": "S p e l l",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Player Health",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: This Card gives the player +1 health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 0,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Increase Player Health"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Medic",
+    "Class": "Warrior",
+    "Type": "S p e l l",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Player Health",
+        "Ability_Int": 3,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: This Card gives the player +3 health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Increase Player Health"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Experienced_Medic",
+    "Class": "Warrior",
+    "Type": "S p e l l",
+    "Rarity": "Legendary",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 3,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Player Health",
+        "Ability_Int": 10,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: This Card gives the player +10 health"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 5,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Increase Player Health"
+      ],
+      "Card_Value": 5,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Copy_Cat",
+    "Class": "Spy",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Clone",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When placed, this card will clone itself '1' times."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player",
+        "Playing Cards"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Masked_Spy",
+    "Class": "Spy",
+    "Type": "C r e a t u r e",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 2,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Clone",
+        "Ability_Int": 2,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When placed, this card will clone itself '2' times."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 5,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player",
+        "Playing Cards"
+      ],
+      "Card_Value": 2,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Mirror_Mirror",
+    "Class": "Spy",
+    "Type": "C r e a t u r e",
+    "Rarity": "Ultra-Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 3,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 3,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Clone",
+        "Ability_Int": 3,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When placed, this card will clone itself '3' times."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 9,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player",
+        "Playing Cards"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Angry_Dwarf",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Attack",
+        "Ability_Int": 2,
+        "Trigger": "Takes Damage",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Every time this card takes damage, its attack increases by '2'."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": [
+        "Can Recieve Self Interaction If does not Remove Card from Play (AI Only)"
+      ]
+    }
+  },
+  {
+    "Name": "Angry_Turtle",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 2,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 3,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Attack",
+        "Ability_Int": 2,
+        "Trigger": "Takes Damage",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Every time this card takes damage, its attack increases by '3'."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 5,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [],
+      "InteractionConditions": [
+        "Can Recieve Self Interaction If does not Remove Card from Play (AI Only)"
+      ]
+    }
+  },
+  {
+    "Name": "Angry_Ex",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_2.Character_2'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_2_Mat_Inst.Character_2_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 3,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 6,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Attack",
+        "Ability_Int": 3,
+        "Trigger": "Takes Damage",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Every time this card takes damage, its attack increases by '3'."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 7,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 7,
+      "PlayConditions": [],
+      "InteractionConditions": [
+        "Can Recieve Self Interaction If does not Remove Card from Play (AI Only)"
+      ]
+    }
+  },
+  {
+    "Name": "The_Scribe",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Draw Card(s)",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Pickup an additional +1 Cards"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 0,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "The_Book_Keeper",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Draw Card(s)",
+        "Ability_Int": 2,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Pickup an additional +2 Cards"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 1,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards"
+      ],
+      "Card_Value": 2,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "The_Librarian",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Ultra-Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Draw Card(s)",
+        "Ability_Int": 3,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Pickup an additional +3 Cards."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Mysterious_Totum",
+    "Class": "Obelisk",
+    "Type": "A u r a",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 10,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Player Health",
+        "Ability_Int": 2,
+        "Trigger": "Start of Turn",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: This 'Mysterious Totum' gives the player '2' health at the start of each turn. "
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 6,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Increase Player Health"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Spiky_Thornbush",
+    "Class": "Obelisk",
+    "Type": "A u r a",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 4,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Retaliation Damage",
+        "Ability_Int": 2,
+        "Trigger": "Takes Damage",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When this card takes damage, the card deals '2' retaliation damage back to the attacking card.  (Placed on opponents side)"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Opponent",
+      "Mana_Cost": 4,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Opponent Hindrance"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": [
+        "Can Recieve Self Interaction (AI Only)",
+        "Card can only recieve interaction on owned placement"
+      ]
+    }
+  },
+  {
+    "Name": "Unstable_Material",
+    "Class": "Obelisk",
+    "Type": "T r a p",
+    "Rarity": "Legendary",
+    "Special": true,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_2.Character_2'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_2_Mat_Inst.Character_2_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 5,
+      "Life_Expectancy": 2,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Damage All Cards on Board",
+        "Ability_Int": 2,
+        "Trigger": "Death by Life Expectancy",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: This 'Unstable Material' deals '2' damage to all cards after '2' turns of being on the board. "
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 4,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 2,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Opponent Hindrance"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [
+        "Play when creatures are on the board (Opponent)(AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Short_Summoner",
+    "Class": "Mage",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": false,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Spawn Random Card from Deck",
+        "Ability_Int": 1,
+        "Trigger": "Start of Turn",
+        "After_Use_State": "Single Use - Send to Graveyard Before Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: At the start of the next owning players turn, Short Summoner will Draw a random card from the deck in its place. This card can only attack other cards, and not the opponent directly."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Playing Cards"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Short_Decoy",
+    "Class": "Obelisk",
+    "Type": "S p e l l",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [],
+    "Description":
+    {
+      "Description": "A decoy has been placed as the spawning card runs away."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 1,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [],
+      "Card_Value": 0,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Cats_Foot",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Un-common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Give Turn Points to All Active Cards",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Gives all owning player cards a second chance, with +1 addtional turn point to use. "
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 6,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [
+        "Play when creatures are on the board (Self)(AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "WildFire",
+    "Class": "Mage",
+    "Type": "T r a p",
+    "Rarity": "Ultra-Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign2.CardDesign2'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Red_Mat_Inst.CardFrame_Red_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Vermelho.Telas_-_Deck_Builder_Botão_Vermelho'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 4,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Clone",
+        "Ability_Int": 1,
+        "Trigger": "End Of Turn",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: It spreads like Wildfire! This card clones itself at the end of each owning players turn. (Placed on opponents side)"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Opponent",
+      "Mana_Cost": 0,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Opponent Hindrance"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": [
+        "Card can only recieve interaction on owned placement",
+        "Can Recieve Self Interaction (AI Only)"
+      ]
+    }
+  },
+  {
+    "Name": "Ticking_Timer",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_2.Character_2'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_2_Mat_Inst.Character_2_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 8,
+      "Mana_Cost": 3,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 5,
+      "Life_Expectancy": 3,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [],
+    "Description":
+    {
+      "Description": "Lifetime: This card will only last 3 Turns in play then it will be sent to the graveyard. Attacking with this card also costs '3' Mana."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "BoomBox",
+    "Class": "Obelisk",
+    "Type": "C r e a t u r e",
+    "Rarity": "Legendary",
+    "Special": true,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Purple.CardDesign_Purple'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Purple_Mat_Inst.CardFrame_Purple_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_2_Mat_Inst.Character_2_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Roxo.Telas_-_Deck_Builder_Botão_Roxo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 7,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Spawn Random Card from Deck",
+        "Ability_Int": 3,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard Before Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      },
+      {
+        "Type": "None",
+        "Ability_Int": 0,
+        "Trigger": "None",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: BoomBox brings the party to the table! Spawns '3' Random cards from the deck, and draws one card into the hand. "
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 8,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 1,
+      "Weight": 3,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Playing Cards"
+      ],
+      "Card_Value": 5,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Archer",
+    "Class": "Warrior",
+    "Type": "C r e a t u r e",
+    "Rarity": "Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": false,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 4,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Increase Turn Points ",
+        "Ability_Int": 3,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      },
+      {
+        "Type": "Increase Turn Points ",
+        "Ability_Int": 3,
+        "Trigger": "Start of Turn",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "This card can opponents cards attack '4' times per turn."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 4,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Sacraficial_Lamb",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Discard Cards In Hand",
+        "Ability_Int": 2,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      },
+      {
+        "Type": "Draw Card(s)",
+        "Ability_Int": 2,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Remove '2' random cards from the players hand and pickup '2' card from the deck"
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [
+        "Play at start of turn (AI Only)",
+        "Play when low playable card in hand (AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Grim_The_Reaper",
+    "Class": "Mage",
+    "Type": "C r e a t u r e",
+    "Rarity": "Legendary",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Blue_Mat_Inst.CardFrame_Blue_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Azul.Telas_-_Deck_Builder_Botão_Azul'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 2,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Discard Cards In Hand",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Opponent",
+        "Particle": "None",
+        "SoundCue": "None"
+      },
+      {
+        "Type": "Discard Cards In Hand",
+        "Ability_Int": 1,
+        "Trigger": "Sent To Graveyard",
+        "After_Use_State": "Single Use - Send to Graveyard Before Ability",
+        "Affecting_Player": "Opponent",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: One random card from the opponents hand is sent directly to the graveyard when this card is played, and when sent to the gravyard."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Opponent Hindrance",
+        "Damage Cards",
+        "Damage Opponent Player"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Creature_Reborn",
+    "Class": "Mage",
+    "Type": "S p e l l",
+    "Rarity": "Ultra-Rare",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_4.Character_4'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_4_Mat_Inst.Character_4_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Pickup first creature in the graveyard (To Board)",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard Before Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When placed, this card will bring the first creature back from your graveyard onto your side of the board. "
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Playing Cards"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [
+        "Play when there are cards in the graveyard (AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Time_Wizard",
+    "Class": "Mage",
+    "Type": "B o o s t e r",
+    "Rarity": "Rare",
+    "Special": true,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Pickup first creature in the graveyard (To Hand)",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: Pickup the last card to enter the graveyard and place it back in your hand."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 1,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards"
+      ],
+      "Card_Value": 2,
+      "PlayConditions": [
+        "Play when there are cards in the graveyard (AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Soul_Possession",
+    "Class": "Mage",
+    "Type": "S p e l l",
+    "Rarity": "Legendary",
+    "Special": true,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Purple.CardDesign_Purple'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_2.Character_2'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Purple_Mat_Inst.CardFrame_Purple_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_2_Mat_Inst.Character_2_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Roxo.Telas_-_Deck_Builder_Botão_Roxo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Possess Opponents Card",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard Before Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "When Placed, a random opponents card will become posessed and will be brought over to your side of the board."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 3,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Playing Cards",
+        "Opponent Hindrance"
+      ],
+      "Card_Value": 4,
+      "PlayConditions": [
+        "Play when creatures are on the board (Opponent)(AI Only)",
+        "Play at start of turn (AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "Influential_Trader",
+    "Class": "Spy",
+    "Type": "T r a p",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Yellow.CardDesign_Yellow'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_3.Character_3'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Yellow_Mat_Inst.CardFrame_Yellow_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_3_Mat_Inst.Character_3_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Amarelo.Telas_-_Deck_Builder_Botão_Amarelo'"
+    },
+    "Attack":
+    {
+      "Damage": 0,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Swap Cards In Hand",
+        "Ability_Int": 0,
+        "Trigger": "On Drop",
+        "After_Use_State": "Single Use - Send to Graveyard After Ability",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Both Opponents swap the cards in their hands."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 4,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Picking up cards",
+        "Opponent Hindrance"
+      ],
+      "Card_Value": 3,
+      "PlayConditions": [
+        "Play when low playable card in hand (AI Only)"
+      ],
+      "InteractionConditions": []
+    }
+  },
+  {
+    "Name": "NEW",
+    "Class": "Spy",
+    "Type": "C r e a t u r e",
+    "Rarity": "Common",
+    "Special": false,
+    "Visual":
+    {
+      "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign_Green.CardDesign_Green'",
+      "Image_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/Character_1.Character_1'",
+      "Back_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardBacking.CardBacking'",
+      "Frame_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardFrame_Green_Mat_Inst.CardFrame_Green_Mat_Inst'",
+      "Image_Material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/Character_1_Mat_Inst.Character_1_Mat_Inst'",
+      "Back_material": "/Script/Engine.MaterialInstanceConstant'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Materials/CardBack_Blue_Mat_Inst.CardBack_Blue_Mat_Inst'",
+      "FrameColorMenu": "/Script/Engine.Texture2D'/Game/CCGToolkit/NewUI/Textures/Telas_-_Deck_Builder_Botão_Verde.Telas_-_Deck_Builder_Botão_Verde'"
+    },
+    "Attack":
+    {
+      "Damage": 1,
+      "Mana_Cost": 0,
+      "CanAttackPlayer": true,
+      "CanAttackCards": true,
+      "Damage_Type": "Basic",
+      "Attack_Particle": "None",
+      "Attack_SoundCue": "None"
+    },
+    "Health":
+    {
+      "Health": 1,
+      "Life_Expectancy": 0,
+      "Dealth_Particle": "None",
+      "Sound_Cue_Death": "None"
+    },
+    "Abilities": [
+      {
+        "Type": "Clone",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      },
+      {
+        "Type": "Draw Card(s)",
+        "Ability_Int": 1,
+        "Trigger": "On Drop",
+        "After_Use_State": "Remain In Play",
+        "Affecting_Player": "Self",
+        "Particle": "None",
+        "SoundCue": "None"
+      }
+    ],
+    "Description":
+    {
+      "Description": "Ability: When placed, this card will clone itself '1' times."
+    },
+    "Placement_Settings":
+    {
+      "Owner": "Self",
+      "Mana_Cost": 2,
+      "Entry_Particle": "None",
+      "Entry_SoundCue": "None"
+    },
+    "DeckSettings":
+    {
+      "Unlocked": true,
+      "AddToPlayerDeck": true,
+      "MaxNumInDeck": 3,
+      "Weight": 0,
+      "ScreenSize":
+      {
+        "X": 512,
+        "Y": 768
+      }
+    },
+    "Card_System_Data":
+    {
+      "Card_Purpose": [
+        "Damage Cards",
+        "Damage Opponent Player",
+        "Playing Cards"
+      ],
+      "Card_Value": 1,
+      "PlayConditions": [],
+      "InteractionConditions": []
+    }
+  }
+]
