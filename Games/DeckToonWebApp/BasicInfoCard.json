@@ -4,7 +4,7 @@
     "Class": "Warrior",
     "Type": "C r e a t u r e",
     "Rarity": "Common",
-    "Special": true,
+    "Special": false,
     "Visual":
     {
       "Frame_Texture": "/Script/Engine.Texture2D'/Game/CCGToolkit/CardGame/CardSets/Basic_Set/Textures/CardDesign.CardDesign'",
