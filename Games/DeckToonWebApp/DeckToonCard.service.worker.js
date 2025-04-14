@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1744606038|47923871988';
+const CACHE_VERSION = '1744609542|51428223981';
 /** @type {string} */
 const CACHE_PREFIX = 'DeckToonCard-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
