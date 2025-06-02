@@ -1871,7 +1871,7 @@
     },
     "Abilities": [
       {
-        "Type": "Increase Turn Points ",
+        "Type": "Increase Turn Points",
         "Ability_Int": 3,
         "Trigger": "On Drop",
         "After_Use_State": "Remain In Play",
@@ -1880,7 +1880,7 @@
         "SoundCue": "None"
       },
       {
-        "Type": "Increase Turn Points ",
+        "Type": "Increase Turn Points",
         "Ability_Int": 3,
         "Trigger": "Start of Turn",
         "After_Use_State": "Remain In Play",

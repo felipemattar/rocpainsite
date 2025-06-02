@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1744611899|53785758223';
+const CACHE_VERSION = '1748881038|8992227933';
 /** @type {string} */
 const CACHE_PREFIX = 'DeckToonCard-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
@@ -17,7 +17,7 @@ const ENSURE_CROSSORIGIN_ISOLATION_HEADERS = true;
 const CACHED_FILES = ["DeckToonCard.html","DeckToonCard.js","DeckToonCard.offline.html","DeckToonCard.icon.png","DeckToonCard.apple-touch-icon.png","DeckToonCard.audio.worklet.js","DeckToonCard.audio.position.worklet.js"];
 // Files that we might not want the user to preload, and will only be cached on first load.
 /** @type {string[]} */
-const CACHEABLE_FILES = ["DeckToonCard.wasm","DeckToonCard.pck"];
+const CACHEABLE_FILES = ["DeckToonCard.wasm","DeckToonCard.pck","DeckToonCard.side.wasm"];
 const FULL_CACHE = CACHED_FILES.concat(CACHEABLE_FILES);
 
 self.addEventListener('install', (event) => {
