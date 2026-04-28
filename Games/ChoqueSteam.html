@@ -299,8 +299,14 @@
             height: 100%;
             border: none;
         }
+        /* rolagem suave e ajuste para header fixo */
+        html {
+            scroll-behavior: smooth;
+        }
 
-
+        section[id], div[id], h2[id] {
+            scroll-margin-top: 80px; /* altura do header + espaço */
+        }
     </style>
 </head>
 <body>
@@ -311,10 +317,10 @@
         <p>Felipe Mattar — games · sound · cinema</p>
     </div>
     <div class="nav-links">
-        <a href="#">Games</a>
-        <a href="#">Film & Sound</a>
-        <a href="#">Studio</a>
-        <a href="#">Contact</a>
+        <a href="#games">Games</a>
+        <a href="#film">Film & Sound</a>
+        <a href="#studio">Studio</a>
+        <a href="#contact">Contact</a>
     </div>
 </header>
 
@@ -323,14 +329,14 @@
     <div class="hero">
         <h2>Building <span class="highlight">sonic worlds</span><br>for games and cinema</h2>
         <p>ROCPAIN Games is the studio of Felipe Mattar — game developer, sound designer, and editor. Combining hiper-realismo sonoro with bold game design, Felipe creates immersive experiences that blur the line between play and film.</p>
-        <div>
+     <!--   <div>
             <a href="#" class="btn-primary">🎮 Explore Games</a>
             <a href="#" class="btn-outline">🎬 Film Portfolio</a>
-        </div>
+        </div>-->
     </div>
 
     <!-- ===== ALL 4 GAMES ===== -->
-    <h2 class="section-title">🎮 Games (4 titles)</h2>
+    <h2 id="games" class="section-title">🎮 Games</h2>
     <div class="games-grid">
         <a href="https://store.steampowered.com/app/3903170/Decktoon/" target="_blank" rel="noopener noreferrer" class="game-card">
             <img class="game-img" src="ChoqueImages/hero_capsule (2).jpg" alt="DeckToon">
@@ -374,8 +380,8 @@
         </a>
     </div>
 
-        !-- ===== FILM & SOUND DESIGN PORTFOLIO ===== -->
-    <h2 class="section-title">🎬 Film & sound design</h2>
+        <!-- ===== FILM & SOUND DESIGN PORTFOLIO ===== -->
+    <h2 id="film" class="section-title">🎬 Film & sound design</h2>
     <div class="film-grid">
         <div class="film-card">
             <div class="video-container">
@@ -422,7 +428,7 @@
     </div>
 
     <!-- Developer spotlight (Felipe) -->
-    <div class="spotlight">
+    <div id="studio" class="spotlight">
         <div class="spotlight-text">
             <h3>Felipe Mattar</h3>
             <p>Mestre em Artes pela UFES (2018), designer gráfico, sound designer e desenvolvedor de jogos. Professor substituto no Departamento de Design/UFES (2018–2019). Fundador da EXP Movies.</p>
@@ -432,13 +438,13 @@
                 <a href="https://fmattar.wixsite.com/mattar" target="_blank">📁 Wix Portfolio →</a>
             </div>
         </div>
-        <div class="spotlight-img">
-            <img src="https://placehold.co/300x300/222/f5a623?text=Felipe" alt="Felipe Mattar">
-        </div>
+    <!--    <div class="spotlight-img">
+            <img src="https://placehold.co/300x300/222/f5a623?text=Felipea" alt="Felipe Mattar">
+        </div>-->
     </div>
 
     <!-- brief contact / social footer inside main? optional -->
-    <div style="text-align: center; margin: 2rem 0;">
+    <div id="contact" style="text-align: center; margin: 2rem 0;">
         <p style="color: var(--text-secondary);">Interested in collaboration or sound design for your project? Get in touch.</p>
         <a href="mailto:rocpaingames@gmail.com" class="btn-primary" style="background: #2a3a48; color: white;">✉️ rocpaingames@gmail.com</a>
     </div>
@@ -446,11 +452,8 @@
 
 <footer>
     <div class="social-links">
-        <a href="#">Steam (coming soon)</a>
-        <a href="#">itch.io</a>
-        <a href="#">Twitter / X</a>
+        <a href="https://store.steampowered.com/developer/rocpaingames">Steam</a>
         <a href="https://fmattar.wixsite.com/mattar">Wix Portfolio</a>
-        <a href="#">YouTube</a>
     </div>
     <p>© 2025 ROCPAIN Games — Felipe Mattar. Games, sound design & interactive narratives.<br>All projects shown are either released or in active development.</p>
 </footer>
