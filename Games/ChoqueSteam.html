@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ROCPAIN Games – Felipe Mattar | Games & Sound Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0f14;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Motiva Sans', sans-serif;
+            color: #d8e2f2;
+            line-height: 1.5;
+        }
+
+        /* ===== ROCPAIN THEME ===== */
+        :root {
+            --bg-dark: #070a0e;
+            --surface: #12181f;
+            --surface-light: #1a232e;
+            --accent: #f5a623;      /* warm orange – ROCPAIN signature */
+            --accent-glow: rgba(245, 166, 35, 0.2);
+            --text-primary: #f0f3fa;
+            --text-secondary: #9aaebf;
+            --border: #253040;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--accent);
+            transition: 0.2s;
+        }
+        a:hover {
+            color: #ffbc5e;
+        }
+
+        /* header */
+        .site-header {
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        /* hero */
+        .hero {
+            background: linear-gradient(135deg, #10171f, #080c12);
+            border-radius: 32px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(245,166,35,0.2);
+        }
+        .hero h2 {
+            font-size: 2.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .hero .highlight {
+            color: var(--accent);
+        }
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            color: #b9c7da;
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0f15;
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background: #ffb347;
+            transform: scale(1.02);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-left: 1rem;
+        }
+
+        /* section titles */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 2rem 0 1.5rem 0;
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        /* games grid (4) */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .game-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.2s;
+            border: 1px solid var(--border);
+        }
+        .game-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.5);
+        }
+        .game-img {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            background: #1f2937;
+        }
+        .game-info {
+            padding: 1.2rem;
+        }
+        .game-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+            color: white;
+        }
+        .game-badge {
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .game-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* film & sound section (grid) */
+        .film-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.8rem;
+            margin: 1.5rem 0;
+        }
+        .film-card {
+            background: var(--surface-light);
+            border-radius: 20px;
+            padding: 1.2rem;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        .film-card:hover {
+            border-color: var(--accent);
+        }
+        .film-card h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .film-role {
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+        .film-card p {
+            font-size: 0.8rem;
+        }
+
+        /* sound manifesto */
+        .sound-manifesto {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* developer spotlight */
+        .spotlight {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: var(--surface-light);
+            border-radius: 28px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            align-items: center;
+        }
+        .spotlight-text {
+            flex: 2;
+        }
+        .spotlight-text h3 {
+            font-size: 1.8rem;
+            color: white;
+        }
+        .spotlight-img {
+            flex: 1;
+            text-align: center;
+        }
+        .spotlight-img img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+        .award {
+            background: #1f2a33;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+        }
+
+        /* footer */
+        footer {
+            background: var(--bg-dark);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem;
+            }
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+        }
+        /* responsivo para vídeos embed */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="logo">
+        <h1>ROCPAIN Games</h1>
+        <p>Felipe Mattar — games · sound · cinema</p>
+    </div>
+    <div class="nav-links">
+        <a href="#">Games</a>
+        <a href="#">Film & Sound</a>
+        <a href="#">Studio</a>
+        <a href="#">Contact</a>
+    </div>
+</header>
+
+<main class="container">
+    <!-- Hero: multidisciplinary identity -->
+    <div class="hero">
+        <h2>Building <span class="highlight">sonic worlds</span><br>for games and cinema</h2>
+        <p>ROCPAIN Games is the studio of Felipe Mattar — game developer, sound designer, and editor. Combining hiper-realismo sonoro with bold game design, Felipe creates immersive experiences that blur the line between play and film.</p>
+        <div>
+            <a href="#" class="btn-primary">🎮 Explore Games</a>
+            <a href="#" class="btn-outline">🎬 Film Portfolio</a>
+        </div>
+    </div>
+
+    <!-- ===== ALL 4 GAMES ===== -->
+    <h2 class="section-title">🎮 Games (4 titles)</h2>
+    <div class="games-grid">
+        <a href="https://store.steampowered.com/app/3903170/Decktoon/" target="_blank" rel="noopener noreferrer" class="game-card">
+            <img class="game-img" src="ChoqueImages/hero_capsule (2).jpg" alt="DeckToon">
+            <div class="game-info">
+                <h3>DeckToon</h3>
+                <div class="game-badge">2026</div>
+                <p>Decktoon é um cardgame estratégico inspirado em quadrinhos brasileiros, onde você monta decks com personagens, cenas e reviravoltas para duelar em partidas dinâmicas cheias de combos, tática e emoção.</p>
+            </div>
+        </a>
+<!--        <a href="https://store.steampowered.com/app/3614650/Choque_de_Cultura_Racing/" target="_blank" rel="noopener noreferrer" class="game-card">
+            <img class="game-img" src="ChoqueImages/store_capsule_vertical.png" alt="Choque de Cultura Racing">
+            <div class="game-info">
+                <h3>Choque de Cultura Racing</h3>
+                <div class="game-badge">2025</div>
+                <p>Choque Racing é um Demo (prova de conceito) de corrida 3D caótico e irreverente, inspirado no transporte alternativo brasileiro. Pilote como Rogerinho, Julinho, Maurílio e Renan,  e domine as ruas em desafios insanos. Com multiplayer e mapas icônicos, a zoeira nunca para!</p>
+            </div>
+        </a> -->
+        <a href="https://store.steampowered.com/app/2601230/Cyber_Control/" target="_blank" rel="noopener noreferrer" class="game-card">
+            <img class="game-img" src="ChoqueImages/0hero_capsule.jpg" alt="Cyber Control">
+            <div class="game-info">
+                <h3>Cyber Control</h3>
+                <div class="game-badge">2024</div>
+                <p>Cyber Control é um jogo de puzzle platformer 3D que se passa em um futuro distópico, onde o jogador controla Jones Murdock ou Jenny Li, rebeldes que precisam escapar da rede cyber-neural dos Alpha, uma classe de super-humanos que domina a sociedade.</p>
+            </div>
+        </a>
+        <a href="https://store.steampowered.com/app/1642600/Mud_River/" target="_blank" rel="noopener noreferrer" class="game-card">
+            <img class="game-img" src="ChoqueImages/hero_capsule_brazilian.jpg" alt="Rio de Lama">
+            <div class="game-info">
+                <h3>Rio de Lama</h3>
+                <div class="game-badge">2021</div>
+                <p>Rio de Lama é um jogo 2D Shoot‘em Up horizontal. O Rio Doce era um paraíso para a humanidade e para os animais, mas agora ele se tornou um território destruído pelas atividades inescrupulosas do Dr. Wellin. Este é o primeiro destino de Pacal, subir o Rio Doce impedindo sua completa destruição.</p>
+            </div>
+        </a>
+        <a href="https://store.steampowered.com/app/2194910/ROCPAIN_Rock_Paper_Scissors/" target="_blank" rel="noopener noreferrer" class="game-card">
+            <img class="game-img" src="ChoqueImages/hero_capsule (1).jpg" alt="Rocpain">
+            <div class="game-info">
+                <h3>Rocpain</h3>
+                <div class="game-badge">2018</div>
+                <p>Estreia do estúdio: Um avião de papel luta contra pedra, papel e tesoura. A jogabilidade de ROCPAIN é inspirada no jogo de mão "Pedra, Papel e Tesoura", e como o jogo original, cada inimigo é destruído apenas com o tiro certo. Uma maneira de jogar diferente que vai desafiar seus reflexos.</p>
+            </div>
+        </a>
+    </div>
+
+        !-- ===== FILM & SOUND DESIGN PORTFOLIO ===== -->
+    <h2 class="section-title">🎬 Film & sound design</h2>
+    <div class="film-grid">
+        <div class="film-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/SUA_ID_AQUI" title="Das Águas que Passam trailer" allowfullscreen></iframe>
+            </div>
+            <h4>Das Águas que Passam</h4>
+            <div class="film-role">Sound editing · Winner Cine PE 2016 (Best Sound)</div>
+            <p>Short film exploring memory and water landscapes. Felipe created immersive soundscape that earned critical acclaim.</p>
+        </div>
+        <div class="film-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/SJv66w4hPDU" title="A Mata Negra trailer" allowfullscreen></iframe>
+            </div>
+            <h4>A Mata Negra</h4>
+            <div class="film-role">Sound designer & editor</div>
+            <p>Horror/atmospheric short. Deep layering of organic and electronic textures.</p>
+        </div>
+        <div class="film-card">
+            <div class="video-container">
+                <iframe width="560" height="311" src="https://www.youtube.com/embed/z8QFfksfJeY?si=KZzqx_lrFHyh8bjm" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <h4>O Cemitério das Almas Perdidas</h4>
+            <div class="film-role">Dialogue editor, sound design</div>
+            <p>Independent feature film. Felipe handled dialogue cleaning and supernatural ambiences.</p>
+        </div>
+        <div class="film-card">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/SUA_ID_AQUI" title="EXP Movies trailer" allowfullscreen></iframe>
+            </div>
+            <h4>EXP Movies trailer</h4>
+            <div class="film-role">Sound design & mix</div>
+            <p>Showreel for experimental film collective. Dynamic and rhythmic editing.</p>
+        </div>
+    </div>
+    <div style="text-align: right; margin-top: -0.5rem;">
+        <a href="https://fmattar.wixsite.com/mattar" target="_blank">📽️ Full portfolio on Wix →</a>
+    </div>
+
+    <!-- Sound manifesto / hiper-realismo sonoro -->
+    <div class="sound-manifesto">
+        <h3 style="color: var(--accent); margin-bottom: 0.5rem;">🎧 Hiper-realismo sonoro</h3>
+        <p>Felipe Mattar’s research bridges Brazilian cinema and game audio. The concept of hyper‑realistic sound — where every texture, echo, and noise tells a story — is applied both to award‑winning short films and to the chaotic streets of <em>Choque de Cultura Racing</em>. This unified philosophy makes every project visceral and unforgettable.</p>
+    </div>
+
+    <!-- Developer spotlight (Felipe) -->
+    <div class="spotlight">
+        <div class="spotlight-text">
+            <h3>Felipe Mattar</h3>
+            <p>Mestre em Artes pela UFES (2018), designer gráfico, sound designer e desenvolvedor de jogos. Professor substituto no Departamento de Design/UFES (2018–2019). Fundador da EXP Movies.</p>
+            <p>Vencedor do prêmio de <strong>Melhor Edição de Som no Cine PE 2016</strong> pelo curta "Das Águas que Passam". Atualmente dedica-se integralmente à ROCPAIN Games, unindo cinema e game design com ênfase em narrativa imersiva e identidade brasileira.</p>
+            <span class="award">🏆 Best Sound Editing – Cine PE 2016</span>
+            <div style="margin-top: 1rem;">
+                <a href="https://fmattar.wixsite.com/mattar" target="_blank">📁 Wix Portfolio →</a>
+            </div>
+        </div>
+        <div class="spotlight-img">
+            <img src="https://placehold.co/300x300/222/f5a623?text=Felipe" alt="Felipe Mattar">
+        </div>
+    </div>
+
+    <!-- brief contact / social footer inside main? optional -->
+    <div style="text-align: center; margin: 2rem 0;">
+        <p style="color: var(--text-secondary);">Interested in collaboration or sound design for your project? Get in touch.</p>
+        <a href="mailto:rocpaingames@gmail.com" class="btn-primary" style="background: #2a3a48; color: white;">✉️ rocpaingames@gmail.com</a>
+    </div>
+</main>
+
+<footer>
+    <div class="social-links">
+        <a href="#">Steam (coming soon)</a>
+        <a href="#">itch.io</a>
+        <a href="#">Twitter / X</a>
+        <a href="https://fmattar.wixsite.com/mattar">Wix Portfolio</a>
+        <a href="#">YouTube</a>
+    </div>
+    <p>© 2025 ROCPAIN Games — Felipe Mattar. Games, sound design & interactive narratives.<br>All projects shown are either released or in active development.</p>
+</footer>
+
+</body>
+</html>

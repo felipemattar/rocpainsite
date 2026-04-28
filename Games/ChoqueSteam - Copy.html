@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choque de Cultura Racing na Steam</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1b2838;
+      font-family: 'Motiva Sans', 'Arial', sans-serif;
+      color: #acb2b8;
+      line-height: 1.4;
+    }
+
+    /* Header Steam simplificado */
+    .steam-header {
+      background: #171a21;
+      padding: 0 5%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2f3540;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .steam-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #67c1f5, #2a6f9c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #b8b6b4;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .install-btn {
+      background: #2f3540;
+      padding: 5px 12px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    /* Container principal (2 colunas estilo Steam) */
+    .game-wrapper {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+
+    /* COLUNA ESQUERDA */
+    .game-tagline {
+      background: #0e1419;
+      border-radius: 4px;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      border-left: 3px solid #66c0f4;
+    }
+
+    .game-title h1 {
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .game-title .sub {
+      font-size: 0.75rem;
+      margin-top: 5px;
+      color: #8f98a0;
+    }
+
+    .capsule-image {
+      margin: 20px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+
+    .capsule-image img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Carrossel de screenshots estilo Steam */
+    .screenshots-section {
+      margin: 35px 0;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      border-left: 3px solid #66c0f4;
+      padding-left: 12px;
+      margin-bottom: 18px;
+      color: #e5e5e5;
+    }
+
+    .main-screenshot {
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .main-screenshot img {
+      width: 100%;
+      display: block;
+      transition: 0.2s;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .thumb {
+      width: 100px;
+      cursor: pointer;
+      border-radius: 4px;
+      opacity: 0.6;
+      transition: 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .thumb:hover, .thumb.active {
+      opacity: 1;
+      border-color: #66c0f4;
+    }
+
+    .thumb img {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+    }
+
+    /* Descrição e seções de texto */
+    .game-description {
+      background: #0e1419;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      line-height: 1.6;
+    }
+
+    .game-description h3 {
+      color: #fff;
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .game-modes, .features {
+      background: #0e1419;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .game-modes h3, .features h3 {
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .sysreq {
+      background: #0e1419;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .req-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    /* COLUNA DIREITA (sidebar) */
+    .game-sidebar {
+      background: #171d25;
+      border-radius: 8px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .price-box {
+      background: #0f141c;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .price {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #acd474;
+    }
+
+    .early-access {
+      background: #2a475e;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .wishlist-btn {
+      background: #2f3540;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      margin-top: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .wishlist-btn:hover {
+      background: #404a5c;
+    }
+
+    .meta-info {
+      margin: 20px 0;
+      font-size: 0.8rem;
+      border-top: 1px solid #2a3340;
+      padding-top: 15px;
+    }
+
+    .dev-pub {
+      margin-bottom: 12px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .tag {
+      background: #2f3a48;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+    }
+
+    footer {
+      background: #171a21;
+      text-align: center;
+      padding: 25px;
+      margin-top: 50px;
+      font-size: 0.7rem;
+      border-top: 1px solid #2f3540;
+    }
+
+    @media (max-width: 800px) {
+      .game-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .game-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="steam-header">
+  <div class="logo-area">
+    <div class="steam-logo">RocpainGames</div>
+    <div class="nav-links">
+      <a href="#">LOJA</a>
+      <a href="#">COMUNIDADE</a>
+      <a href="#">SOBRE</a>
+      <a href="#">SUPORTE</a>
+    </div>
+  </div>
+  <div class="user-area">
+    <span class="install-btn">instalar steam</span>
+    <span>👤 login</span>
+  </div>
+</header>
+
+<div class="game-wrapper">
+  <!-- COLUNA PRINCIPAL (conteúdo) -->
+  <div>
+    <div class="game-tagline">
+      🎮  Ação, Corrida, Mundo Aberto |  Multiplayer |  Acesso Antecipado
+    </div>
+    <div class="game-title">
+      <h1>Choque de Cultura Racing</h1>
+      <div class="sub">Rocpain Games</div>
+    </div>
+
+    <!-- Carrossel de screenshots -->
+    <div class="screenshots-section">
+      <div class="section-title">📸 Screenshots</div>
+      <div class="main-screenshot" id="mainScreenshot">
+        <img id="mainImg" src="ChoqueImages/1.png">
+      </div>
+      <div class="thumbnails" id="thumbContainer"></div>
+    </div>
+
+    <!-- Sobre o jogo (descrição) -->
+    <div class="game-description">
+      <h3>📖 Sobre o jogo</h3>
+      <p>Choque Racing é um jogo de corrida caótico e irreverente em 3D, inspirado no transporte alternativo brasileiro. 
+      Assuma o volante como Rogerinho, Julinho, Maurílio e Renan, e domine as ruas em desafios insanos. 
+      Com multiplayer e mapas icônicos, a diversão nunca para!</p>
+      <br>
+      <p>Ambientado em locais icônicos do Rio de Janeiro e Espírito Santo, o jogo oferece uma experiência livre e caótica, 
+      onde você pode explorar mapas urbanos, pegar e deixar passageiros, competir em corridas emocionantes e causar confusão.</p>
+    </div>
+
+    <!-- Modos de jogo -->
+    <div class="game-modes">
+      <h3>🎮 Modos de jogo principais</h3>
+      <ul style="margin-left:20px; line-height:1.6;">
+        <li><strong>Modo Livre:</strong> Explore a cidade, colete passageiros e ganhe dinheiro para desbloquear novas corridas.</li>
+        <li><strong>Modo Circuito:</strong> Corridas estruturadas para provar suas habilidades.</li>
+        <li><strong>Modo Pega:</strong> Corridas casuais de rua com desafios de tempo.</li>
+      </ul>
+    </div>
+
+    <div class="features">
+      <h3>⚙️ Características</h3>
+      <ul style="margin-left:20px; line-height:1.6;">
+        <li>Mecânicas de física equilibradas entre arcade e simulação.</li>
+        <li>Mapas de mundo aberto com várias localizações desbloqueáveis.</li>
+        <li>Personagens icônicos do programa Choque de Cultura.</li>
+        <li>Sistema de power-ups com sátira e referências à cultura brasileira.</li>
+      </ul>
+    </div>
+
+    <!-- Requisitos de sistema -->
+    <div class="sysreq">
+      <h3>🖥️ Requisitos de sistema</h3>
+      <div class="req-grid">
+        <div>
+          <strong>MÍNIMO:</strong><br>
+          SO: Windows 10 (64 bits)<br>
+          Processador: Intel Core i3-2100 ou equivalente<br>
+          Memória: 8 GB RAM<br>
+          Placa de vídeo: NVIDIA GeForce GTX 660<br>
+          DirectX: Versão 11<br>
+          Armazenamento: 10 GB disponíveis
+        </div>
+        <div>
+          <strong>RECOMENDADO:</strong><br>
+          SO: Windows 11 (64 bits)<br>
+          Processador: Intel Core i5-8400 ou equivalente<br>
+          Memória: 16 GB RAM<br>
+          Placa de vídeo: NVIDIA GeForce GTX 1060<br>
+          DirectX: Versão 11<br>
+          Armazenamento: 10 GB SSD
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUNA DIREITA (sidebar) -->
+  <aside class="game-sidebar">
+     <div class="capsule-image">
+      <img src="ChoqueImages/Store_Capsule_Header.png" alt="Choque de Cultura Racing">
+    </div>
+    <div class="price-box">
+      <div class="early-access">🚀 ACESSO ANTECIPADO</div>
+      <div class="price">R$ 1,99</div>
+      <button class="wishlist-btn" id="addWishlistBtn">➕ Adicionar à lista de desejos</button>
+    </div>
+
+    <div class="meta-info">
+      <div class="dev-pub"><strong>Desenvolvedor:</strong> Rocpain Games</div>
+      <div class="dev-pub"><strong>Publicadora:</strong> Rocpain Games</div>
+      <div><strong>Data de lançamento:</strong> A ser definido</div>
+      <div><strong>Tags populares:</strong></div>
+      <div class="tags">
+        <span class="tag">Corrida</span>
+        <span class="tag">Mundo aberto</span>
+        <span class="tag">Humor brasileiro</span>
+        <span class="tag">Multiplayer</span>
+        <span class="tag">Ação</span>
+        <span class="tag">Indie</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+      <span>✅ Jogador único</span><br>
+      <span>👥 Multijogador online</span><br>
+      <span>🏆 Conquistas Steam</span><br>
+      <span>🎮 Suporte a controle</span>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  © 2025 Steam Clone - Demonstração educacional. "Choque de Cultura Racing" é um título fictício para fins de aprendizado.
+</footer>
+
+<script>
+  // Dados de screenshots (simulados)
+  const screenshots = [
+    "ChoqueImages/1.png",
+    "ChoqueImages/2.png",
+    "ChoqueImages/3.png",
+    "ChoqueImages/4.png",
+  ];
+
+  const thumbContainer = document.getElementById('thumbContainer');
+  const mainImg = document.getElementById('mainImg');
+
+  // Gera thumbnails
+  screenshots.forEach((src, idx) => {
+    const thumbDiv = document.createElement('div');
+    thumbDiv.className = 'thumb';
+    if (idx === 0) thumbDiv.classList.add('active');
+    const img = document.createElement('img');
+    img.src = src.replace('800x450', '100x56');
+    thumbDiv.appendChild(img);
+
+    thumbDiv.addEventListener('click', () => {
+      mainImg.src = screenshots[idx];
+      document.querySelectorAll('.thumb').forEach(thumb => thumb.classList.remove('active'));
+      thumbDiv.classList.add('active');
+    });
+    thumbContainer.appendChild(thumbDiv);
+  });
+
+  // Botão simulado da lista de desejos
+  const wishlistBtn = document.getElementById('addWishlistBtn');
+  wishlistBtn.addEventListener('click', () => {
+    alert('[Demonstração] "Choque de Cultura Racing" foi adicionado à sua lista de desejos.');
+  });
+</script>
+</body>
+</html>
