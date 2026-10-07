@@ -197,6 +197,7 @@ select.sel{padding:9px 10px;border:1px solid var(--line);border-radius:8px;backg
       <button class="tab" role="tab" data-tab="projects" aria-selected="false">Projetos <span class="n" id="n-projects">0</span></button>
       <button class="tab" role="tab" data-tab="groups" aria-selected="false">Grupos</button>
       <button class="tab" role="tab" data-tab="labels" aria-selected="false">Etiquetas QR</button>
+      <button class="tab" role="tab" data-tab="team" aria-selected="false" id="tabTeam" hidden>Equipe</button>
     </nav>
   </div>
 </header>
@@ -242,6 +243,7 @@ select.sel{padding:9px 10px;border:1px solid var(--line);border-radius:8px;backg
     <div id="lpick"></div>
     <div class="labels" id="lprev"></div>
   </section>
+  <section id="v-team" hidden><div id="teamBox"></div></section>
 </main>
 
 <div id="sheetRoot"></div>
@@ -276,7 +278,7 @@ const FILTERS = [
   ['ordered','Encomendado','var(--accent)'], ['tobuy','A comprar','var(--idle)']
 ];
 
-const S = { items:new Map(), groups:new Map(), projects:new Map(), loaded:{items:false,groups:false,projects:false},
+const S = { team:new Map(), me:'', isAdmin:false, items:new Map(), groups:new Map(), projects:new Map(), loaded:{items:false,groups:false,projects:false},
   tab:'items', filter:'all', fgroup:'', q:'', openProject:null, labelSel:new Set(), labelInit:false };
 let db=null, assets=null, downloads=null, canWrite=true;
 
@@ -374,7 +376,7 @@ function pillsHTML(it){
 function setTab(t){
   S.tab=t;
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===t)));
-  for (const v of ['items','projects','groups','labels']) $('#v-'+v).hidden = v!==t;
+  for (const v of ['items','projects','groups','labels','team']) $('#v-'+v).hidden = v!==t;
   ls.set('iur.tab',t); render();
 }
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.tab==='projects') S.openProject=null; setTab(b.dataset.tab); }));
@@ -393,6 +395,7 @@ let render = function(){
   if (S.tab==='projects') S.openProject && S.projects.has(S.openProject) ? renderProject(S.openProject) : renderProjects();
   if (S.tab==='groups') renderGroups();
   if (S.tab==='labels') renderLabels();
+  if (S.tab==='team') renderTeam();
 }
 function fillGroupSelect(sel,val,allLabel){
   const opts=[`<option value="">${allLabel}</option>`, ...groupsSorted().map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`)].join('');
@@ -767,6 +770,47 @@ p{font-size:9pt;color:#555}@media print{p{display:none}}</style></head><body><p>
   catch(e){ if(e?.code!=='declined') toast('Não foi possível gerar o arquivo.'); }
 }
 
+
+// ---------- equipe ----------
+// Proprietário fixo: sempre administrador e não pode ser removido pelo app (precisa ser igual ao firestore.rules)
+const OWNERS = ['fdesigner@gmail.com'];
+const ROLE = { owner:'Proprietário', admin:'Administrador', member:'Membro' };
+function renderTeam(){
+  const el=$('#teamBox');
+  if(!S.isAdmin){ el.innerHTML='<div class="empty">Só administradores gerenciam a equipe.</div>'; return; }
+  const list=[...OWNERS.map(e=>({email:e,role:'owner'})),
+    ...[...S.team.entries()].filter(([e])=>!OWNERS.includes(e)).map(([e,d])=>({email:e,...d}))]
+    .sort((a,b)=>({owner:0,admin:1,member:2}[a.role]-{owner:0,admin:1,member:2}[b.role])||a.email.localeCompare(b.email));
+  el.innerHTML=`
+    <div class="section"><h3>Adicionar pessoa</h3>
+      <form class="inline-form" id="tform" style="margin-top:0">
+        <label style="flex:1 1 240px">E-mail da conta Google<input type="email" id="t-mail" required placeholder="nome@gmail.com" autocomplete="off" style="width:100%"></label>
+        <label>Permissão<select id="t-role"><option value="member">Membro</option><option value="admin">Administrador</option></select></label>
+        <button class="btn pri" type="submit">Dar acesso</button>
+      </form>
+      <p class="hint">Membros veem e editam o inventário e os projetos. Administradores também gerenciam esta lista. A pessoa entra pelo mesmo endereço, com “Entrar com Google”.</p>
+    </div>
+    <div class="section"><h3>Com acesso · ${list.length}</h3>
+      <div class="rows">${list.map(m=>{ const me=m.email===S.me, fixed=m.role==='owner';
+        return `<div class="row" style="cursor:default;grid-template-columns:1fr auto auto">
+          <span class="main"><span class="name">${esc(m.email)}</span>${me?' <span class="pill p-use">você</span>':''}
+            ${m.addedBy?`<div class="meta">adicionado por ${esc(m.addedBy)}${m.addedAt?' em '+fmtD(m.addedAt.slice(0,10)):''}</div>`:''}</span>
+          ${fixed||me?`<span class="pill ${fixed?'p-acc':'p-idle'}">${ROLE[m.role]}</span>`:`<select class="sel" data-role="${esc(m.email)}" aria-label="Permissão"><option value="member" ${m.role==='member'?'selected':''}>Membro</option><option value="admin" ${m.role==='admin'?'selected':''}>Administrador</option></select>`}
+          ${fixed||me?'<span></span>':`<button class="btn sm danger" data-rm="${esc(m.email)}">Remover</button>`}
+        </div>`;}).join('')}</div>
+    </div>`;
+  el.querySelector('#tform').addEventListener('submit',e=>{ e.preventDefault();
+    const mail=el.querySelector('#t-mail').value.trim().toLowerCase();
+    if(!/^[^\s@/]+@[^\s@/]+\.[^\s@/]+$/.test(mail)){ toast('E-mail inválido.'); return; }
+    if(OWNERS.includes(mail)||S.team.has(mail)){ toast('Essa pessoa já tem acesso.'); return; }
+    db.doc('team/'+mail).set({role:el.querySelector('#t-role').value, addedBy:S.me, addedAt:new Date().toISOString()});
+    toast(`${mail} agora tem acesso`); });
+  el.querySelectorAll('[data-role]').forEach(sel=>sel.addEventListener('change',()=>{ const d={...S.team.get(sel.dataset.role), role:sel.value}; db.doc('team/'+sel.dataset.role).set(d); toast('Permissão alterada'); }));
+  el.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{
+    if(!b.dataset.armed){ b.dataset.armed='1'; b.classList.add('solid'); b.textContent='Confirmar'; return; }
+    db.doc('team/'+b.dataset.rm).delete(); toast('Acesso removido'); }));
+}
+
 // ---------- deep link (#ID from QR) ----------
 function handleHash(){ const h=decodeURIComponent(location.hash.slice(1)); if(h && S.items.has(h)){ if(S.tab!=='items') setTab('items'); openItem(h); } }
 window.addEventListener('hashchange',handleHash);
@@ -790,7 +834,7 @@ assets = { upload: blob => new Promise((res,rej)=>{ if(blob.size>350000) return 
 downloads = { save: async ({filename,data}) => { const u=URL.createObjectURL(new Blob([data],{type:'text/html'})); const a=document.createElement('a'); a.href=u; a.download=filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); return {status:'saved'}; } };
 
 S.tab=ls.get('iur.tab','items'); setTab(S.tab);
-const views=['v-items','v-projects','v-groups','v-labels'];
+const views=['v-items','v-projects','v-groups','v-labels','v-team'];
 let unsubs=[];
 function showApp(on){ $('#login').hidden=on; $('.tabs').hidden=!on; views.forEach(v=>{ if(!on) $('#'+v).hidden=true; }); if(on) setTab(S.tab); }
 function checkImport(){ $('#importBox').hidden = !(S.loaded.items && S.loaded.groups && S.items.size===0 && S.groups.size===0); }
@@ -816,10 +860,15 @@ $('#doImport').addEventListener('click', async ()=>{
 
 onAuthStateChanged(auth, user=>{
   unsubs.forEach(u=>u()); unsubs=[];
-  S.items=new Map(); S.groups=new Map(); S.projects=new Map(); S.loaded={items:false,groups:false,projects:false};
+  S.items=new Map(); S.groups=new Map(); S.projects=new Map(); S.team=new Map(); S.isAdmin=false; $('#tabTeam').hidden=true; S.loaded={items:false,groups:false,projects:false};
+  if(S.tab==='team' && !user) S.tab='items';
   $('#banner').hidden=true; $('#importBox').hidden=true;
   if(!user){ $('#who').hidden=true; showApp(false); return; }
-  $('#who').hidden=false; $('#whoMail').textContent=user.email||''; canWrite=true; showApp(true);
+  S.me=(user.email||'').toLowerCase();
+  $('#who').hidden=false; $('#whoMail').textContent=user.email||''; canWrite=true;
+  const setAdmin=()=>{ S.isAdmin = OWNERS.includes(S.me) || S.team.get(S.me)?.role==='admin'; $('#tabTeam').hidden=!S.isAdmin; if(!S.isAdmin && S.tab==='team') S.tab='items'; };
+  setAdmin(); showApp(true);
+  unsubs.push(db.collection('team').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>m.set(d.id,d.data())); S.team=m; setAdmin(); render(); }, ()=>{}));
   let hashDone=false;
   for(const name of ['groups','items','projects']){
     unsubs.push(db.collection(name).onSnapshot(snap=>{
