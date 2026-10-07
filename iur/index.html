@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b6b6f">
+<title>Equipamentos IUR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: field-kit inventory — sticky top bar with tabs, single working column, bottom sheets for detail/edit */
+:root{
+  --bg:#f2f5f3; --surface:#ffffff; --surface2:#e8eeeb; --ink:#14201c; --muted:#5a6964; --line:#d6dfdb;
+  --accent:#0b6b6f; --accent-ink:#ffffff; --accent-soft:#d7ecec;
+  --ok:#2c7a4b; --ok-soft:#dcefe3; --warn:#9a6212; --warn-soft:#fbecd2; --bad:#b42318; --bad-soft:#fbe0dd;
+  --use:#2552a0; --use-soft:#dfe8f8; --idle:#6b6f73; --idle-soft:#e9ebec;
+  --shadow:0 10px 30px rgba(10,30,25,.18);
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1412; --surface:#16201d; --surface2:#1d2925; --ink:#e4ebe8; --muted:#94a49e; --line:#2a3632;
+  --accent:#43b3b0; --accent-ink:#06201f; --accent-soft:#183634;
+  --ok:#62c78e; --ok-soft:#173326; --warn:#e5b154; --warn-soft:#3a2c12; --bad:#f2806f; --bad-soft:#3d1c18;
+  --use:#86aef2; --use-soft:#1a2740; --idle:#a3a9ad; --idle-soft:#262c2f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1412; --surface:#16201d; --surface2:#1d2925; --ink:#e4ebe8; --muted:#94a49e; --line:#2a3632;
+  --accent:#43b3b0; --accent-ink:#06201f; --accent-soft:#183634;
+  --ok:#62c78e; --ok-soft:#173326; --warn:#e5b154; --warn-soft:#3a2c12; --bad:#f2806f; --bad-soft:#3d1c18;
+  --use:#86aef2; --use-soft:#1a2740; --idle:#a3a9ad; --idle-soft:#262c2f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+:root{padding-top:env(safe-area-inset-top,0px)}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:0 80px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:12px 0;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:.02em;margin:0;text-transform:uppercase}
+.brand span{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tab{border:0;background:none;padding:8px 12px 10px;font-family:var(--f-display);font-size:17px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font-family:var(--f-body);font-size:12px;font-weight:600;background:var(--surface2);border-radius:20px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.tab .n.bad{background:var(--bad);color:#fff}
+
+.banner{margin-top:14px;padding:10px 12px;border-radius:var(--r);background:var(--warn-soft);color:var(--warn);font-size:14px}
+
+/* toolbar */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-block:16px 10px}
+.search{flex:1 1 220px;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+select.sel{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-width:100%}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:5px 11px;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip b{font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] b{color:inherit;opacity:.75}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.toggle{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 13px;font-weight:600;font-size:14px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--bad);border-color:var(--bad-soft)}
+.btn.danger.solid{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.sm{padding:5px 9px;font-size:13px}
+.btn.ghost{border-color:transparent;background:none}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* group sections & rows */
+.gsec{margin-top:18px}
+.ghead{display:flex;align-items:baseline;gap:10px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.ghead h2{font-family:var(--f-display);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0}
+.ghead small{color:var(--muted);font-size:13px}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%}
+.row:hover{background:var(--surface)}
+.row .main{min-width:0}
+.row .name{font-weight:600;overflow-wrap:anywhere}
+.row .meta{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.id{font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.04em;background:var(--surface2);border-radius:5px;padding:2px 6px;white-space:nowrap}
+.thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--surface2);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;color:var(--muted);font-size:14px;flex:none;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.nophotos .thumb{display:none}
+.nophotos .row{grid-template-columns:auto 1fr auto}
+.pills{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.pill{font-size:12px;font-weight:600;border-radius:20px;padding:2px 9px;white-space:nowrap;display:inline-flex;gap:5px;align-items:center}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)} .p-use{background:var(--use-soft);color:var(--use)}
+.p-idle{background:var(--idle-soft);color:var(--idle)} .p-acc{background:var(--accent-soft);color:var(--accent)}
+.qty{font-variant-numeric:tabular-nums;font-weight:600;color:var(--muted);font-size:13px}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+
+/* cards (projects, groups) */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;min-width:0}
+.card:hover{border-color:var(--muted)}
+.card h3{font-family:var(--f-display);font-size:21px;font-weight:700;margin:0;letter-spacing:.01em;overflow-wrap:anywhere}
+.card .meta{font-size:13px;color:var(--muted)}
+.prog{height:6px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent)}
+.card.conf{border-color:var(--bad);box-shadow:inset 4px 0 0 var(--bad)}
+
+/* project detail */
+.back{margin-top:14px}
+.phead{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;justify-content:space-between;margin-top:10px}
+.phead h2{font-family:var(--f-display);font-size:32px;line-height:1.05;margin:0;font-weight:700;overflow-wrap:anywhere;min-width:0}
+.section{margin-top:22px}
+.section > h3{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.05em;font-size:15px;color:var(--muted);margin:0 0 8px;font-weight:700}
+.dates{display:flex;flex-wrap:wrap;gap:8px}
+.date{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 6px 6px 10px;font-weight:600;font-variant-numeric:tabular-nums}
+.date small{font-weight:400;color:var(--muted)}
+.date.now{border-color:var(--use);color:var(--use)}
+.x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;border-radius:5px}
+.x:hover{background:var(--surface2);color:var(--bad)}
+.inline-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:10px}
+.inline-form label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted);font-weight:600}
+.inline-form input,.inline-form select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);max-width:100%}
+.alert{border-radius:10px;padding:12px 14px;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.alert.bad{background:var(--bad-soft);color:var(--ink);border-left:4px solid var(--bad)}
+.alert.warn{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}
+.alert strong{font-family:var(--f-display);font-size:17px;letter-spacing:.02em;text-transform:uppercase}
+.alert ul{margin:0;padding-left:18px}
+.check{display:grid;grid-template-columns:auto auto auto 1fr auto auto;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--line)}
+.nophotos .check{grid-template-columns:auto auto 1fr auto auto}
+.check input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);cursor:pointer}
+.check.done .name{text-decoration:line-through;color:var(--muted)}
+.check .main{min-width:0;cursor:pointer}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.stepper button{border:0;background:none;width:30px;height:30px;cursor:pointer;font-size:17px;font-weight:600}
+.stepper button:hover{background:var(--surface2)}
+.stepper span,.stepper input{min-width:30px;width:44px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;border:0;background:none;padding:0}
+.stepper.sm button{width:26px;height:26px}
+.stepper.sm span{min-width:24px;width:auto;padding:0 2px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,15,12,.45);z-index:50;display:flex;justify-content:center;align-items:flex-end}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:16px 16px 0 0;box-shadow:var(--shadow);padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){.scrim{align-items:center}.sheet{border-radius:16px;max-height:88%}}
+.sheet-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.sheet-h h2{font-family:var(--f-display);font-size:26px;line-height:1.1;margin:4px 0 0;font-weight:700;overflow-wrap:anywhere}
+.form{display:flex;flex-direction:column;gap:12px}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form input[type=date],.form input[type=number],.form select,.form textarea{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-weight:400;font-size:15px;width:100%}
+.form textarea{min-height:64px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:460px){.two{grid-template-columns:1fr}}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1 1 auto;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;font-weight:600;font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;justify-content:center}
+.seg button[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor}
+.seg .s-ok[aria-pressed="true"]{color:var(--ok);background:var(--ok-soft)}
+.seg .s-warn[aria-pressed="true"]{color:var(--warn);background:var(--warn-soft)}
+.seg .s-bad[aria-pressed="true"]{color:var(--bad);background:var(--bad-soft)}
+.seg .s-acc[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft)}
+.photo-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.photo-big{width:112px;height:112px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;overflow:hidden;font-family:var(--f-display);font-weight:700;color:var(--muted);font-size:22px}
+.photo-big img{width:100%;height:100%;object-fit:cover}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-top:6px}
+.actions .r{display:flex;gap:8px;flex-wrap:wrap}
+.qrbox{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.qrbox .qr{width:96px;height:96px;background:#fff;border-radius:6px;padding:4px;flex:none}
+.qrbox .qr svg{width:100%;height:100%;display:block}
+.uses{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.hint{font-size:12.5px;color:var(--muted);font-weight:400}
+
+/* picker */
+.pick{display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.pick input{width:20px;height:20px;accent-color:var(--accent)}
+.pick .main{min-width:0}
+.pick.dis{opacity:.55}
+
+/* labels */
+.labels{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+.lab{background:#fff;color:#111;border:1px dashed #9aa;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.lab svg{width:100px;height:100px}
+.lab .lid{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.05em}
+.lab .lname{font-size:11px;line-height:1.2;overflow-wrap:anywhere}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:80;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+<style>.who{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}.login{max-width:420px;margin:48px auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;text-align:center}.login h2{font-family:var(--f-display);font-size:26px;margin:0}</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><h1>Equipamentos IUR</h1><span>Instituto Últimos Refúgios · inventário de campo</span><span class="who" id="who" hidden><span id="whoMail"></span><button class="btn sm ghost" id="logout">Sair</button></span></div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="items" aria-selected="true">Equipamentos <span class="n" id="n-items">0</span></button>
+      <button class="tab" role="tab" data-tab="projects" aria-selected="false">Projetos <span class="n" id="n-projects">0</span></button>
+      <button class="tab" role="tab" data-tab="groups" aria-selected="false">Grupos</button>
+      <button class="tab" role="tab" data-tab="labels" aria-selected="false">Etiquetas QR</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <div id="banner" class="banner" hidden></div>
+  <div id="login" class="login" hidden><h2>Entrar</h2><p class="hint" style="font-size:14px;margin:0">Use a conta Google autorizada pela equipe do IUR.</p><button class="btn pri" id="gsign" style="justify-content:center">Entrar com Google</button><p class="hint" id="loginMsg"></p></div>
+  <div id="importBox" class="banner" hidden style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between"><span>O banco está vazio. Importar o inventário inicial (65 itens, 12 grupos e 1 projeto)?</span><button class="btn pri sm" id="doImport">Importar</button></div>
+
+  <section id="v-items">
+    <div class="bar">
+      <input class="search" id="q" type="search" placeholder="Buscar por nome, ID, local…" autocomplete="off">
+      <select class="sel" id="fgroup" aria-label="Filtrar por grupo"><option value="">Todos os grupos</option></select>
+      <label class="toggle"><input type="checkbox" id="showPhotos"> Fotos</label>
+      <button class="btn pri" id="addItem" data-w>+ Equipamento</button>
+    </div>
+    <div class="chips" id="fchips"></div>
+    <div id="itemsList"><div class="empty">Carregando o inventário…</div></div>
+  </section>
+
+  <section id="v-projects" hidden>
+    <div id="projList"></div>
+    <div id="projDetail" hidden></div>
+  </section>
+
+  <section id="v-groups" hidden>
+    <div class="bar"><p class="hint" style="flex:1;margin:0">Grupos organizam o inventário e podem ser adicionados inteiros a uma lista de projeto.</p><button class="btn pri" id="addGroup" data-w>+ Grupo</button></div>
+    <div class="grid" id="groupsGrid"></div>
+  </section>
+
+  <section id="v-labels" hidden>
+    <div class="bar">
+      <select class="sel" id="lgroup" aria-label="Grupo"><option value="">Todos os grupos</option></select>
+      <select class="sel" id="lstatus" aria-label="Situação">
+        <option value="owned">Só itens em posse</option>
+        <option value="">Todos os itens</option>
+      </select>
+      <button class="btn" id="lall">Marcar todos</button>
+      <button class="btn" id="lnone">Desmarcar</button>
+      <button class="btn pri" id="ldl">Baixar etiquetas (.html)</button>
+    </div>
+    <p class="hint" id="lhint"></p>
+    <div id="lpick"></div>
+    <div class="labels" id="lprev"></div>
+  </section>
+</main>
+
+<div id="sheetRoot"></div>
+<div id="toastRoot"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc as fdoc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDiqnJOTlPQFmqCYzcsfhqPiUDIokJetgs",
+  authDomain: "equipamentosiur.firebaseapp.com",
+  projectId: "equipamentosiur",
+  storageBucket: "equipamentosiur.firebasestorage.app",
+  messagingSenderId: "960323848348",
+  appId: "1:960323848348:web:dd82c923459eb2c1630559"
+};
+const SEED = {"groups":{"CMP":{"desc":"Rádios, lanternas, claquete, caixas, ferramentas, trena","name":"Campo, comunicação e ferramentas","order":9},"CAM":{"desc":"Corpos de câmera, GoPro e celulares usados para captação","name":"Câmeras e celulares","order":0},"TRP":{"desc":"Camera traps instaladas ou disponíveis","name":"Armadilhas fotográficas","order":3},"DRN":{"desc":"Drone, gimbal","name":"Drone e estabilização","order":4},"VEI":{"desc":"Itens para a caminhonete / transporte","name":"Veículo e logística","order":10},"CON":{"desc":"Suprimentos que são repostos (não patrimoniais)","name":"Consumíveis e reposição","order":11},"MAQ":{"desc":"Tripés, praticáveis, sacos de areia, grampos","name":"Maquinaria e tripés","order":6},"LEN":{"desc":"Lentes, tampas, oculares, correias e capas","name":"Lentes e acessórios de câmera","order":1},"LUZ":{"desc":"Softboxes, LEDs, rebatedores","name":"Iluminação","order":5},"ENE":{"desc":"Baterias, carregadores, extensões, gerador, kit elétrico","name":"Energia e elétrica","order":7},"SUB":{"desc":"Caixas estanques, portas, strobes, braços, clamps, cabos de fibra","name":"Subaquático","order":2},"ARM":{"desc":"Cartões, HDs, computador","name":"Armazenamento e informática","order":8}},"items":{"MAQ-01":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"GorillaPod","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"SUB-12":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Luz de vídeo SeaLife Sea Dragon 2300F","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"ENE-01":{"accessories":"","condition":"ok","group":"ENE","location":"","name":"Bateria GoPro","notes":"","photo":"","qty":4,"returnDate":"","status":"owned"},"SUB-11":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ikelite transmissor manual de fibra óptica 44700-G2","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"MAQ-09":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Três tabelas","notes":"Definir modelo e comprar","photo":"","qty":1,"returnDate":"","status":"tobuy"},"CMP-03":{"accessories":"","condition":"ok","group":"CMP","location":"","name":"Ferramentas","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"VEI-01":{"accessories":"","condition":"ok","group":"VEI","location":"","name":"Luminária LED adesiva (carroceria da caminhonete)","notes":"","photo":"","qty":4,"returnDate":"","status":"ordered"},"SUB-04":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Aquatica 1\" Delta 3 Ball Mount c/ QR tipo Ikelite (77555)","notes":"opção B de pino-bola","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-15":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ultralight Quick Release Ball Adapter p/ alças Ikelite (BA-IK)","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"ENE-07":{"accessories":"","condition":"ok","group":"ENE","location":"","name":"Medidor de bateria NP","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"ENE-02":{"accessories":"30 pilhas","condition":"ok","group":"ENE","location":"","name":"Carregador de pilhas","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"TRP-01":{"accessories":"","condition":"ok","group":"TRP","location":"Sítio Leo","name":"Armadilha fotográfica (Trap) 01","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"TRP-07":{"accessories":"","condition":"ok","group":"TRP","location":"UR","name":"Armadilha fotográfica (Trap) 07","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"CAM-04":{"accessories":"Lista de lentes - X baterias - carregador - domo - ventosa","condition":"needs","group":"CAM","location":"","name":"GoPro Hero 11","notes":"Testar baterias","photo":"","qty":1,"returnDate":"","status":"owned"},"SUB-05":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ball clamp alumínio 1\" (braçadeira esférica)","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"MAQ-03":{"accessories":"","condition":"needs","group":"MAQ","location":"","name":"Saco de areia","notes":"Costurar furos","photo":"","qty":10,"returnDate":"","status":"owned"},"ARM-01":{"accessories":"Tela extra + nobreak + projetor + HDMI + P2xP2 + RCA + P2xRCA","condition":"ok","group":"ARM","location":"","name":"Computador (PC)","notes":"Definir configuração","photo":"","qty":1,"returnDate":"","status":"owned"},"LEN-01":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Capa de borracha (Nikon D850)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"LEN-04":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Lente ultra macro Laowa 25mm f/2.8 2.5-5x (Nikon Z)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"LUZ-01":{"accessories":"X baterias - carregador","condition":"ok","group":"LUZ","location":"","name":"LED redondo 01 (bateria)","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"ARM-02":{"accessories":"Cabo de dados","condition":"ok","group":"ARM","location":"","name":"HD externo 4 TB","notes":"Levar 2 para o campo","photo":"","qty":6,"returnDate":"","status":"owned"},"CAM-01":{"accessories":"Lista de lentes - X baterias - carregador","condition":"needs","group":"CAM","location":"","name":"Câmera Canon 5D (still)","notes":"Limpar lente","photo":"","qty":1,"returnDate":"","status":"owned"},"CMP-06":{"accessories":"","condition":"ok","group":"CMP","location":"","name":"Trena laser","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"TRP-03":{"accessories":"","condition":"ok","group":"TRP","location":"Sítio Leo","name":"Armadilha fotográfica (Trap) 03","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"SUB-06":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Braço com bola (AliExpress)","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-07":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Braço esférico náutico Ikelite 4080.06","notes":"Mercado Livre","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-13":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Strobe Ikelite Ecko Fiber","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"TRP-04":{"accessories":"","condition":"ok","group":"TRP","location":"Instituto Terra","name":"Armadilha fotográfica (Trap) 04","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"LUZ-04":{"accessories":"X baterias - carregador","condition":"needs","group":"LUZ","location":"","name":"Softbox LED quadrado","notes":"Testar","photo":"","qty":1,"returnDate":"","status":"owned"},"DRN-01":{"accessories":"Lista de lentes - X baterias - carregador","condition":"ok","group":"DRN","location":"","name":"Drone DJI Mavic 3 Cine","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"DRN-02":{"accessories":"","condition":"needs","group":"DRN","location":"","name":"Gimbal DJI","notes":"Calibrar","photo":"","qty":1,"returnDate":"","status":"owned"},"TRP-02":{"accessories":"","condition":"ok","group":"TRP","location":"Sítio Leo","name":"Armadilha fotográfica (Trap) 02","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"SUB-08":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ikelite DL 50mm Port Extension","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"CAM-02":{"accessories":"Lista de lentes - X baterias - carregador","condition":"ok","group":"CAM","location":"","name":"Câmera Nikon D850","notes":"Detalhar lentes e nº de baterias","photo":"","qty":1,"returnDate":"","status":"owned"},"LEN-06":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Viewfinder / ocular (Canon 5D)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"MAQ-06":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Tripé médio para luz","notes":"","photo":"","qty":4,"returnDate":"","status":"owned"},"LUZ-02":{"accessories":"Só energia","condition":"ok","group":"LUZ","location":"","name":"LED redondo 02 (só tomada)","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"MAQ-07":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Libélula (estaca decorativa)","notes":"Comprar","photo":"","qty":1,"returnDate":"","status":"tobuy"},"CMP-04":{"accessories":"","condition":"ok","group":"CMP","location":"","name":"Lanternas","notes":"Contar e enumerar","photo":"","qty":1,"returnDate":"","status":"owned"},"TRP-06":{"accessories":"","condition":"ok","group":"TRP","location":"UR","name":"Armadilha fotográfica (Trap) 06","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"SUB-14":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ultralight AC-CSF Ball Clamp com T-Knob (preto)","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-03":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Cabo de fibra óptica p/ flash subaquático","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"ARM-03":{"accessories":"","condition":"ok","group":"ARM","location":"","name":"Cartão CFexpress Tipo B 1 TB Lexar (para Z9)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"MAQ-08":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Praticável","notes":"Definir modelo e comprar","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-02":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Braço de mergulho 20 cm","notes":"","photo":"","qty":2,"returnDate":"","status":"ordered"},"SUB-09":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ikelite anel antirreflexo p/ Nikon Z 14-30mm f/4 S (dome port)","notes":"","photo":"","qty":1,"returnDate":"","status":"tobuy"},"SUB-10":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Ikelite short stem mount c/ engate rápido (4081.31)","notes":"opção A de pino-bola","photo":"","qty":1,"returnDate":"","status":"tobuy"},"CMP-02":{"accessories":"","condition":"ok","group":"CMP","location":"","name":"Caixa térmica grande","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"LEN-05":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Tampa de borracha (Canon 5D)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"ENE-04":{"accessories":"","condition":"needs","group":"ENE","location":"","name":"Kit de elétrica","notes":"Revisar conteúdo","photo":"","qty":1,"returnDate":"","status":"owned"},"TRP-05":{"accessories":"","condition":"ok","group":"TRP","location":"Instituto Terra","name":"Armadilha fotográfica (Trap) 05","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"LEN-02":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Correia lateral para DSLR","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"MAQ-02":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Grampo / pinça / garra 3,7 cm","notes":"Confirmar quantidade","photo":"","qty":6,"returnDate":"","status":"owned"},"CAM-03":{"accessories":"Lista de lentes - X baterias - carregador","condition":"ok","group":"CAM","location":"","name":"Câmera Nikon Z9","notes":"Detalhar lentes e nº de baterias","photo":"","qty":1,"returnDate":"","status":"owned"},"ENE-06":{"accessories":"","condition":"ok","group":"ENE","location":"","name":"Testador de pilha","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"MAQ-04":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Tripé Manfrotto","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"MAQ-05":{"accessories":"","condition":"ok","group":"MAQ","location":"","name":"Tripé grande para luz","notes":"","photo":"","qty":2,"returnDate":"","status":"owned"},"SUB-01":{"accessories":"","condition":"ok","group":"SUB","location":"","name":"Braço com presilha de mergulho","notes":"","photo":"","qty":2,"returnDate":"","status":"ordered"},"CMP-05":{"accessories":"Carregador","condition":"ok","group":"CMP","location":"","name":"Rádios comunicadores","notes":"Confirmar quantidade","photo":"","qty":1,"returnDate":"","status":"owned"},"LEN-03":{"accessories":"","condition":"ok","group":"LEN","location":"","name":"Lente macro AstrHori 28mm f/13 (Nikon Z)","notes":"","photo":"","qty":1,"returnDate":"","status":"ordered"},"CON-01":{"accessories":"","condition":"ok","group":"CON","location":"","name":"Suprimentos","notes":"Linkar lista externa","photo":"","qty":1,"returnDate":"","status":"owned"},"LUZ-03":{"accessories":"","condition":"ok","group":"LUZ","location":"","name":"Rebatedor","notes":"Falta bolsa","photo":"","qty":1,"returnDate":"","status":"owned"},"CMP-01":{"accessories":"","condition":"ok","group":"CMP","location":"","name":"Caixa para ferramentas modular 3 em 1","notes":"","photo":"","qty":1,"returnDate":"","status":"owned"},"ENE-03":{"accessories":"","condition":"ok","group":"ENE","location":"","name":"Extensão carretel 10A 50 m (2x1,5 mm)","notes":"","photo":"","qty":2,"returnDate":"","status":"owned"},"ENE-05":{"accessories":"","condition":"ok","group":"ENE","location":"","name":"Mini gerador","notes":"Verificar combustível","photo":"","qty":1,"returnDate":"","status":"owned"}},"projects":{"9m7gjxc1svbsmlb1hqlz":{"checked":{},"created":"2026-10-07T23:35:50.013Z","dates":[{"end":"2026-10-11","label":"","start":"2026-10-05"}],"items":[{"id":"SUB-14","qty":1},{"id":"SUB-15","qty":1}],"name":"Documentário Santa Teresa","notes":""}}};
+(() => {
+'use strict';
+// Link público do artifact (usado nos QR codes). #ID abre a ficha do item.
+// Endereço onde o app está publicado (GitHub Pages). Os QR codes apontam para cá + #ID.
+const ARTIFACT_URL = location.origin + location.pathname;
+
+const COND = { ok:{t:'Em condições de uso',c:'p-ok',s:'s-ok'}, needs:{t:'Precisa de manutenção',c:'p-warn',s:'s-warn'}, repair:{t:'Em manutenção',c:'p-bad',s:'s-bad'} };
+const STAT = { owned:{t:'Em posse'}, ordered:{t:'Encomendado',c:'p-acc'}, tobuy:{t:'A comprar',c:'p-idle'} };
+const FILTERS = [
+  ['all','Todos',null], ['free','Livre','var(--ok)'], ['inuse','Em uso','var(--use)'],
+  ['needs','Precisa de manutenção','var(--warn)'], ['repair','Em manutenção','var(--bad)'],
+  ['ordered','Encomendado','var(--accent)'], ['tobuy','A comprar','var(--idle)']
+];
+
+const S = { items:new Map(), groups:new Map(), projects:new Map(), loaded:{items:false,groups:false,projects:false},
+  tab:'items', filter:'all', fgroup:'', q:'', openProject:null, labelSel:new Set(), labelInit:false };
+let db=null, assets=null, downloads=null, canWrite=true;
+
+// ---------- utils ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const todayStr = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const fmtD = s => { if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}/${y.slice(2)}`; };
+const fmtRange = r => r.start===r.end ? fmtD(r.start) : `${fmtD(r.start)} → ${fmtD(r.end)}`;
+const ls = { get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v);}catch(e){return d;} }, set(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} } };
+function toast(msg){ const el=document.createElement('div'); el.className='toast'; el.textContent=msg; $('#toastRoot').append(el); setTimeout(()=>el.remove(),2600); }
+const groupsSorted = () => [...S.groups.entries()].map(([id,g])=>({id,...g})).sort((a,b)=>(a.order??99)-(b.order??99)||a.name.localeCompare(b.name));
+const gName = id => S.groups.get(id)?.name || 'Sem grupo';
+const itemsSorted = () => [...S.items.entries()].map(([id,it])=>({id,...it})).sort((a,b)=>{
+  const ga=S.groups.get(a.group)?.order??99, gb=S.groups.get(b.group)?.order??99; return ga-gb || a.id.localeCompare(b.id,undefined,{numeric:true}); });
+const photoSrc = it => it.photo || '';
+const thumbHTML = (it,cls='thumb') => `<span class="${cls}">${it.photo?`<img src="${esc(photoSrc(it))}" alt="" loading="lazy">`:esc((it.group||'?').slice(0,3))}</span>`;
+const showPhotos = () => ls.get('iur.photos', true);
+
+// ---------- usage / conflicts ----------
+function projectIntervals(override){
+  const out=[];
+  for (const [pid,p0] of S.projects){
+    const p = override && override.id===pid ? override : p0;
+    for (const r of (p.dates||[])) for (const e of (p.items||[])) out.push({pid,itemId:e.id,qty:e.qty||1,start:r.start,end:r.end});
+  }
+  if (override && !S.projects.has(override.id)) for (const r of (override.dates||[])) for (const e of (override.items||[])) out.push({pid:override.id,itemId:e.id,qty:e.qty||1,start:r.start,end:r.end});
+  return out;
+}
+function inUseToday(itemId){
+  const t=todayStr(); const ps=[];
+  for (const [pid,p] of S.projects) if ((p.items||[]).some(e=>e.id===itemId) && (p.dates||[]).some(r=>r.start<=t&&r.end>=t)) ps.push(pid);
+  return ps;
+}
+function conflictsFor(p){
+  const all=projectIntervals(p); const res=new Map();
+  for (const e of (p.items||[])){
+    const it=S.items.get(e.id); if(!it) continue;
+    const ivs=all.filter(x=>x.itemId===e.id);
+    const mine=ivs.filter(x=>x.pid===p.id);
+    for (const m of mine){
+      const cands=new Set(ivs.filter(o=>o.start<=m.end&&o.end>=m.start).map(o=>o.start>m.start?o.start:m.start));
+      for (const d of cands){
+        const cover=ivs.filter(o=>o.start<=d&&o.end>=d);
+        const sum=cover.reduce((a,o)=>a+o.qty,0);
+        const others=[...new Set(cover.filter(o=>o.pid!==p.id).map(o=>o.pid))];
+        if (others.length && sum>(it.qty||1)){
+          const key=e.id+'|'+others.sort().join(',');
+          if(!res.has(key)) res.set(key,{itemId:e.id,date:d,others,need:sum,have:it.qty||1});
+        }
+      }
+    }
+  }
+  return [...res.values()];
+}
+function warningsFor(p){
+  const w=[]; const first=(p.dates||[]).map(r=>r.start).sort()[0];
+  for (const e of (p.items||[])){
+    const it=S.items.get(e.id); if(!it) continue;
+    if (it.status!=='owned') w.push({itemId:e.id,t:STAT[it.status].t});
+    else if (it.condition==='repair') w.push({itemId:e.id,t: it.returnDate ? (first && it.returnDate>first ? `Em manutenção até ${fmtD(it.returnDate)} (depois do início)` : `Em manutenção, retorno ${fmtD(it.returnDate)}`) : 'Em manutenção, sem data de retorno'});
+    else if (it.condition==='needs') w.push({itemId:e.id,t:'Precisa de manutenção'+(it.notes?` — ${it.notes}`:'')});
+  }
+  return w;
+}
+const projectConflictCount = pid => conflictsFor({id:pid,...S.projects.get(pid)}).length;
+
+function itemFlags(it){
+  const use=inUseToday(it.id);
+  const free = it.status==='owned' && it.condition==='ok' && use.length===0;
+  return {use,free};
+}
+function matchesFilter(it,f){
+  const fl=itemFlags(it);
+  switch(f){
+    case 'free': return fl.free; case 'inuse': return fl.use.length>0;
+    case 'needs': return it.status==='owned'&&it.condition==='needs'; case 'repair': return it.status==='owned'&&it.condition==='repair';
+    case 'ordered': return it.status==='ordered'; case 'tobuy': return it.status==='tobuy'; default: return true;
+  }
+}
+function pillsHTML(it){
+  const fl=itemFlags(it); const p=[];
+  if (it.status!=='owned') p.push(`<span class="pill ${STAT[it.status].c}">${STAT[it.status].t}</span>`);
+  else {
+    if (it.condition==='repair') { const late = it.returnDate && it.returnDate<todayStr(); p.push(`<span class="pill p-bad">Manutenção${it.returnDate?` · ${late?'atrasado ':''}volta ${fmtD(it.returnDate)}`:' · sem data'}</span>`); }
+    else if (it.condition==='needs') p.push(`<span class="pill p-warn">Precisa manutenção</span>`);
+    if (fl.use.length) p.push(`<span class="pill p-use">Em uso</span>`);
+    else if (it.condition==='ok') p.push(`<span class="pill p-ok">Livre</span>`);
+  }
+  return `<span class="pills">${p.join('')}</span>`;
+}
+
+// ---------- tabs ----------
+function setTab(t){
+  S.tab=t;
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===t)));
+  for (const v of ['items','projects','groups','labels']) $('#v-'+v).hidden = v!==t;
+  ls.set('iur.tab',t); render();
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.tab==='projects') S.openProject=null; setTab(b.dataset.tab); }));
+
+// ---------- render ----------
+let render = function(){
+  document.body.classList.toggle('nophotos', !showPhotos());
+  $('#showPhotos').checked = showPhotos();
+  $('#n-items').textContent = S.items.size;
+  const nconf=[...S.projects.keys()].filter(pid=>projectConflictCount(pid)>0).length;
+  const np=$('#n-projects'); np.textContent = nconf ? `${nconf} conflito${nconf>1?'s':''}` : S.projects.size; np.classList.toggle('bad', nconf>0);
+  fillGroupSelect($('#fgroup'), S.fgroup, 'Todos os grupos');
+  fillGroupSelect($('#lgroup'), $('#lgroup').value, 'Todos os grupos');
+  document.querySelectorAll('[data-w]').forEach(b=>b.hidden=!canWrite);
+  if (S.tab==='items') renderItems();
+  if (S.tab==='projects') S.openProject && S.projects.has(S.openProject) ? renderProject(S.openProject) : renderProjects();
+  if (S.tab==='groups') renderGroups();
+  if (S.tab==='labels') renderLabels();
+}
+function fillGroupSelect(sel,val,allLabel){
+  const opts=[`<option value="">${allLabel}</option>`, ...groupsSorted().map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`)].join('');
+  if (sel.dataset.sig!==opts){ sel.innerHTML=opts; sel.dataset.sig=opts; }
+  sel.value = S.groups.has(val)?val:'';
+}
+
+function renderItems(){
+  const all=itemsSorted();
+  const q=S.q.trim().toLowerCase();
+  const base=all.filter(it=>(!S.fgroup||it.group===S.fgroup) && (!q || [it.id,it.name,it.location,it.notes,it.accessories,gName(it.group)].join(' ').toLowerCase().includes(q)));
+  $('#fchips').innerHTML = FILTERS.map(([k,t,c])=>`<button class="chip" data-f="${k}" aria-pressed="${S.filter===k}">${c?`<span class="dot" style="background:${c}"></span>`:''}${t} <b>${base.filter(it=>matchesFilter(it,k)).length}</b></button>`).join('');
+  const list=base.filter(it=>matchesFilter(it,S.filter));
+  if (!S.loaded.items){ $('#itemsList').innerHTML='<div class="empty">Carregando o inventário…</div>'; return; }
+  if (!all.length){ $('#itemsList').innerHTML='<div class="empty">Nenhum equipamento cadastrado ainda. Use “+ Equipamento” para adicionar o primeiro.</div>'; return; }
+  if (!list.length){ $('#itemsList').innerHTML='<div class="empty">Nenhum equipamento com esses filtros.</div>'; return; }
+  const byG=new Map(); for(const it of list){ if(!byG.has(it.group)) byG.set(it.group,[]); byG.get(it.group).push(it); }
+  $('#itemsList').innerHTML=[...byG.entries()].map(([g,arr])=>`
+    <div class="gsec"><div class="ghead"><h2>${esc(gName(g))}</h2><small>${arr.length} ite${arr.length>1?'ns':'m'}</small></div>
+    <div class="rows">${arr.map(it=>`<button class="row" data-item="${esc(it.id)}">
+      ${thumbHTML(it)}<span class="id">${esc(it.id)}</span>
+      <span class="main"><span class="name">${esc(it.name)}</span>${(it.qty||1)>1?` <span class="qty">× ${it.qty}</span>`:''}
+      ${it.location||it.notes?`<div class="meta">${[it.location?'📍 '+esc(it.location):'', it.notes?esc(it.notes):''].filter(Boolean).join(' · ')}</div>`:''}</span>
+      ${pillsHTML(it)}</button>`).join('')}</div></div>`).join('');
+}
+$('#fchips').addEventListener('click',e=>{ const b=e.target.closest('[data-f]'); if(!b) return; S.filter=b.dataset.f; renderItems(); });
+$('#q').addEventListener('input',e=>{ S.q=e.target.value; renderItems(); });
+$('#fgroup').addEventListener('change',e=>{ S.fgroup=e.target.value; renderItems(); });
+$('#showPhotos').addEventListener('change',e=>{ ls.set('iur.photos',e.target.checked); render(); });
+$('#itemsList').addEventListener('click',e=>{ const r=e.target.closest('[data-item]'); if(r) openItem(r.dataset.item); });
+$('#addItem').addEventListener('click',()=>openItem(null));
+
+// ---------- sheet ----------
+function openSheet(html,onMount){
+  const root=$('#sheetRoot'); root.innerHTML=`<div class="scrim"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  const scrim=root.firstElementChild;
+  scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
+  onMount && onMount(scrim.firstElementChild);
+}
+function closeSheet(){ $('#sheetRoot').innerHTML=''; if(/^#[A-Z]/.test(location.hash)) { try{history.replaceState(null,'',location.pathname+location.search);}catch(e){} } }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#sheetRoot').innerHTML) closeSheet(); });
+
+function qrSVG(text,cell=4){
+  if (typeof qrcode!=='function') return '';
+  const q=qrcode(0,'M'); q.addData(text); q.make();
+  const n=q.getModuleCount(), m=2, size=(n+m*2)*cell; let d='';
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) if(q.isDark(r,c)) d+=`M${(c+m)*cell},${(r+m)*cell}h${cell}v${cell}h-${cell}z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+}
+const itemLink = id => ARTIFACT_URL ? `${ARTIFACT_URL}#${id}` : '';
+
+function nextId(group){
+  let max=0; for (const id of S.items.keys()){ const m=id.match(/^([A-Z0-9]+)-(\d+)$/); if(m&&m[1]===group) max=Math.max(max,+m[2]); }
+  return `${group}-${pad(max+1)}`;
+}
+
+function openItem(id){
+  const isNew=!id; const it = isNew ? {name:'',group:S.fgroup||groupsSorted()[0]?.id||'',qty:1,accessories:'',status:'owned',condition:'ok',returnDate:'',location:'',notes:'',photo:''} : {id,...S.items.get(id)};
+  if(!isNew && !S.items.has(id)) return;
+  const st={...it};
+  const uses = isNew?[]:[...S.projects.entries()].filter(([,p])=>(p.items||[]).some(e=>e.id===id));
+  const link=isNew?'':itemLink(id);
+  const ro = !canWrite ? 'disabled' : '';
+  openSheet(`
+    <div class="sheet-h"><div>${isNew?'<span class="hint">Novo equipamento</span>':`<span class="id">${esc(id)}</span>`}<h2>${isNew?'Cadastrar equipamento':esc(it.name)}</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <form class="form" id="itemForm">
+      <div class="photo-box">
+        <span class="photo-big" id="pbig">${it.photo?`<img src="${esc(photoSrc(it))}" alt="">`:esc((it.group||'?').slice(0,3))}</span>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label class="btn sm" id="photoBtn" style="cursor:pointer" ${ro?'hidden':''}><input type="file" id="photoIn" accept="image/*" hidden>${it.photo?'Trocar foto':'Adicionar foto'}</label>
+          ${it.photo&&canWrite?'<button type="button" class="btn sm ghost" id="photoRm">Remover foto</button>':''}
+          <span class="hint" id="photoMsg">Foto ajuda a identificar o item na lista.</span>
+        </div>
+      </div>
+      <label>Nome<input type="text" id="f-name" required value="${esc(it.name)}" ${ro}></label>
+      <div class="two">
+        <label>Grupo<select id="f-group" ${ro}>${groupsSorted().map(g=>`<option value="${esc(g.id)}" ${g.id===it.group?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
+        <label>Quantidade<span class="stepper"><button type="button" data-q="-1" ${ro}>−</button><input type="number" id="f-qty" min="0" value="${it.qty??1}" ${ro}><button type="button" data-q="1" ${ro}>+</button></span></label>
+      </div>
+      <label>Situação<div class="seg" id="segStat">${Object.entries(STAT).map(([k,v])=>`<button type="button" class="s-acc" data-v="${k}" aria-pressed="${it.status===k}" ${ro}>${v.t}</button>`).join('')}</div></label>
+      <label>Condição<div class="seg" id="segCond">${Object.entries(COND).map(([k,v])=>`<button type="button" class="${v.s}" data-v="${k}" aria-pressed="${it.condition===k}" ${ro}>${v.t}</button>`).join('')}</div></label>
+      <label id="retWrap" ${it.condition==='repair'?'':'hidden'}>Previsão de retorno da manutenção<input type="date" id="f-ret" value="${esc(it.returnDate)}" ${ro}></label>
+      <div class="two">
+        <label>Localização<input type="text" id="f-loc" value="${esc(it.location)}" placeholder="Ex.: base UR, Sítio Leo" ${ro}></label>
+        <label>Acessórios<input type="text" id="f-acc" value="${esc(it.accessories)}" ${ro}></label>
+      </div>
+      <label>Pendência / observações<textarea id="f-notes" ${ro}>${esc(it.notes)}</textarea></label>
+      ${isNew?'':`<div class="section" style="margin-top:4px"><h3>Projetos com este item</h3><div class="uses">${uses.length?uses.map(([pid,p])=>`<a href="#" data-goproj="${esc(pid)}">${esc(p.name)}</a> <span class="hint">${(p.dates||[]).map(fmtRange).join(' · ')||'sem datas'}</span>`).join('<br>'):'<span class="hint">Nenhum projeto ainda.</span>'}</div></div>
+      <div class="qrbox">${link?`<div class="qr">${qrSVG(link,3)}</div><div><b>QR code</b><div class="hint">Escaneie com a câmera do celular para abrir esta ficha.</div><button type="button" class="btn sm" id="qrDl" style="margin-top:6px">Baixar etiqueta</button></div>`:'<div class="hint">O QR code aparece aqui assim que o link do app estiver configurado.</div>'}</div>`}
+      <div class="actions">
+        <div>${!isNew&&canWrite?'<button type="button" class="btn danger" id="delItem">Excluir</button>':''}</div>
+        <div class="r"><button type="button" class="btn" data-close>Fechar</button>${canWrite?`<button type="submit" class="btn pri">${isNew?'Cadastrar':'Salvar'}</button>`:''}</div>
+      </div>
+    </form>`, sh=>{
+      sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+      sh.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{ const i=sh.querySelector('#f-qty'); i.value=Math.max(0,(+i.value||0)+(+b.dataset.q)); }));
+      const seg=(sel,key,cb)=>sh.querySelector(sel).addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; st[key]=b.dataset.v; sh.querySelectorAll(sel+' button').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); cb&&cb(); });
+      seg('#segStat','status'); seg('#segCond','condition',()=>{ sh.querySelector('#retWrap').hidden = st.condition!=='repair'; });
+      sh.querySelector('#f-group').addEventListener('change',e=>{ if(!st.photo) sh.querySelector('#pbig').textContent=e.target.value.slice(0,3); });
+      sh.querySelectorAll('[data-goproj]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); closeSheet(); S.openProject=a.dataset.goproj; setTab('projects'); }));
+      const pin=sh.querySelector('#photoIn');
+      if (!assets){ const pb=sh.querySelector('#photoBtn'); if(pb) pb.hidden=true; sh.querySelector('#photoMsg').textContent = canWrite?'Envio de fotos indisponível nesta visualização.':''; }
+      pin && pin.addEventListener('change', async ()=>{
+        const f=pin.files[0]; if(!f) return; const msg=sh.querySelector('#photoMsg'); msg.textContent='Enviando foto…';
+        try{ const blob=await shrink(f); const r=await assets.upload(blob,{type:'image/jpeg'}); st.photo=r.id; sh.querySelector('#pbig').innerHTML=`<img src="${esc(r.url)}" alt="">`; msg.textContent='Foto pronta. Salve para gravar.'; }
+        catch(e){ msg.textContent = e?.code==='too_large'?'Imagem grande demais.':'Não foi possível enviar a foto ('+(e?.code||'erro')+').'; }
+      });
+      const prm=sh.querySelector('#photoRm'); prm&&prm.addEventListener('click',()=>{ st.photo=''; sh.querySelector('#pbig').textContent=(st.group||'?').slice(0,3); prm.remove(); });
+      const qd=sh.querySelector('#qrDl'); qd&&qd.addEventListener('click',()=>downloadLabels([id]));
+      const del=sh.querySelector('#delItem'); del&&del.addEventListener('click',()=>{
+        if (del.dataset.armed){ deleteItem(id); return; }
+        del.dataset.armed='1'; del.classList.add('solid'); del.textContent= uses.length?`Confirmar (sai de ${uses.length} projeto${uses.length>1?'s':''})`:'Confirmar exclusão';
+      });
+      sh.querySelector('#itemForm').addEventListener('submit', async e=>{
+        e.preventDefault(); if(!canWrite) return;
+        const data={ name:sh.querySelector('#f-name').value.trim(), group:sh.querySelector('#f-group').value, qty:Math.max(0,parseInt(sh.querySelector('#f-qty').value)||0),
+          accessories:sh.querySelector('#f-acc').value.trim(), status:st.status, condition:st.condition, returnDate: st.condition==='repair'?sh.querySelector('#f-ret').value:'',
+          location:sh.querySelector('#f-loc').value.trim(), notes:sh.querySelector('#f-notes').value.trim(), photo:st.photo||'' };
+        if(!data.name){ sh.querySelector('#f-name').focus(); return; }
+        if(!data.group){ toast('Crie um grupo antes de cadastrar.'); return; }
+        if(data.condition==='repair' && !data.returnDate){ sh.querySelector('#f-ret').focus(); toast('Informe a previsão de retorno.'); return; }
+        const newId = isNew ? nextId(data.group) : id;
+        try{ await db.doc('items/'+newId).set(data); toast(isNew?`${newId} cadastrado`:'Alterações salvas'); closeSheet(); }
+        catch(err){ writeFail(err); }
+      });
+    });
+}
+async function shrink(file){
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=url; });
+    const max=360, k=Math.min(1,max/Math.max(img.width,img.height));
+    const c=document.createElement('canvas'); c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    return await new Promise(res=>c.toBlob(res,'image/jpeg',0.72));
+  } finally { URL.revokeObjectURL(url); }
+}
+async function deleteItem(id){
+  try{
+    for (const [pid,p] of S.projects) if((p.items||[]).some(e=>e.id===id)){
+      const np={...p, items:p.items.filter(e=>e.id!==id)}; const ch={...(p.checked||{})}; delete ch[id]; np.checked=ch;
+      await db.doc('projects/'+pid).set(np);
+    }
+    await db.doc('items/'+id).delete(); closeSheet(); toast(`${id} excluído`);
+  }catch(e){ writeFail(e); }
+}
+function writeFail(e){
+  if (e?.code==='permission-denied'||e?.code==='invalid_argument'){ canWrite=false; render(); toast('Você não tem permissão para editar.'); }
+  else if (e?.code==='quota_exceeded') toast('Limite de armazenamento atingido.');
+  else toast('Não foi possível salvar. Tente de novo.');
+}
+
+// ---------- projects ----------
+function renderProjects(){
+  $('#projDetail').hidden=true; const el=$('#projList'); el.hidden=false;
+  const t=todayStr();
+  const arr=[...S.projects.entries()].map(([id,p])=>({id,...p})).sort((a,b)=>{
+    const na=(a.dates||[]).filter(r=>r.end>=t).map(r=>r.start).sort()[0]||'9999', nb=(b.dates||[]).filter(r=>r.end>=t).map(r=>r.start).sort()[0]||'9999';
+    return na.localeCompare(nb)||a.name.localeCompare(b.name); });
+  el.innerHTML=`<div class="bar"><p class="hint" style="flex:1;margin:0">Cada projeto guarda a lista de equipamentos, as datas de uso e um checklist de saída.</p>${canWrite?'<button class="btn pri" id="newProj">+ Projeto</button>':''}</div>
+    ${!S.loaded.projects?'<div class="empty">Carregando…</div>': !arr.length?'<div class="empty">Nenhum projeto ainda. Crie um projeto (ex.: “Manguezais – saída de campo”) e adicione equipamentos e datas.</div>':
+    `<div class="grid">${arr.map(p=>{
+      const nc=conflictsFor(p).length, ni=(p.items||[]).length, nk=(p.items||[]).filter(e=>p.checked?.[e.id]).length;
+      const now=(p.dates||[]).some(r=>r.start<=t&&r.end>=t);
+      const up=(p.dates||[]).filter(r=>r.end>=t).sort((a,b)=>a.start.localeCompare(b.start));
+      return `<button class="card ${nc?'conf':''}" data-proj="${esc(p.id)}">
+        <div class="pills" style="justify-content:flex-start">${now?'<span class="pill p-use">Em andamento</span>':''}${nc?`<span class="pill p-bad">⚠ ${nc} conflito${nc>1?'s':''}</span>`:''}</div>
+        <h3>${esc(p.name)}</h3>
+        <div class="meta">${up.length?up.slice(0,3).map(fmtRange).join(' · '):(p.dates||[]).length?'Datas já passaram':'Sem datas'}</div>
+        <div class="meta">${ni} equipamento${ni!==1?'s':''} · checklist ${nk}/${ni}</div>
+        <div class="prog"><i style="width:${ni?Math.round(nk/ni*100):0}%"></i></div></button>`;}).join('')}</div>`}`;
+  el.querySelectorAll('[data-proj]').forEach(b=>b.addEventListener('click',()=>{ S.openProject=b.dataset.proj; render(); window.scrollTo(0,0); }));
+  const np=el.querySelector('#newProj'); np&&np.addEventListener('click',newProject);
+}
+function newProject(){
+  openSheet(`<div class="sheet-h"><div><span class="hint">Novo projeto</span><h2>Criar lista de projeto</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <form class="form" id="pf"><label>Nome do projeto<input type="text" id="p-name" required placeholder="Ex.: Manguezais – saída de campo"></label>
+    <label>Observações<textarea id="p-notes" placeholder="Local, equipe, objetivo…"></textarea></label>
+    <div class="actions"><span></span><div class="r"><button type="button" class="btn" data-close>Cancelar</button><button class="btn pri" type="submit">Criar</button></div></div></form>`, sh=>{
+    sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+    sh.querySelector('#p-name').focus();
+    sh.querySelector('#pf').addEventListener('submit',async e=>{ e.preventDefault();
+      const name=sh.querySelector('#p-name').value.trim(); if(!name) return;
+      try{ const ref=db.collection('projects').doc(); await ref.set({name,notes:sh.querySelector('#p-notes').value.trim(),dates:[],items:[],checked:{},created:new Date().toISOString()});
+        closeSheet(); S.openProject=ref.id; render(); }catch(err){ writeFail(err); } });
+  });
+}
+function confirmConflicts(newConf, onGo){
+  const rows=newConf.map(c=>{ const it=S.items.get(c.itemId); return `<li><span class="id">${esc(c.itemId)}</span> ${esc(it?.name||'')} — ${fmtD(c.date)}: também em ${c.others.map(o=>`<b>${esc(S.projects.get(o)?.name||'outro projeto')}</b>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`; }).join('');
+  openSheet(`<div class="sheet-h"><div><span class="pill p-bad">Conflito de uso</span><h2>Equipamento já reservado nessas datas</h2></div></div>
+    <div class="alert bad"><ul>${rows}</ul></div>
+    <p class="hint" style="font-size:14px">Se continuar, o projeto fica marcado com conflito até que você mude as datas, a quantidade ou remova o equipamento de um dos projetos.</p>
+    <div class="actions"><span></span><div class="r"><button class="btn" id="cc">Cancelar</button><button class="btn danger solid" id="cg">Continuar com conflito</button></div></div>`, sh=>{
+      sh.querySelector('#cc').addEventListener('click',closeSheet);
+      sh.querySelector('#cg').addEventListener('click',()=>{ closeSheet(); onGo(); });
+    });
+}
+async function saveProject(pid, np, msg){
+  const old={id:pid,...S.projects.get(pid)}; const next={id:pid,...np};
+  const key=c=>c.itemId+'|'+c.others.join(',');
+  const before=new Set(conflictsFor(old).map(key));
+  const added=conflictsFor(next).filter(c=>!before.has(key(c)));
+  const go=async()=>{ try{ const body={...np}; delete body.id; await db.doc('projects/'+pid).set(body); msg&&toast(msg); }catch(e){ writeFail(e); } };
+  if (added.length) confirmConflicts(added, go); else await go();
+}
+const projBody = pid => JSON.parse(JSON.stringify(S.projects.get(pid)));
+
+function renderProject(pid){
+  $('#projList').hidden=true; const el=$('#projDetail'); el.hidden=false;
+  const p={id:pid,...S.projects.get(pid)}; const t=todayStr();
+  const conf=conflictsFor(p), warn=warningsFor(p);
+  const items=(p.items||[]).map(e=>({...e,it:S.items.get(e.id)})).filter(x=>x.it);
+  items.sort((a,b)=>((S.groups.get(a.it.group)?.order??99)-(S.groups.get(b.it.group)?.order??99))||a.id.localeCompare(b.id,undefined,{numeric:true}));
+  const nk=items.filter(x=>p.checked?.[x.id]).length;
+  const byG=new Map(); for(const x of items){ if(!byG.has(x.it.group)) byG.set(x.it.group,[]); byG.get(x.it.group).push(x); }
+  const W=canWrite;
+  el.innerHTML=`
+    <button class="btn ghost back" id="pback">← Projetos</button>
+    <div class="phead"><div style="min-width:0"><h2>${esc(p.name)}</h2>${p.notes?`<p class="hint" style="font-size:14px;margin:6px 0 0">${esc(p.notes)}</p>`:''}</div>
+      ${W?'<div style="display:flex;gap:6px"><button class="btn sm" id="pedit">Editar</button><button class="btn sm danger" id="pdel">Excluir</button></div>':''}</div>
+
+    ${conf.length?`<div class="section"><div class="alert bad"><strong>⚠ Conflito de uso — pendente</strong><ul>${conf.map(c=>`<li><span class="id">${esc(c.itemId)}</span> ${esc(S.items.get(c.itemId)?.name||'')} — ${fmtD(c.date)}: também em ${c.others.map(o=>`<a href="#" data-goproj="${esc(o)}">${esc(S.projects.get(o)?.name||'')}</a>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`).join('')}</ul><span class="hint">Resolva mudando datas, quantidades ou retirando o item de um dos projetos.</span></div></div>`:''}
+    ${warn.length?`<div class="section"><div class="alert warn"><strong>Atenção</strong><ul>${warn.map(w=>`<li><span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name||'')} — ${esc(w.t)}</li>`).join('')}</ul></div></div>`:''}
+
+    <div class="section"><h3>Datas de uso</h3>
+      <div class="dates">${(p.dates||[]).length?p.dates.map((r,i)=>`<span class="date ${r.start<=t&&r.end>=t?'now':''}">${fmtRange(r)}${r.label?` <small>${esc(r.label)}</small>`:''}${W?`<button class="x" data-rmdate="${i}" aria-label="Remover data">×</button>`:''}</span>`).join(''):'<span class="hint">Nenhuma data. Adicione as datas em que esta lista será usada.</span>'}</div>
+      ${W?`<form class="inline-form" id="dform"><label>Início<input type="date" id="d-s" required></label><label>Fim<input type="date" id="d-e"></label><label>Descrição<input type="text" id="d-l" placeholder="opcional" size="14"></label><button class="btn" type="submit">Adicionar data</button></form>`:''}
+    </div>
+
+    <div class="section"><h3>Equipamentos · checklist ${nk}/${items.length}</h3>
+      <div class="prog" style="margin-bottom:10px"><i style="width:${items.length?Math.round(nk/items.length*100):0}%"></i></div>
+      ${W?`<div class="bar" style="margin-top:0"><button class="btn pri" id="padd">+ Equipamentos</button>
+        <select class="sel" id="pgsel" aria-label="Grupo para adicionar"><option value="">Adicionar grupo inteiro…</option>${groupsSorted().map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('')}</select>
+        <label class="toggle"><input type="checkbox" id="pgall"> incluir encomendados / a comprar</label>
+        <span style="flex:1"></span>${nk?'<button class="btn sm" id="punchk">Desmarcar todos</button>':''}</div>`:''}
+      ${items.length?[...byG.entries()].map(([g,arr])=>`<div class="gsec" style="margin-top:12px"><div class="ghead"><h2 style="font-size:17px">${esc(gName(g))}</h2><small>${arr.length}</small></div>
+        ${arr.map(x=>`<div class="check ${p.checked?.[x.id]?'done':''}">
+          <input type="checkbox" data-chk="${esc(x.id)}" ${p.checked?.[x.id]?'checked':''} ${W?'':'disabled'} aria-label="Conferido">
+          ${thumbHTML(x.it)}<span class="id">${esc(x.id)}</span>
+          <span class="main" data-item="${esc(x.id)}"><span class="name">${esc(x.it.name)}</span>${conf.some(c=>c.itemId===x.id)?' <span class="pill p-bad">conflito</span>':''}</span>
+          ${(x.it.qty||1)>1||(x.qty||1)>1?`<span class="stepper sm">${W?`<button data-pq="${esc(x.id)}" data-d="-1">−</button>`:''}<span>${x.qty||1}</span>${W?`<button data-pq="${esc(x.id)}" data-d="1">+</button>`:''}</span>`:'<span></span>'}
+          ${W?`<button class="x" data-rmit="${esc(x.id)}" aria-label="Remover do projeto">×</button>`:'<span></span>'}
+        </div>`).join('')}</div>`).join(''):'<div class="empty">Nenhum equipamento nesta lista ainda.</div>'}
+    </div>`;
+  el.querySelector('#pback').addEventListener('click',()=>{ S.openProject=null; render(); });
+  el.querySelectorAll('[data-goproj]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); S.openProject=a.dataset.goproj; render(); window.scrollTo(0,0); }));
+  el.querySelectorAll('[data-item]').forEach(a=>a.addEventListener('click',()=>openItem(a.dataset.item)));
+  if(!W) return;
+  el.querySelector('#pedit').addEventListener('click',()=>editProject(pid));
+  const pd=el.querySelector('#pdel'); pd.addEventListener('click',async()=>{ if(!pd.dataset.armed){ pd.dataset.armed='1'; pd.classList.add('solid'); pd.textContent='Confirmar exclusão'; return; }
+    try{ await db.doc('projects/'+pid).delete(); S.openProject=null; toast('Projeto excluído'); render(); }catch(e){ writeFail(e); } });
+  el.querySelectorAll('[data-rmdate]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.dates.splice(+b.dataset.rmdate,1); saveProject(pid,np); }));
+  const ds=el.querySelector('#d-s'), de=el.querySelector('#d-e');
+  ds.addEventListener('change',()=>{ if(!de.value||de.value<ds.value) de.value=ds.value; });
+  el.querySelector('#dform').addEventListener('submit',e=>{ e.preventDefault();
+    const s=ds.value, en=de.value||s; if(!s) return; if(en<s){ toast('A data final é antes da inicial.'); return; }
+    const np=projBody(pid); np.dates=[...(np.dates||[]),{start:s,end:en,label:el.querySelector('#d-l').value.trim()}].sort((a,b)=>a.start.localeCompare(b.start));
+    saveProject(pid,np,'Data adicionada'); });
+  el.querySelector('#padd').addEventListener('click',()=>pickItems(pid));
+  el.querySelector('#pgsel').addEventListener('change',e=>{ const g=e.target.value; if(!g) return; e.target.value='';
+    const incl=el.querySelector('#pgall').checked; const np=projBody(pid); const have=new Set(np.items.map(x=>x.id));
+    const add=itemsSorted().filter(it=>it.group===g && !have.has(it.id) && (incl||it.status==='owned'));
+    if(!add.length){ toast('Nenhum item novo desse grupo para adicionar.'); return; }
+    np.items=[...np.items,...add.map(it=>({id:it.id,qty:Math.max(1,it.qty||1)}))];
+    saveProject(pid,np,`${add.length} itens de ${gName(g)} adicionados`); });
+  const un=el.querySelector('#punchk'); un&&un.addEventListener('click',()=>{ const np=projBody(pid); np.checked={}; saveProject(pid,np,'Checklist reiniciado'); });
+  el.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',async()=>{ const np=projBody(pid); np.checked={...(np.checked||{})}; if(c.checked) np.checked[c.dataset.chk]=true; else delete np.checked[c.dataset.chk];
+    try{ await db.doc('projects/'+pid).set(np); }catch(e){ writeFail(e); } }));
+  el.querySelectorAll('[data-rmit]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.items=np.items.filter(x=>x.id!==b.dataset.rmit); if(np.checked) delete np.checked[b.dataset.rmit]; saveProject(pid,np); }));
+  el.querySelectorAll('[data-pq]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); const e=np.items.find(x=>x.id===b.dataset.pq); e.qty=Math.max(1,(e.qty||1)+(+b.dataset.d)); saveProject(pid,np); }));
+}
+function editProject(pid){
+  const p=S.projects.get(pid);
+  openSheet(`<div class="sheet-h"><div><span class="hint">Editar projeto</span><h2>${esc(p.name)}</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <form class="form" id="pf"><label>Nome<input type="text" id="p-name" required value="${esc(p.name)}"></label><label>Observações<textarea id="p-notes">${esc(p.notes||'')}</textarea></label>
+    <div class="actions"><span></span><div class="r"><button type="button" class="btn" data-close>Cancelar</button><button class="btn pri" type="submit">Salvar</button></div></div></form>`, sh=>{
+    sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+    sh.querySelector('#pf').addEventListener('submit',async e=>{ e.preventDefault(); const np=projBody(pid); np.name=sh.querySelector('#p-name').value.trim()||np.name; np.notes=sh.querySelector('#p-notes').value.trim();
+      try{ await db.doc('projects/'+pid).set(np); closeSheet(); }catch(err){ writeFail(err); } });
+  });
+}
+function pickItems(pid){
+  const p={id:pid,...S.projects.get(pid)}; const have=new Set((p.items||[]).map(x=>x.id)); const sel=new Set();
+  let q='', g='';
+  const busy=id=>{ if(!(p.dates||[]).length) return ''; const trial={...p,items:[...(p.items||[]),{id,qty:1}]};
+    const c=conflictsFor(trial).filter(x=>x.itemId===id); return c.length?`ocupado ${fmtD(c[0].date)} · ${S.projects.get(c[0].others[0])?.name||''}`:''; };
+  openSheet(`<div class="sheet-h"><div><span class="hint">${esc(p.name)}</span><h2>Adicionar equipamentos</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <div class="bar" style="margin-top:0"><input class="search" id="pq" type="search" placeholder="Buscar…"><select class="sel" id="pg"><option value="">Todos os grupos</option>${groupsSorted().map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></div>
+    <div id="plist"></div>
+    <div class="actions" style="position:sticky;bottom:-20px;background:var(--bg);padding-block:10px"><span class="hint" id="pcount">Nenhum selecionado</span><div class="r"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="pok">Adicionar</button></div></div>`, sh=>{
+    const draw=()=>{ const ql=q.toLowerCase();
+      const arr=itemsSorted().filter(it=>!have.has(it.id)&&(!g||it.group===g)&&(!ql||(it.id+' '+it.name).toLowerCase().includes(ql)));
+      sh.querySelector('#plist').innerHTML= arr.length?arr.map(it=>{ const b=busy(it.id); const na=it.status!=='owned'?STAT[it.status].t: it.condition!=='ok'?COND[it.condition].t:'';
+        return `<label class="pick ${na?'dis':''}"><input type="checkbox" data-pk="${esc(it.id)}" ${sel.has(it.id)?'checked':''}><span class="id">${esc(it.id)}</span><span class="main"><span class="name">${esc(it.name)}</span>${(it.qty||1)>1?` <span class="qty">× ${it.qty}</span>`:''}${b||na?`<div class="meta">${[b?`<span style="color:var(--bad)">⚠ ${esc(b)}</span>`:'',na?esc(na):''].filter(Boolean).join(' · ')}</div>`:''}</span><span class="hint">${esc(gName(it.group))}</span></label>`; }).join('')
+        :'<div class="empty">Nada para adicionar com esse filtro.</div>';
+      sh.querySelectorAll('[data-pk]').forEach(c=>c.addEventListener('change',()=>{ c.checked?sel.add(c.dataset.pk):sel.delete(c.dataset.pk); sh.querySelector('#pcount').textContent= sel.size?`${sel.size} selecionado${sel.size>1?'s':''}`:'Nenhum selecionado'; }));
+    };
+    sh.querySelector('#pq').addEventListener('input',e=>{ q=e.target.value; draw(); });
+    sh.querySelector('#pg').addEventListener('change',e=>{ g=e.target.value; draw(); });
+    sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+    sh.querySelector('#pok').addEventListener('click',()=>{ if(!sel.size){ closeSheet(); return; } const np=projBody(pid);
+      np.items=[...(np.items||[]),...[...sel].map(id=>({id,qty:1}))]; closeSheet(); saveProject(pid,np,`${sel.size} equipamento${sel.size>1?'s':''} adicionado${sel.size>1?'s':''}`); });
+    draw();
+  });
+}
+
+// ---------- groups ----------
+function renderGroups(){
+  const gs=groupsSorted(); const all=itemsSorted();
+  $('#groupsGrid').innerHTML = !S.loaded.groups?'<div class="empty">Carregando…</div>': gs.map(g=>{
+    const its=all.filter(i=>i.group===g.id); const free=its.filter(i=>itemFlags(i).free).length;
+    const man=its.filter(i=>i.status==='owned'&&i.condition!=='ok').length; const pend=its.filter(i=>i.status!=='owned').length;
+    return `<div class="card" data-g="${esc(g.id)}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${esc(g.name)}</h3><span class="id">${esc(g.id)}</span></div>
+      ${g.desc?`<div class="meta">${esc(g.desc)}</div>`:''}
+      <div class="pills" style="justify-content:flex-start"><span class="pill p-idle">${its.length} itens</span>${free?`<span class="pill p-ok">${free} livres</span>`:''}${man?`<span class="pill p-warn">${man} manutenção</span>`:''}${pend?`<span class="pill p-acc">${pend} a chegar/comprar</span>`:''}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px"><button class="btn sm" data-gview="${esc(g.id)}">Ver itens</button>${canWrite?`<button class="btn sm" data-gedit="${esc(g.id)}">Editar</button>`:''}</div></div>`; }).join('');
+  $('#groupsGrid').querySelectorAll('[data-gview]').forEach(b=>b.addEventListener('click',()=>{ S.fgroup=b.dataset.gview; S.filter='all'; setTab('items'); }));
+  $('#groupsGrid').querySelectorAll('[data-gedit]').forEach(b=>b.addEventListener('click',()=>editGroup(b.dataset.gedit)));
+}
+$('#addGroup').addEventListener('click',()=>editGroup(null));
+function editGroup(gid){
+  const isNew=!gid; const g=isNew?{name:'',desc:''}:S.groups.get(gid);
+  const count=isNew?0:itemsSorted().filter(i=>i.group===gid).length;
+  openSheet(`<div class="sheet-h"><div><span class="hint">${isNew?'Novo grupo':'Editar grupo'}</span><h2>${isNew?'Criar grupo':esc(g.name)}</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <form class="form" id="gf">
+      <label>Nome<input type="text" id="g-name" required value="${esc(g.name)}"></label>
+      ${isNew?`<label>Sigla (2 a 4 letras, usada nos IDs)<input type="text" id="g-id" required maxlength="4" placeholder="Ex.: SOM" style="text-transform:uppercase"></label>`:''}
+      <label>Descrição<input type="text" id="g-desc" value="${esc(g.desc||'')}"></label>
+      ${!isNew&&count?`<label>Para excluir, mover os ${count} itens para<select id="g-move">${groupsSorted().filter(x=>x.id!==gid).map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label>`:''}
+      <div class="actions"><div>${isNew?'':'<button type="button" class="btn danger" id="gdel">Excluir grupo</button>'}</div><div class="r"><button type="button" class="btn" data-close>Cancelar</button><button class="btn pri" type="submit">Salvar</button></div></div>
+    </form>`, sh=>{
+    sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+    sh.querySelector('#gf').addEventListener('submit',async e=>{ e.preventDefault();
+      const name=sh.querySelector('#g-name').value.trim(); if(!name) return;
+      let id=gid; if(isNew){ id=sh.querySelector('#g-id').value.trim().toUpperCase(); if(!/^[A-Z]{2,4}$/.test(id)){ toast('Use de 2 a 4 letras na sigla.'); return; } if(S.groups.has(id)){ toast('Essa sigla já existe.'); return; } }
+      const order = isNew ? Math.max(-1,...groupsSorted().map(x=>x.order??0))+1 : (g.order??0);
+      try{ await db.doc('groups/'+id).set({name,desc:sh.querySelector('#g-desc').value.trim(),order}); closeSheet(); toast('Grupo salvo'); }catch(err){ writeFail(err); } });
+    const del=sh.querySelector('#gdel'); del&&del.addEventListener('click',async()=>{
+      if(!del.dataset.armed){ del.dataset.armed='1'; del.classList.add('solid'); del.textContent=count?`Mover ${count} itens e excluir`:'Confirmar exclusão'; return; }
+      try{ if(count){ const to=sh.querySelector('#g-move')?.value; if(!to){ toast('Crie outro grupo antes.'); return; }
+          for(const it of itemsSorted().filter(i=>i.group===gid)){ const {id,...body}=it; await db.doc('items/'+id).set({...body,group:to}); } }
+        await db.doc('groups/'+gid).delete(); if(S.fgroup===gid) S.fgroup=''; closeSheet(); toast('Grupo excluído'); }catch(err){ writeFail(err); } });
+  });
+}
+
+// ---------- labels ----------
+function labelItems(){ const g=$('#lgroup').value, s=$('#lstatus').value; return itemsSorted().filter(it=>(!g||it.group===g)&&(!s||it.status===s)); }
+function renderLabels(){
+  const arr=labelItems();
+  if(!S.labelInit && S.loaded.items){ arr.forEach(it=>S.labelSel.add(it.id)); S.labelInit=true; }
+  $('#lhint').textContent = ARTIFACT_URL ? `Cada etiqueta abre a ficha do equipamento ao ser escaneada pela câmera do celular. ${[...S.labelSel].length} selecionada(s). O arquivo baixado é uma folha A4 pronta para imprimir.` : 'O link do app ainda não foi configurado: os QR codes aparecem assim que for.';
+  $('#lpick').innerHTML = `<div class="chips">${arr.map(it=>`<button class="chip" data-ls="${esc(it.id)}" aria-pressed="${S.labelSel.has(it.id)}">${esc(it.id)}</button>`).join('')}</div>`;
+  const sel=arr.filter(it=>S.labelSel.has(it.id));
+  $('#lprev').innerHTML = ARTIFACT_URL ? sel.slice(0,60).map(it=>`<div class="lab">${qrSVG(itemLink(it.id),3)}<div class="lid">${esc(it.id)}</div><div class="lname">${esc(it.name)}</div></div>`).join('') + (sel.length>60?`<div class="hint">+ ${sel.length-60} no arquivo</div>`:'') : '';
+}
+$('#lpick').addEventListener('click',e=>{ const b=e.target.closest('[data-ls]'); if(!b) return; const id=b.dataset.ls; S.labelSel.has(id)?S.labelSel.delete(id):S.labelSel.add(id); renderLabels(); });
+$('#lgroup').addEventListener('change',renderLabels); $('#lstatus').addEventListener('change',renderLabels);
+$('#lall').addEventListener('click',()=>{ labelItems().forEach(it=>S.labelSel.add(it.id)); renderLabels(); });
+$('#lnone').addEventListener('click',()=>{ labelItems().forEach(it=>S.labelSel.delete(it.id)); renderLabels(); });
+$('#ldl').addEventListener('click',()=>{ const ids=labelItems().filter(it=>S.labelSel.has(it.id)).map(it=>it.id); if(!ids.length){ toast('Selecione ao menos uma etiqueta.'); return; } downloadLabels(ids); });
+async function downloadLabels(ids){
+  if(!ARTIFACT_URL){ toast('Link do app ainda não configurado.'); return; }
+  const cells=ids.map(id=>{ const it=S.items.get(id)||{name:''}; return `<div class="l">${qrSVG(itemLink(id),4)}<div class="t"><div class="i">${esc(id)}</div><div class="n">${esc(it.name)}</div><div class="o">IUR · Últimos Refúgios</div></div></div>`; }).join('');
+  const html=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Etiquetas IUR</title><style>
+@page{size:A4;margin:10mm}body{font-family:Arial,sans-serif;margin:0;color:#000}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.l{border:1px dashed #888;border-radius:2mm;padding:3mm;display:flex;gap:3mm;align-items:center;break-inside:avoid;height:30mm}
+.l svg{width:24mm;height:24mm;flex:none}.i{font-weight:700;font-size:15pt;letter-spacing:.5pt}.n{font-size:8pt;line-height:1.15;margin-top:1mm}.o{font-size:6.5pt;color:#555;margin-top:1mm}
+p{font-size:9pt;color:#555}@media print{p{display:none}}</style></head><body><p>Abra este arquivo no navegador e use Imprimir (Ctrl+P). ${ids.length} etiqueta(s).</p><div class="g">${cells}</div></body></html>`;
+  if(!downloads){ toast('Download indisponível nesta visualização.'); return; }
+  try{ await downloads.save({filename: ids.length===1?`etiqueta-${ids[0]}.html`:'etiquetas-equipamentos-IUR.html', data:html}); }
+  catch(e){ if(e?.code!=='declined') toast('Não foi possível gerar o arquivo.'); }
+}
+
+// ---------- deep link (#ID from QR) ----------
+function handleHash(){ const h=decodeURIComponent(location.hash.slice(1)); if(h && S.items.has(h)){ if(S.tab!=='items') setTab('items'); openItem(h); } }
+window.addEventListener('hashchange',handleHash);
+
+// ---------- boot (Firebase) ----------
+const fbApp=initializeApp(firebaseConfig);
+const fs=initializeFirestore(fbApp,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+const auth=getAuth(fbApp);
+// adaptador com a mesma interface usada pelo app
+const wrapRef = r => ({ id:r.id, set:d=>{ setDoc(r,d).catch(writeFail); return Promise.resolve(); }, delete:()=>{ deleteDoc(r).catch(writeFail); return Promise.resolve(); } });
+db = {
+  doc: p => wrapRef(fdoc(fs,p)),
+  collection: p => ({
+    doc: id => wrapRef(id ? fdoc(fs,p,id) : fdoc(collection(fs,p))),
+    onSnapshot: (next,err) => onSnapshot(collection(fs,p), s=>next({docs:s.docs.map(d=>({id:d.id,data:()=>d.data()}))}), err)
+  })
+};
+// fotos: miniatura gravada no próprio documento (data URL), sem precisar do Storage
+assets = { upload: blob => new Promise((res,rej)=>{ if(blob.size>350000) return rej({code:'too_large'}); const fr=new FileReader(); fr.onload=()=>res({id:fr.result,url:fr.result}); fr.onerror=()=>rej({code:'upstream_error'}); fr.readAsDataURL(blob); }) };
+// downloads: download normal do navegador
+downloads = { save: async ({filename,data}) => { const u=URL.createObjectURL(new Blob([data],{type:'text/html'})); const a=document.createElement('a'); a.href=u; a.download=filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); return {status:'saved'}; } };
+
+S.tab=ls.get('iur.tab','items'); setTab(S.tab);
+const views=['v-items','v-projects','v-groups','v-labels'];
+let unsubs=[];
+function showApp(on){ $('#login').hidden=on; $('.tabs').hidden=!on; views.forEach(v=>{ if(!on) $('#'+v).hidden=true; }); if(on) setTab(S.tab); }
+function checkImport(){ $('#importBox').hidden = !(S.loaded.items && S.loaded.groups && S.items.size===0 && S.groups.size===0); }
+render = (orig => () => { orig(); checkImport(); })(render);
+
+$('#gsign').addEventListener('click', async ()=>{
+  const p=new GoogleAuthProvider(); $('#loginMsg').textContent='';
+  try{ await signInWithPopup(auth,p); }
+  catch(e){ if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(e.code)) signInWithRedirect(auth,p);
+    else if(e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request') $('#loginMsg').textContent='Não foi possível entrar ('+e.code+').'; }
+});
+getRedirectResult(auth).catch(e=>{ $('#loginMsg').textContent='Não foi possível entrar ('+e.code+').'; });
+$('#logout').addEventListener('click',()=>signOut(auth));
+$('#doImport').addEventListener('click', async ()=>{
+  const btn=$('#doImport'); btn.disabled=true; btn.textContent='Importando…';
+  try{ const b=writeBatch(fs);
+    for(const [id,d] of Object.entries(SEED.groups)) b.set(fdoc(fs,'groups',id),d);
+    for(const [id,d] of Object.entries(SEED.items)) b.set(fdoc(fs,'items',id),d);
+    for(const [id,d] of Object.entries(SEED.projects)) b.set(fdoc(fs,'projects',id),d);
+    await b.commit(); toast('Inventário importado'); }
+  catch(e){ btn.disabled=false; btn.textContent='Importar'; writeFail(e); }
+});
+
+onAuthStateChanged(auth, user=>{
+  unsubs.forEach(u=>u()); unsubs=[];
+  S.items=new Map(); S.groups=new Map(); S.projects=new Map(); S.loaded={items:false,groups:false,projects:false};
+  $('#banner').hidden=true; $('#importBox').hidden=true;
+  if(!user){ $('#who').hidden=true; showApp(false); return; }
+  $('#who').hidden=false; $('#whoMail').textContent=user.email||''; canWrite=true; showApp(true);
+  let hashDone=false;
+  for(const name of ['groups','items','projects']){
+    unsubs.push(db.collection(name).onSnapshot(snap=>{
+      const m=new Map(); snap.docs.forEach(d=>m.set(d.id,d.data())); S[name]=m; S.loaded[name]=true; render();
+      if(!hashDone && S.loaded.items && S.loaded.projects){ hashDone=true; handleHash(); }
+    }, err=>{
+      $('#banner').hidden=false;
+      $('#banner').textContent = err.code==='permission-denied' ? `O e-mail ${user.email} não tem acesso a este inventário. Peça para incluí-lo nas regras do Firebase.` : 'Falha na conexão com o banco ('+err.code+'). Recarregue a página.';
+    }));
+  }
+});
+})();
+</script>
+
+</body>
+</html>
