@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- quem é quem ----------
+    // Administrador fixo: precisa ser igual a OWNERS em js/config.js
+    function proprietario() {
+      return request.auth.token.email.lower() in ['fdesigner@gmail.com'];
+    }
+    function logado() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function eu() { return request.auth.token.email.lower(); }
+    function cadastro() { return /databases/$(database)/documents/team/$(eu()); }
+
+    // perfil salvo na aba Equipe: admin | editor | member
+    function cadastrado() { return logado() && (proprietario() || exists(cadastro())); }
+    function admin()      { return logado() && (proprietario() || (exists(cadastro()) && get(cadastro()).data.role in ['admin', 'owner'])); }
+    function editor()     { return logado() && (proprietario() || (exists(cadastro()) && get(cadastro()).data.role in ['admin', 'owner', 'editor'])); }
+
+    function noProjeto(pid) {
+      return eu() in get(/databases/$(database)/documents/projects/$(pid)).data.team;
+    }
+
+    // ---------- pessoas com acesso ----------
+    match /team/{email} {
+      allow read: if cadastrado();
+      allow write: if admin();
+    }
+
+    // ---------- inventário ----------
+    match /items/{id}  { allow read: if cadastrado(); allow write: if editor(); }
+    match /groups/{id} { allow read: if cadastrado(); allow write: if editor(); }
+
+    // ---------- projetos ----------
+    // Membros só leem os projetos em que estão na equipe.
+    match /projects/{pid} {
+      allow read: if editor() || (cadastrado() && eu() in resource.data.team);
+      allow write: if editor();
+
+      // diárias
+      match /days/{date} {
+        allow read: if editor() || (cadastrado() && noProjeto(pid));
+        allow write: if editor();
+      }
+
+      // "estou ciente": cada pessoa grava só a própria confirmação (id = DATA__email)
+      match /acks/{ackId} {
+        allow read: if editor() || (cadastrado() && noProjeto(pid));
+        allow create, update: if cadastrado()
+          && request.resource.data.email == eu()
+          && ackId == request.resource.data.date + '__' + eu()
+          && (editor() || noProjeto(pid));
+        allow delete: if cadastrado() && (resource.data.email == eu() || editor());
+      }
+    }
+  }
+}
