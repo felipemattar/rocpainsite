@@ -128,10 +128,16 @@ select.sel{padding:9px 10px;border:1px solid var(--line);border-radius:8px;backg
 .alert.warn{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}
 .alert strong{font-family:var(--f-display);font-size:17px;letter-spacing:.02em;text-transform:uppercase}
 .alert ul{margin:0;padding-left:18px}
-.check{display:grid;grid-template-columns:auto auto auto 1fr auto auto;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--line)}
-.nophotos .check{grid-template-columns:auto auto 1fr auto auto}
+.check{display:grid;grid-template-columns:auto auto auto 1fr auto;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--line)}
+.nophotos .check{grid-template-columns:auto auto 1fr auto}
 .check input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);cursor:pointer}
 .check.done .name{text-decoration:line-through;color:var(--muted)}
+.check.base .name{color:var(--muted)}
+.check.dayrow{grid-template-columns:auto auto 1fr auto}
+.dayrow .ctl{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+@media (max-width:560px){.dayrow .ctl{grid-column:2 / -1}}
+.stepper button[disabled]{opacity:.3;cursor:not-allowed}
+.stepper small{font-weight:400}
 .check .main{min-width:0;cursor:pointer}
 .stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .stepper button{border:0;background:none;width:30px;height:30px;cursor:pointer;font-size:17px;font-weight:600}
@@ -379,7 +385,7 @@ function setTab(t){
   for (const v of ['items','projects','groups','labels','team']) $('#v-'+v).hidden = v!==t;
   ls.set('iur.tab',t); render();
 }
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.tab==='projects') S.openProject=null; setTab(b.dataset.tab); }));
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.tab==='projects'){ S.openProject=null; S.ptab='lista'; S.pday=null; } setTab(b.dataset.tab); }));
 
 // ---------- render ----------
 let render = function(){
@@ -555,7 +561,7 @@ function renderProjects(){
   const arr=[...S.projects.entries()].map(([id,p])=>({id,...p})).sort((a,b)=>{
     const na=(a.dates||[]).filter(r=>r.end>=t).map(r=>r.start).sort()[0]||'9999', nb=(b.dates||[]).filter(r=>r.end>=t).map(r=>r.start).sort()[0]||'9999';
     return na.localeCompare(nb)||a.name.localeCompare(b.name); });
-  el.innerHTML=`<div class="bar"><p class="hint" style="flex:1;margin:0">Cada projeto guarda a lista de equipamentos, as datas de uso e um checklist de saída.</p>${canWrite?'<button class="btn pri" id="newProj">+ Projeto</button>':''}</div>
+  el.innerHTML=`<div class="bar"><p class="hint" style="flex:1;margin:0">Cada projeto guarda a lista de equipamentos, a equipe, as datas e os checklists de carregamento e de cada dia.</p>${canWrite?'<button class="btn pri" id="newProj">+ Projeto</button>':''}</div>
     ${!S.loaded.projects?'<div class="empty">Carregando…</div>': !arr.length?'<div class="empty">Nenhum projeto ainda. Crie um projeto (ex.: “Manguezais – saída de campo”) e adicione equipamentos e datas.</div>':
     `<div class="grid">${arr.map(p=>{
       const nc=conflictsFor(p).length, ni=(p.items||[]).length, nk=(p.items||[]).filter(e=>p.checked?.[e.id]).length;
@@ -565,7 +571,8 @@ function renderProjects(){
         <div class="pills" style="justify-content:flex-start">${now?'<span class="pill p-use">Em andamento</span>':''}${nc?`<span class="pill p-bad">⚠ ${nc} conflito${nc>1?'s':''}</span>`:''}</div>
         <h3>${esc(p.name)}</h3>
         <div class="meta">${up.length?up.slice(0,3).map(fmtRange).join(' · '):(p.dates||[]).length?'Datas já passaram':'Sem datas'}</div>
-        <div class="meta">${ni} equipamento${ni!==1?'s':''} · checklist ${nk}/${ni}</div>
+        <div class="meta">${ni} equipamento${ni!==1?'s':''} · carregamento ${nk}/${ni}</div>
+        ${(p.team||[]).length?`<div class="meta">👥 ${(p.team||[]).map(e=>esc(personName(e))).join(', ')}</div>`:''}
         <div class="prog"><i style="width:${ni?Math.round(nk/ni*100):0}%"></i></div></button>`;}).join('')}</div>`}`;
   el.querySelectorAll('[data-proj]').forEach(b=>b.addEventListener('click',()=>{ S.openProject=b.dataset.proj; render(); window.scrollTo(0,0); }));
   const np=el.querySelector('#newProj'); np&&np.addEventListener('click',newProject);
@@ -603,21 +610,64 @@ async function saveProject(pid, np, msg){
 }
 const projBody = pid => JSON.parse(JSON.stringify(S.projects.get(pid)));
 
-function renderProject(pid){
-  $('#projList').hidden=true; const el=$('#projDetail'); el.hidden=false;
-  const p={id:pid,...S.projects.get(pid)}; const t=todayStr();
-  const conf=conflictsFor(p), warn=warningsFor(p);
+// ----- project helpers -----
+const DEFAULT_VEH = [ {id:'toro',name:'Fiat Toro',daily:true}, {id:'hilux',name:'Toyota Hilux',daily:true}, {id:'carretinha',name:'Carretinha',daily:false} ];
+const vehiclesOf = p => (p.vehicles && p.vehicles.length) ? p.vehicles : DEFAULT_VEH;
+const vehName = (p,id) => vehiclesOf(p).find(v=>v.id===id)?.name || '';
+const WD = ['dom','seg','ter','qua','qui','sex','sáb'];
+const wday = s => { const [y,m,d]=s.split('-').map(Number); return WD[new Date(y,m-1,d).getDay()]; };
+function projectDays(p){
+  const set=new Set();
+  for(const r of (p.dates||[])){ let [y,m,d]=r.start.split('-').map(Number); let dt=new Date(y,m-1,d); let guard=0;
+    while(guard++<400){ const s=`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`; if(s>r.end) break; set.add(s); dt.setDate(dt.getDate()+1); } }
+  return [...set].sort();
+}
+const allMembers = () => [...new Set([...OWNERS, ...S.team.keys()])].sort((a,b)=>personName(a).localeCompare(personName(b)));
+const personName = e => S.team.get(e)?.name || e;
+const stockOf = id => Math.max(0, S.items.get(id)?.qty ?? 0);
+function sortedProjItems(p){
   const items=(p.items||[]).map(e=>({...e,it:S.items.get(e.id)})).filter(x=>x.it);
   items.sort((a,b)=>((S.groups.get(a.it.group)?.order??99)-(S.groups.get(b.it.group)?.order??99))||a.id.localeCompare(b.id,undefined,{numeric:true}));
-  const nk=items.filter(x=>p.checked?.[x.id]).length;
-  const byG=new Map(); for(const x of items){ if(!byG.has(x.it.group)) byG.set(x.it.group,[]); byG.get(x.it.group).push(x); }
-  const W=canWrite;
+  return items;
+}
+async function setProjectDirect(pid,np){ try{ const b={...np}; delete b.id; await db.doc('projects/'+pid).set(b); }catch(e){ writeFail(e); } }
+
+function renderProject(pid){
+  $('#projList').hidden=true; const el=$('#projDetail'); el.hidden=false;
+  const p={id:pid,...S.projects.get(pid)};
+  if(!S.ptab) S.ptab='lista';
+  const W=canWrite; const nDays=projectDays(p).length;
   el.innerHTML=`
     <button class="btn ghost back" id="pback">← Projetos</button>
     <div class="phead"><div style="min-width:0"><h2>${esc(p.name)}</h2>${p.notes?`<p class="hint" style="font-size:14px;margin:6px 0 0">${esc(p.notes)}</p>`:''}</div>
       ${W?'<div style="display:flex;gap:6px"><button class="btn sm" id="pedit">Editar</button><button class="btn sm danger" id="pdel">Excluir</button></div>':''}</div>
+    <div class="tabs" style="margin-top:14px;border-bottom:1px solid var(--line)">
+      <button class="tab" data-ptab="lista" aria-selected="${S.ptab==='lista'}">Lista geral</button>
+      <button class="tab" data-ptab="diarias" aria-selected="${S.ptab==='diarias'}">Diárias <span class="n">${nDays}</span></button>
+    </div>
+    <div id="pbody"></div>`;
+  el.querySelector('#pback').addEventListener('click',()=>{ S.openProject=null; S.ptab='lista'; S.pday=null; render(); });
+  el.querySelectorAll('[data-ptab]').forEach(b=>b.addEventListener('click',()=>{ S.ptab=b.dataset.ptab; render(); }));
+  if(W){
+    el.querySelector('#pedit').addEventListener('click',()=>editProject(pid));
+    const pd=el.querySelector('#pdel'); pd.addEventListener('click',async()=>{ if(!pd.dataset.armed){ pd.dataset.armed='1'; pd.classList.add('solid'); pd.textContent='Confirmar exclusão'; return; }
+      try{ await db.doc('projects/'+pid).delete(); S.openProject=null; toast('Projeto excluído'); render(); }catch(e){ writeFail(e); } });
+  }
+  if(S.ptab==='diarias') renderDays(pid, el.querySelector('#pbody')); else renderGeneral(pid, el.querySelector('#pbody'));
+}
 
+function renderGeneral(pid, el){
+  const p={id:pid,...S.projects.get(pid)}; const t=todayStr(); const W=canWrite;
+  const conf=conflictsFor(p), warn=warningsFor(p);
+  const items=sortedProjItems(p);
+  const nk=items.filter(x=>p.checked?.[x.id]).length;
+  const byG=new Map(); for(const x of items){ if(!byG.has(x.it.group)) byG.set(x.it.group,[]); byG.get(x.it.group).push(x); }
+  const vehs=vehiclesOf(p); const team=p.team||[];
+  const freeMembers=allMembers().filter(e=>!team.includes(e));
+  const over=items.filter(x=>(x.qty||1)>stockOf(x.id));
+  el.innerHTML=`
     ${conf.length?`<div class="section"><div class="alert bad"><strong>⚠ Conflito de uso — pendente</strong><ul>${conf.map(c=>`<li><span class="id">${esc(c.itemId)}</span> ${esc(S.items.get(c.itemId)?.name||'')} — ${fmtD(c.date)}: também em ${c.others.map(o=>`<a href="#" data-goproj="${esc(o)}">${esc(S.projects.get(o)?.name||'')}</a>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`).join('')}</ul><span class="hint">Resolva mudando datas, quantidades ou retirando o item de um dos projetos.</span></div></div>`:''}
+    ${over.length?`<div class="section"><div class="alert bad"><strong>Quantidade acima do estoque</strong><ul>${over.map(x=>`<li><span class="id">${esc(x.id)}</span> ${esc(x.it.name)} — na lista ${x.qty}, no inventário ${stockOf(x.id)}</li>`).join('')}</ul>${W?'<div><button class="btn sm" id="fixover">Ajustar para o estoque</button></div>':''}</div></div>`:''}
     ${warn.length?`<div class="section"><div class="alert warn"><strong>Atenção</strong><ul>${warn.map(w=>`<li><span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name||'')} — ${esc(w.t)}</li>`).join('')}</ul></div></div>`:''}
 
     <div class="section"><h3>Datas de uso</h3>
@@ -625,28 +675,38 @@ function renderProject(pid){
       ${W?`<form class="inline-form" id="dform"><label>Início<input type="date" id="d-s" required></label><label>Fim<input type="date" id="d-e"></label><label>Descrição<input type="text" id="d-l" placeholder="opcional" size="14"></label><button class="btn" type="submit">Adicionar data</button></form>`:''}
     </div>
 
-    <div class="section"><h3>Equipamentos · checklist ${nk}/${items.length}</h3>
+    <div class="section"><h3>Equipe do projeto · ${team.length}</h3>
+      <div class="dates">${team.length?team.map(e=>`<span class="date">${esc(personName(e))}${W?`<button class="x" data-rmteam="${esc(e)}" aria-label="Retirar da equipe">×</button>`:''}</span>`).join(''):'<span class="hint">Ninguém escalado ainda.</span>'}</div>
+      ${W&&freeMembers.length?`<div class="inline-form"><select class="sel" id="addteam" aria-label="Adicionar pessoa"><option value="">Adicionar pessoa da equipe…</option>${freeMembers.map(e=>`<option value="${esc(e)}">${esc(personName(e))}${S.team.get(e)?.name?'':' (sem nome)'}</option>`).join('')}</select></div>`:''}
+      ${W&&!freeMembers.length&&!team.length?'<p class="hint">Cadastre pessoas na aba Equipe.</p>':''}
+    </div>
+
+    <div class="section"><h3>Veículos</h3>
+      <div class="dates">${vehs.map(v=>`<span class="date">${esc(v.name)} ${W?`<button class="pill ${v.daily?'p-use':'p-idle'}" style="border:0;cursor:pointer" data-vdaily="${esc(v.id)}" title="Alternar">${v.daily?'viagem e diárias':'só viagem'}</button>`:`<small>${v.daily?'viagem e diárias':'só viagem'}</small>`}${W?`<button class="x" data-rmveh="${esc(v.id)}" aria-label="Remover veículo">×</button>`:''}</span>`).join('')}</div>
+      ${W?'<form class="inline-form" id="vform"><label>Novo veículo<input type="text" id="v-n" placeholder="Ex.: Barco" size="16"></label><button class="btn" type="submit">Adicionar</button></form>':''}
+      <p class="hint">“Só viagem” aparece no carregamento sede → hospedagem; nas diárias só entram os veículos de “viagem e diárias”.</p>
+    </div>
+
+    <div class="section"><h3>Equipamentos · carregamento na sede ${nk}/${items.length}</h3>
       <div class="prog" style="margin-bottom:10px"><i style="width:${items.length?Math.round(nk/items.length*100):0}%"></i></div>
       ${W?`<div class="bar" style="margin-top:0"><button class="btn pri" id="padd">+ Equipamentos</button>
         <select class="sel" id="pgsel" aria-label="Grupo para adicionar"><option value="">Adicionar grupo inteiro…</option>${groupsSorted().map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('')}</select>
         <label class="toggle"><input type="checkbox" id="pgall"> incluir encomendados / a comprar</label>
         <span style="flex:1"></span>${nk?'<button class="btn sm" id="punchk">Desmarcar todos</button>':''}</div>`:''}
       ${items.length?[...byG.entries()].map(([g,arr])=>`<div class="gsec" style="margin-top:12px"><div class="ghead"><h2 style="font-size:17px">${esc(gName(g))}</h2><small>${arr.length}</small></div>
-        ${arr.map(x=>`<div class="check ${p.checked?.[x.id]?'done':''}">
-          <input type="checkbox" data-chk="${esc(x.id)}" ${p.checked?.[x.id]?'checked':''} ${W?'':'disabled'} aria-label="Conferido">
+        ${arr.map(x=>{ const st=stockOf(x.id), q=x.qty||1;
+          return `<div class="check ${p.checked?.[x.id]?'done':''}">
+          <input type="checkbox" data-chk="${esc(x.id)}" ${p.checked?.[x.id]?'checked':''} ${W?'':'disabled'} aria-label="Conferido na saída">
           ${thumbHTML(x.it)}<span class="id">${esc(x.id)}</span>
-          <span class="main" data-item="${esc(x.id)}"><span class="name">${esc(x.it.name)}</span>${conf.some(c=>c.itemId===x.id)?' <span class="pill p-bad">conflito</span>':''}</span>
-          ${(x.it.qty||1)>1||(x.qty||1)>1?`<span class="stepper sm">${W?`<button data-pq="${esc(x.id)}" data-d="-1">−</button>`:''}<span>${x.qty||1}</span>${W?`<button data-pq="${esc(x.id)}" data-d="1">+</button>`:''}</span>`:'<span></span>'}
+          <span class="main" data-item="${esc(x.id)}"><span class="name">${esc(x.it.name)}</span>${conf.some(c=>c.itemId===x.id)?' <span class="pill p-bad">conflito</span>':''}${q>st?` <span class="pill p-bad">só há ${st}</span>`:''}
+            <div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px"><select class="sel" style="padding:3px 6px;font-size:13px" data-load="${esc(x.id)}" ${W?'':'disabled'} aria-label="Veículo na viagem"><option value="">Veículo…</option>${vehs.map(v=>`<option value="${esc(v.id)}" ${p.load?.[x.id]===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select>
+            ${st>1||q>1?`<span class="stepper sm">${W?`<button data-pq="${esc(x.id)}" data-d="-1" ${q<=1?'disabled':''}>−</button>`:''}<span>${q}<small class="hint">/${st}</small></span>${W?`<button data-pq="${esc(x.id)}" data-d="1" ${q>=st?'disabled':''}>+</button>`:''}</span>`:''}</div></span>
           ${W?`<button class="x" data-rmit="${esc(x.id)}" aria-label="Remover do projeto">×</button>`:'<span></span>'}
-        </div>`).join('')}</div>`).join(''):'<div class="empty">Nenhum equipamento nesta lista ainda.</div>'}
+        </div>`;}).join('')}</div>`).join(''):'<div class="empty">Nenhum equipamento nesta lista ainda.</div>'}
     </div>`;
-  el.querySelector('#pback').addEventListener('click',()=>{ S.openProject=null; render(); });
-  el.querySelectorAll('[data-goproj]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); S.openProject=a.dataset.goproj; render(); window.scrollTo(0,0); }));
-  el.querySelectorAll('[data-item]').forEach(a=>a.addEventListener('click',()=>openItem(a.dataset.item)));
+  el.querySelectorAll('[data-goproj]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); S.openProject=a.dataset.goproj; S.ptab='lista'; render(); window.scrollTo(0,0); }));
+  el.querySelectorAll('[data-item]').forEach(a=>a.addEventListener('click',e=>{ if(e.target.closest('select,button,.stepper')) return; openItem(a.dataset.item); }));
   if(!W) return;
-  el.querySelector('#pedit').addEventListener('click',()=>editProject(pid));
-  const pd=el.querySelector('#pdel'); pd.addEventListener('click',async()=>{ if(!pd.dataset.armed){ pd.dataset.armed='1'; pd.classList.add('solid'); pd.textContent='Confirmar exclusão'; return; }
-    try{ await db.doc('projects/'+pid).delete(); S.openProject=null; toast('Projeto excluído'); render(); }catch(e){ writeFail(e); } });
   el.querySelectorAll('[data-rmdate]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.dates.splice(+b.dataset.rmdate,1); saveProject(pid,np); }));
   const ds=el.querySelector('#d-s'), de=el.querySelector('#d-e');
   ds.addEventListener('change',()=>{ if(!de.value||de.value<ds.value) de.value=ds.value; });
@@ -654,19 +714,103 @@ function renderProject(pid){
     const s=ds.value, en=de.value||s; if(!s) return; if(en<s){ toast('A data final é antes da inicial.'); return; }
     const np=projBody(pid); np.dates=[...(np.dates||[]),{start:s,end:en,label:el.querySelector('#d-l').value.trim()}].sort((a,b)=>a.start.localeCompare(b.start));
     saveProject(pid,np,'Data adicionada'); });
+  // equipe
+  const at=el.querySelector('#addteam'); at&&at.addEventListener('change',()=>{ if(!at.value) return; const np=projBody(pid); np.team=[...(np.team||[]),at.value]; setProjectDirect(pid,np); });
+  el.querySelectorAll('[data-rmteam]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.team=(np.team||[]).filter(e=>e!==b.dataset.rmteam); setProjectDirect(pid,np); }));
+  // veículos
+  el.querySelectorAll('[data-vdaily]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.vehicles=vehiclesOf(np).map(v=>v.id===b.dataset.vdaily?{...v,daily:!v.daily}:v); setProjectDirect(pid,np); }));
+  el.querySelectorAll('[data-rmveh]').forEach(b=>b.addEventListener('click',()=>{ const id=b.dataset.rmveh; const np=projBody(pid);
+    np.vehicles=vehiclesOf(np).filter(v=>v.id!==id);
+    if(np.load) for(const k of Object.keys(np.load)) if(np.load[k]===id) delete np.load[k];
+    if(np.days) for(const d of Object.values(np.days)) for(const r of Object.values(d.items||{})) if(r.v===id) r.v='';
+    setProjectDirect(pid,np); }));
+  el.querySelector('#vform').addEventListener('submit',e=>{ e.preventDefault(); const n=el.querySelector('#v-n').value.trim(); if(!n) return;
+    const np=projBody(pid); const vs=vehiclesOf(np); let id=n.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'v'; while(vs.some(v=>v.id===id)) id+='2';
+    np.vehicles=[...vs,{id,name:n,daily:true}]; setProjectDirect(pid,np); });
+  // equipamentos
   el.querySelector('#padd').addEventListener('click',()=>pickItems(pid));
   el.querySelector('#pgsel').addEventListener('change',e=>{ const g=e.target.value; if(!g) return; e.target.value='';
     const incl=el.querySelector('#pgall').checked; const np=projBody(pid); const have=new Set(np.items.map(x=>x.id));
-    const add=itemsSorted().filter(it=>it.group===g && !have.has(it.id) && (incl||it.status==='owned'));
+    const add=itemsSorted().filter(it=>it.group===g && !have.has(it.id) && (incl||it.status==='owned') && (it.qty||0)>0);
     if(!add.length){ toast('Nenhum item novo desse grupo para adicionar.'); return; }
     np.items=[...np.items,...add.map(it=>({id:it.id,qty:Math.max(1,it.qty||1)}))];
     saveProject(pid,np,`${add.length} itens de ${gName(g)} adicionados`); });
-  const un=el.querySelector('#punchk'); un&&un.addEventListener('click',()=>{ const np=projBody(pid); np.checked={}; saveProject(pid,np,'Checklist reiniciado'); });
-  el.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',async()=>{ const np=projBody(pid); np.checked={...(np.checked||{})}; if(c.checked) np.checked[c.dataset.chk]=true; else delete np.checked[c.dataset.chk];
-    try{ await db.doc('projects/'+pid).set(np); }catch(e){ writeFail(e); } }));
-  el.querySelectorAll('[data-rmit]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); np.items=np.items.filter(x=>x.id!==b.dataset.rmit); if(np.checked) delete np.checked[b.dataset.rmit]; saveProject(pid,np); }));
-  el.querySelectorAll('[data-pq]').forEach(b=>b.addEventListener('click',()=>{ const np=projBody(pid); const e=np.items.find(x=>x.id===b.dataset.pq); e.qty=Math.max(1,(e.qty||1)+(+b.dataset.d)); saveProject(pid,np); }));
+  const fx=el.querySelector('#fixover'); fx&&fx.addEventListener('click',()=>{ const np=projBody(pid); np.items=np.items.map(x=>({...x,qty:Math.max(1,Math.min(x.qty||1,stockOf(x.id)||1))})); saveProject(pid,np,'Quantidades ajustadas'); });
+  const un=el.querySelector('#punchk'); un&&un.addEventListener('click',()=>{ const np=projBody(pid); np.checked={}; setProjectDirect(pid,np); toast('Checklist reiniciado'); });
+  el.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',()=>{ const np=projBody(pid); np.checked={...(np.checked||{})}; if(c.checked) np.checked[c.dataset.chk]=true; else delete np.checked[c.dataset.chk]; setProjectDirect(pid,np); }));
+  el.querySelectorAll('[data-load]').forEach(s=>s.addEventListener('change',()=>{ const np=projBody(pid); np.load={...(np.load||{})}; if(s.value) np.load[s.dataset.load]=s.value; else delete np.load[s.dataset.load]; setProjectDirect(pid,np); }));
+  el.querySelectorAll('[data-rmit]').forEach(b=>b.addEventListener('click',()=>{ const id=b.dataset.rmit; const np=projBody(pid); np.items=np.items.filter(x=>x.id!==id);
+    if(np.checked) delete np.checked[id]; if(np.load) delete np.load[id]; if(np.days) for(const d of Object.values(np.days)) if(d.items) delete d.items[id];
+    saveProject(pid,np); }));
+  el.querySelectorAll('[data-pq]').forEach(b=>b.addEventListener('click',()=>{ const id=b.dataset.pq; const np=projBody(pid); const e=np.items.find(x=>x.id===id); const st=stockOf(id);
+    const nq=Math.max(1,Math.min(st||1,(e.qty||1)+(+b.dataset.d))); if(nq===(e.qty||1)){ if(+b.dataset.d>0) toast(`O inventário tem ${st}.`); return; }
+    e.qty=nq; if(np.days) for(const d of Object.values(np.days)){ const r=d.items?.[id]; if(r&&r.qty>nq) r.qty=nq; }
+    saveProject(pid,np); }));
 }
+
+// ----- diárias -----
+function renderDays(pid, el){
+  const p={id:pid,...S.projects.get(pid)}; const W=canWrite;
+  const days=projectDays(p);
+  if(!days.length){ el.innerHTML='<div class="empty">Adicione as datas do projeto na Lista geral para montar o checklist de cada dia.</div>'; return; }
+  const t=todayStr();
+  if(!S.pday || !days.includes(S.pday)) S.pday = days.includes(t) ? t : (days.find(d=>d>=t) || days[0]);
+  const d=S.pday; const day=(p.days||{})[d]||{}; const recs=day.items||{};
+  const vehs=vehiclesOf(p).filter(v=>v.daily);
+  const items=sortedProjItems(p);
+  const rec=id=>recs[id]||{};
+  const taken=items.filter(x=>rec(x.id).take);
+  const by=S.pgroupBy||'carro';
+  const idx=days.indexOf(d);
+  const sections=[];
+  if(by==='carro'){
+    for(const v of vehs) sections.push({title:v.name, list:taken.filter(x=>rec(x.id).v===v.id)});
+    sections.push({title:'Levar · sem carro definido', list:taken.filter(x=>!vehs.some(v=>v.id===rec(x.id).v))});
+    sections.push({title:'Fica na base', list:items.filter(x=>!rec(x.id).take), base:true});
+  } else {
+    const byG=new Map(); for(const x of items){ if(!byG.has(x.it.group)) byG.set(x.it.group,[]); byG.get(x.it.group).push(x); }
+    for(const [g,list] of byG) sections.push({title:gName(g), list});
+  }
+  const rowHTML=x=>{ const r=rec(x.id); const pq=x.qty||1; const q=Math.min(r.qty||pq,pq);
+    return `<div class="check dayrow ${r.take?'':'base'}">
+      <input type="checkbox" data-take="${esc(x.id)}" ${r.take?'checked':''} ${W?'':'disabled'} aria-label="Levar neste dia">
+      <span class="id">${esc(x.id)}</span>
+      <span class="main"><span class="name" data-item="${esc(x.id)}" style="cursor:pointer">${esc(x.it.name)}</span>${r.take?'':' <span class="pill p-idle">base</span>'}</span>
+      <span class="ctl">${pq>1&&r.take?`<span class="stepper sm">${W?`<button data-dq="${esc(x.id)}" data-d="-1" ${q<=1?'disabled':''}>−</button>`:''}<span>${q}<small class="hint">/${pq}</small></span>${W?`<button data-dq="${esc(x.id)}" data-d="1" ${q>=pq?'disabled':''}>+</button>`:''}</span>`:'<span></span>'}
+      <select class="sel" style="padding:4px 6px;font-size:13px" data-veh="${esc(x.id)}" ${W&&r.take?'':'disabled'} aria-label="Veículo">
+        <option value="">${r.take?'Carro…':'—'}</option>${vehs.map(v=>`<option value="${esc(v.id)}" ${r.v===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select></span>
+    </div>`; };
+  el.innerHTML=`
+    <div class="section" style="margin-top:16px"><div class="chips" style="margin:0">${days.map(x=>`<button class="chip" data-day="${x}" aria-pressed="${x===d}">${wday(x)} ${fmtD(x).slice(0,5)}${(p.days?.[x]?.items&&Object.values(p.days[x].items).some(r=>r.take))?' <b>●</b>':''}</button>`).join('')}</div></div>
+    <div class="phead" style="margin-top:14px"><h2 style="font-size:26px">${wday(d)}, ${fmtD(d)} <small class="hint" style="font-family:var(--f-body);font-size:13px">dia ${idx+1} de ${days.length}</small></h2></div>
+    <div class="inline-form" style="margin-top:6px"><label style="flex:1 1 260px">Atividade / local do dia<input type="text" id="dnote" value="${esc(day.note||'')}" placeholder="Ex.: Manguezal da Barra do Jucu" ${W?'':'disabled'} style="width:100%"></label></div>
+    <div class="dates" style="margin-top:12px">${vehs.map(v=>`<span class="date">${esc(v.name)} <small>${taken.filter(x=>rec(x.id).v===v.id).length}</small></span>`).join('')}
+      <span class="date">Sem carro <small>${taken.filter(x=>!vehs.some(v=>v.id===rec(x.id).v)).length}</small></span>
+      <span class="date">Na base <small>${items.length-taken.length}</small></span></div>
+    <div class="bar">
+      ${W?`${idx>0?'<button class="btn sm" id="dcopy">Copiar do dia anterior</button>':''}<button class="btn sm" id="dall">Levar tudo</button><button class="btn sm" id="dnone">Tudo na base</button>`:''}
+      <span style="flex:1"></span>
+      <label class="toggle">Agrupar por <select class="sel" id="dby" style="padding:4px 6px"><option value="carro" ${by==='carro'?'selected':''}>carro</option><option value="grupo" ${by==='grupo'?'selected':''}>grupo</option></select></label>
+    </div>
+    ${!items.length?'<div class="empty">A lista geral ainda não tem equipamentos.</div>':
+      sections.map(s=>`<div class="gsec" style="margin-top:12px"><div class="ghead"><h2 style="font-size:17px">${esc(s.title)}</h2><small>${s.list.length}</small></div>
+        ${s.list.length?s.list.map(rowHTML).join(''):'<div class="hint" style="padding:8px 4px">—</div>'}</div>`).join('')}
+    ${!vehs.length?'<p class="hint">Nenhum veículo marcado para diárias. Ajuste em Lista geral → Veículos.</p>':''}`;
+  el.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{ S.pday=b.dataset.day; render(); }));
+  el.querySelector('#dby').addEventListener('change',e=>{ S.pgroupBy=e.target.value; ls.set('iur.dby',S.pgroupBy); render(); });
+  el.querySelectorAll('[data-item]').forEach(a=>a.addEventListener('click',()=>openItem(a.dataset.item)));
+  if(!W) return;
+  const save=mut=>{ const np=projBody(pid); np.days={...(np.days||{})}; const dd={note:'',items:{},...(np.days[d]||{})}; dd.items={...(dd.items||{})}; mut(dd,np); np.days[d]=dd; setProjectDirect(pid,np); };
+  const defVeh=id=>{ const lv=p.load?.[id]; return vehs.some(v=>v.id===lv)?lv:''; };
+  el.querySelector('#dnote').addEventListener('change',e=>save(dd=>{ dd.note=e.target.value.trim(); }));
+  el.querySelectorAll('[data-take]').forEach(c=>c.addEventListener('change',()=>save(dd=>{ const id=c.dataset.take; const r={...(dd.items[id]||{})}; r.take=c.checked; if(c.checked&&!r.v) r.v=defVeh(id); dd.items[id]=r; })));
+  el.querySelectorAll('[data-veh]').forEach(s=>s.addEventListener('change',()=>save(dd=>{ const id=s.dataset.veh; dd.items[id]={...(dd.items[id]||{}),take:true,v:s.value}; })));
+  el.querySelectorAll('[data-dq]').forEach(b=>b.addEventListener('click',()=>save((dd,np)=>{ const id=b.dataset.dq; const pq=(np.items.find(x=>x.id===id)?.qty)||1; const r={...(dd.items[id]||{})}; r.qty=Math.max(1,Math.min(pq,(r.qty||pq)+(+b.dataset.d))); dd.items[id]=r; })));
+  const all=el.querySelector('#dall'); all&&all.addEventListener('click',()=>save(dd=>{ for(const x of items){ const r={...(dd.items[x.id]||{})}; r.take=true; if(!r.v) r.v=defVeh(x.id); dd.items[x.id]=r; } }));
+  const none=el.querySelector('#dnone'); none&&none.addEventListener('click',()=>save(dd=>{ for(const x of items){ dd.items[x.id]={...(dd.items[x.id]||{}),take:false}; } }));
+  const cp=el.querySelector('#dcopy'); cp&&cp.addEventListener('click',()=>{ const prev=(p.days||{})[days[idx-1]]; if(!prev||!prev.items){ toast('O dia anterior está vazio.'); return; } save(dd=>{ dd.items=JSON.parse(JSON.stringify(prev.items)); }); toast('Copiado do dia anterior'); });
+}
+
 function editProject(pid){
   const p=S.projects.get(pid);
   openSheet(`<div class="sheet-h"><div><span class="hint">Editar projeto</span><h2>${esc(p.name)}</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
@@ -674,30 +818,35 @@ function editProject(pid){
     <div class="actions"><span></span><div class="r"><button type="button" class="btn" data-close>Cancelar</button><button class="btn pri" type="submit">Salvar</button></div></div></form>`, sh=>{
     sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
     sh.querySelector('#pf').addEventListener('submit',async e=>{ e.preventDefault(); const np=projBody(pid); np.name=sh.querySelector('#p-name').value.trim()||np.name; np.notes=sh.querySelector('#p-notes').value.trim();
-      try{ await db.doc('projects/'+pid).set(np); closeSheet(); }catch(err){ writeFail(err); } });
+      await setProjectDirect(pid,np); closeSheet(); });
   });
 }
 function pickItems(pid){
-  const p={id:pid,...S.projects.get(pid)}; const have=new Set((p.items||[]).map(x=>x.id)); const sel=new Set();
+  const p={id:pid,...S.projects.get(pid)}; const have=new Set((p.items||[]).map(x=>x.id)); const sel=new Map();
   let q='', g='';
-  const busy=id=>{ if(!(p.dates||[]).length) return ''; const trial={...p,items:[...(p.items||[]),{id,qty:1}]};
+  const busy=id=>{ if(!(p.dates||[]).length) return ''; const trial={...p,items:[...(p.items||[]),{id,qty:sel.get(id)||1}]};
     const c=conflictsFor(trial).filter(x=>x.itemId===id); return c.length?`ocupado ${fmtD(c[0].date)} · ${S.projects.get(c[0].others[0])?.name||''}`:''; };
   openSheet(`<div class="sheet-h"><div><span class="hint">${esc(p.name)}</span><h2>Adicionar equipamentos</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
     <div class="bar" style="margin-top:0"><input class="search" id="pq" type="search" placeholder="Buscar…"><select class="sel" id="pg"><option value="">Todos os grupos</option>${groupsSorted().map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></div>
     <div id="plist"></div>
     <div class="actions" style="position:sticky;bottom:-20px;background:var(--bg);padding-block:10px"><span class="hint" id="pcount">Nenhum selecionado</span><div class="r"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="pok">Adicionar</button></div></div>`, sh=>{
+    const count=()=>{ sh.querySelector('#pcount').textContent= sel.size?`${sel.size} selecionado${sel.size>1?'s':''}`:'Nenhum selecionado'; };
     const draw=()=>{ const ql=q.toLowerCase();
-      const arr=itemsSorted().filter(it=>!have.has(it.id)&&(!g||it.group===g)&&(!ql||(it.id+' '+it.name).toLowerCase().includes(ql)));
+      const arr=itemsSorted().filter(it=>!have.has(it.id)&&(it.qty||0)>0&&(!g||it.group===g)&&(!ql||(it.id+' '+it.name).toLowerCase().includes(ql)));
       sh.querySelector('#plist').innerHTML= arr.length?arr.map(it=>{ const b=busy(it.id); const na=it.status!=='owned'?STAT[it.status].t: it.condition!=='ok'?COND[it.condition].t:'';
-        return `<label class="pick ${na?'dis':''}"><input type="checkbox" data-pk="${esc(it.id)}" ${sel.has(it.id)?'checked':''}><span class="id">${esc(it.id)}</span><span class="main"><span class="name">${esc(it.name)}</span>${(it.qty||1)>1?` <span class="qty">× ${it.qty}</span>`:''}${b||na?`<div class="meta">${[b?`<span style="color:var(--bad)">⚠ ${esc(b)}</span>`:'',na?esc(na):''].filter(Boolean).join(' · ')}</div>`:''}</span><span class="hint">${esc(gName(it.group))}</span></label>`; }).join('')
+        const st=it.qty||1, on=sel.has(it.id), qv=sel.get(it.id)||1;
+        return `<div class="pick ${na?'dis':''}" style="grid-template-columns:auto auto 1fr auto"><input type="checkbox" data-pk="${esc(it.id)}" ${on?'checked':''} id="pk-${esc(it.id)}"><span class="id">${esc(it.id)}</span>
+          <label class="main" for="pk-${esc(it.id)}" style="cursor:pointer"><span class="name">${esc(it.name)}</span>${st>1?` <span class="qty">· ${st} no inventário</span>`:''}${b||na?`<div class="meta">${[b?`<span style="color:var(--bad)">⚠ ${esc(b)}</span>`:'',na?esc(na):''].filter(Boolean).join(' · ')}</div>`:''}</label>
+          ${st>1?`<span class="stepper sm"><button type="button" data-sq="${esc(it.id)}" data-d="-1" ${qv<=1?'disabled':''}>−</button><span>${qv}<small class="hint">/${st}</small></span><button type="button" data-sq="${esc(it.id)}" data-d="1" ${qv>=st?'disabled':''}>+</button></span>`:`<span class="hint">${esc(gName(it.group))}</span>`}</div>`; }).join('')
         :'<div class="empty">Nada para adicionar com esse filtro.</div>';
-      sh.querySelectorAll('[data-pk]').forEach(c=>c.addEventListener('change',()=>{ c.checked?sel.add(c.dataset.pk):sel.delete(c.dataset.pk); sh.querySelector('#pcount').textContent= sel.size?`${sel.size} selecionado${sel.size>1?'s':''}`:'Nenhum selecionado'; }));
+      sh.querySelectorAll('[data-pk]').forEach(c=>c.addEventListener('change',()=>{ c.checked?sel.set(c.dataset.pk,sel.get(c.dataset.pk)||1):sel.delete(c.dataset.pk); count(); }));
+      sh.querySelectorAll('[data-sq]').forEach(b=>b.addEventListener('click',()=>{ const id=b.dataset.sq, st=S.items.get(id)?.qty||1; const nq=Math.max(1,Math.min(st,(sel.get(id)||1)+(+b.dataset.d))); sel.set(id,nq); count(); draw(); }));
     };
     sh.querySelector('#pq').addEventListener('input',e=>{ q=e.target.value; draw(); });
     sh.querySelector('#pg').addEventListener('change',e=>{ g=e.target.value; draw(); });
     sh.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeSheet));
     sh.querySelector('#pok').addEventListener('click',()=>{ if(!sel.size){ closeSheet(); return; } const np=projBody(pid);
-      np.items=[...(np.items||[]),...[...sel].map(id=>({id,qty:1}))]; closeSheet(); saveProject(pid,np,`${sel.size} equipamento${sel.size>1?'s':''} adicionado${sel.size>1?'s':''}`); });
+      np.items=[...(np.items||[]),...[...sel].map(([id,qty])=>({id,qty}))]; closeSheet(); saveProject(pid,np,`${sel.size} equipamento${sel.size>1?'s':''} adicionado${sel.size>1?'s':''}`); });
     draw();
   });
 }
@@ -778,13 +927,14 @@ const ROLE = { owner:'Proprietário', admin:'Administrador', member:'Membro' };
 function renderTeam(){
   const el=$('#teamBox');
   if(!S.isAdmin){ el.innerHTML='<div class="empty">Só administradores gerenciam a equipe.</div>'; return; }
-  const list=[...OWNERS.map(e=>({email:e,role:'owner'})),
+  const list=[...OWNERS.map(e=>({...(S.team.get(e)||{}),email:e,role:'owner'})),
     ...[...S.team.entries()].filter(([e])=>!OWNERS.includes(e)).map(([e,d])=>({email:e,...d}))]
-    .sort((a,b)=>({owner:0,admin:1,member:2}[a.role]-{owner:0,admin:1,member:2}[b.role])||a.email.localeCompare(b.email));
+    .sort((a,b)=>({owner:0,admin:1,member:2}[a.role]-{owner:0,admin:1,member:2}[b.role])||(a.name||a.email).localeCompare(b.name||b.email));
   el.innerHTML=`
     <div class="section"><h3>Adicionar pessoa</h3>
       <form class="inline-form" id="tform" style="margin-top:0">
-        <label style="flex:1 1 240px">E-mail da conta Google<input type="email" id="t-mail" required placeholder="nome@gmail.com" autocomplete="off" style="width:100%"></label>
+        <label style="flex:1 1 180px">Nome<input type="text" id="t-name" required placeholder="Ex.: Leonardo" autocomplete="off" style="width:100%"></label>
+        <label style="flex:1 1 220px">E-mail da conta Google<input type="email" id="t-mail" required placeholder="nome@gmail.com" autocomplete="off" style="width:100%"></label>
         <label>Permissão<select id="t-role"><option value="member">Membro</option><option value="admin">Administrador</option></select></label>
         <button class="btn pri" type="submit">Dar acesso</button>
       </form>
@@ -793,18 +943,22 @@ function renderTeam(){
     <div class="section"><h3>Com acesso · ${list.length}</h3>
       <div class="rows">${list.map(m=>{ const me=m.email===S.me, fixed=m.role==='owner';
         return `<div class="row" style="cursor:default;grid-template-columns:1fr auto auto">
-          <span class="main"><span class="name">${esc(m.email)}</span>${me?' <span class="pill p-use">você</span>':''}
-            ${m.addedBy?`<div class="meta">adicionado por ${esc(m.addedBy)}${m.addedAt?' em '+fmtD(m.addedAt.slice(0,10)):''}</div>`:''}</span>
+          <span class="main"><input type="text" class="search" data-name="${esc(m.email)}" value="${esc(m.name||'')}" placeholder="Nome" aria-label="Nome" style="padding:5px 8px;font-weight:600;max-width:260px;width:100%">${me?' <span class="pill p-use">você</span>':''}
+            <div class="meta">${esc(m.email)}${m.addedBy?` · adicionado por ${esc(personName(m.addedBy))}${m.addedAt?' em '+fmtD(m.addedAt.slice(0,10)):''}`:''}</div></span>
           ${fixed||me?`<span class="pill ${fixed?'p-acc':'p-idle'}">${ROLE[m.role]}</span>`:`<select class="sel" data-role="${esc(m.email)}" aria-label="Permissão"><option value="member" ${m.role==='member'?'selected':''}>Membro</option><option value="admin" ${m.role==='admin'?'selected':''}>Administrador</option></select>`}
           ${fixed||me?'<span></span>':`<button class="btn sm danger" data-rm="${esc(m.email)}">Remover</button>`}
         </div>`;}).join('')}</div>
     </div>`;
   el.querySelector('#tform').addEventListener('submit',e=>{ e.preventDefault();
+    const name=el.querySelector('#t-name').value.trim();
     const mail=el.querySelector('#t-mail').value.trim().toLowerCase();
+    if(!name){ toast('Informe o nome.'); return; }
     if(!/^[^\s@/]+@[^\s@/]+\.[^\s@/]+$/.test(mail)){ toast('E-mail inválido.'); return; }
-    if(OWNERS.includes(mail)||S.team.has(mail)){ toast('Essa pessoa já tem acesso.'); return; }
-    db.doc('team/'+mail).set({role:el.querySelector('#t-role').value, addedBy:S.me, addedAt:new Date().toISOString()});
-    toast(`${mail} agora tem acesso`); });
+    if(S.team.has(mail)||(OWNERS.includes(mail))){ toast('Essa pessoa já tem acesso.'); return; }
+    db.doc('team/'+mail).set({name, role:el.querySelector('#t-role').value, addedBy:S.me, addedAt:new Date().toISOString()});
+    toast(`${name} agora tem acesso`); });
+  el.querySelectorAll('[data-name]').forEach(inp=>inp.addEventListener('change',()=>{ const e=inp.dataset.name; const cur=S.team.get(e)||{role:OWNERS.includes(e)?'owner':'member'};
+    db.doc('team/'+e).set({...cur, name:inp.value.trim()}); toast('Nome salvo'); }));
   el.querySelectorAll('[data-role]').forEach(sel=>sel.addEventListener('change',()=>{ const d={...S.team.get(sel.dataset.role), role:sel.value}; db.doc('team/'+sel.dataset.role).set(d); toast('Permissão alterada'); }));
   el.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{
     if(!b.dataset.armed){ b.dataset.armed='1'; b.classList.add('solid'); b.textContent='Confirmar'; return; }
@@ -833,6 +987,7 @@ assets = { upload: blob => new Promise((res,rej)=>{ if(blob.size>350000) return 
 // downloads: download normal do navegador
 downloads = { save: async ({filename,data}) => { const u=URL.createObjectURL(new Blob([data],{type:'text/html'})); const a=document.createElement('a'); a.href=u; a.download=filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); return {status:'saved'}; } };
 
+S.pgroupBy = ls.get('iur.dby','carro');
 S.tab=ls.get('iur.tab','items'); setTab(S.tab);
 const views=['v-items','v-projects','v-groups','v-labels','v-team'];
 let unsubs=[];
