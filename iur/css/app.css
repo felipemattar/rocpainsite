@@ -211,3 +211,19 @@ input::placeholder, textarea::placeholder { color: #8A9682; }
 .seatcar-h b { font-size: 15px; color: var(--forest); }
 .drv { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 .drv select { text-transform: none; letter-spacing: 0; font-weight: 600; }
+
+/* local no mapa */
+.place-view { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.place-view small, .place-cur small { color: var(--muted); }
+.place-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.place-cur { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; background: var(--sage-soft); border-radius: 10px; padding: 8px 10px; }
+.psearch { position: relative; }
+.psearch input, .plink input { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: #FAFBF7; color: var(--ink); }
+.psugg { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+.psugg button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left; padding: 9px 12px; border: 0; border-bottom: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.psugg button:hover, .psugg button:focus { background: var(--sage-soft); }
+.psugg small { color: var(--muted); }
+.plink { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; }
+@media (max-width: 520px) { .plink { grid-template-columns: 1fr; } }
+.daycard .ackbox { margin: 0; background: var(--bg); }
+.ackbox h3 { font-family: var(--f-display); font-size: 17px; line-height: 1.2; margin: 0; color: var(--moss); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }

@@ -1,10 +1,10 @@
 // Página da diária: frentes (local, horários, equipe, carros), equipamentos do dia e "ciente"
 import { S, can, canEditProject } from '../store.js';
-import { DEFAULT_TIMES } from '../config.js';
+import { DEFAULT_TIMES, PLACE_SEARCH } from '../config.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr, toast, armButton, $$ } from '../utils.js';
-import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat } from '../logic.js';
+import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat, placeFromPhoton, isMapsLink, mapsSearchURL } from '../logic.js';
 import { saveDay, setAck } from '../actions.js';
-import { personLine, timelineHTML, thumbHTML, emptyHTML, carsHTML } from '../components.js';
+import { personLine, timelineHTML, thumbHTML, emptyHTML, carsHTML, placeHTML, ackPanelHTML } from '../components.js';
 import { stepper } from './project.js';
 import { openItem } from './inventory.js';
 import { ls } from '../utils.js';
@@ -34,7 +34,7 @@ export function renderDiaria(el, pid, date) {
       <a class="btn sm ${next ? '' : 'disabled'}" ${next ? `href="#/projeto/${esc(pid)}/diaria/${next}"` : 'aria-disabled="true"'} aria-label="Próximo dia">›</a>
     </div>
     ${E && !day.saved ? '<div class="banner">Rascunho com os valores padrão. Qualquer alteração já salva a diária.</div>' : ''}
-    ${ackPanel(p, date, day)}
+    <div class="section">${ackPanelHTML(p, date, day)}</div>
     <div class="section"><h3>Informações gerais</h3>
       ${E ? `<textarea class="area" id="d-info" placeholder="Maré, previsão do tempo, contatos, avisos para todos…">${esc(day.info)}</textarea>` : (day.info ? `<p class="info">${esc(day.info)}</p>` : '<p class="hint">—</p>')}
       ${E && prev ? '<div class="bar"><button class="btn sm" id="copyPrev">Copiar tudo do dia anterior</button></div>' : ''}
@@ -46,7 +46,7 @@ export function renderDiaria(el, pid, date) {
     ${equipSection(p, day, E)}`;
 
   // ---- ciente ----
-  el.querySelector('#ackBtn')?.addEventListener('click', () => { const st = ackState(pid, date, S.me, day).k; setAck(pid, date, st !== 'ok'); });
+  el.querySelector('[data-ack]')?.addEventListener('click', () => { const st = ackState(pid, date, S.me, day).k; setAck(pid, date, st !== 'ok'); });
   $$('[data-item]', el).forEach(a => a.addEventListener('click', e => { if (e.target.closest('select,button,.stepper')) return; openItem(a.dataset.item); }));
   $$('[data-dview]', el).forEach(s => s.addEventListener('change', () => { ls.set('iur.dview', s.value); renderDiaria(el, pid, date); }));
   if (!E) return;
@@ -72,6 +72,21 @@ export function renderDiaria(el, pid, date) {
     commit(d => { for (const f of d.fronts) { if (f.id === fid) f.vehicles = f.vehicles.includes(v) ? f.vehicles.filter(x => x !== v) : [...f.vehicles, v]; else if (!b.classList.contains('on')) f.vehicles = f.vehicles.filter(x => x !== v);
         if (!f.vehicles.includes(v) && f.seats) delete f.seats[v]; }
       for (const r of Object.values(d.items)) if (r.v === v && !d.fronts.find(f => f.id === r.f)?.vehicles.includes(v)) r.v = ''; }); }));
+  // local no mapa
+  $$('[data-psearch]', el).forEach(inp => {
+    const fid = inp.dataset.psearch, box = el.querySelector('#ps-' + fid), gl = el.querySelector('#pg-' + fid);
+    inp.addEventListener('input', () => { const q = inp.value.trim(); gl.href = mapsSearchURL(q || inp.placeholder);
+      clearTimeout(searchTimer); if (q.length < 3) { box.hidden = true; return; }
+      searchTimer = setTimeout(() => searchPlaces(q, box, pl => { box.hidden = true; inp.value = ''; inp.dataset.dirty = '';
+        fr(fid, f => { f.place = pl; if (!f.local) f.local = pl.name; }); }), 450); });
+    inp.addEventListener('blur', () => setTimeout(() => { box.hidden = true; }, 200));
+    inp.addEventListener('change', e => e.stopPropagation());
+  });
+  $$('[data-plink]', el).forEach(inp => inp.addEventListener('change', () => { const u = inp.value.trim(); if (!u) return;
+    if (!/^https?:\/\//i.test(u)) return toast('Cole um link completo (https://…).');
+    if (!isMapsLink(u)) toast('Link salvo, mas não parece ser do Google Maps.');
+    fr(inp.dataset.plink, f => { f.place = { name: f.local || 'Local', desc: '', url: u }; }); }));
+  $$('[data-rmplace]', el).forEach(b => b.addEventListener('click', () => fr(b.dataset.rmplace, f => { f.place = null; })));
   // lugares nos carros
   $$('[data-driver]', el).forEach(s => s.addEventListener('change', () => { const [fid, v] = s.dataset.driver.split('|');
     fr(fid, f => { const e = s.value; f.seats ||= {}; if (e) unseat(f, e); f.seats[v] = { ...(f.seats[v] || { people: [] }), driver: e }; }); }));
@@ -90,25 +105,12 @@ export function renderDiaria(el, pid, date) {
   el.querySelector('#allBase')?.addEventListener('click', () => commit(d => { d.items = {}; }));
 }
 
-// ---------- ciente ----------
-function ackPanel(p, date, day) {
-  const people = sortPeople(p, dayPeople(day).length ? dayPeople(day) : (p.team || []));
-  const me = people.includes(S.me) || (p.team || []).includes(S.me);
-  const mine = ackState(p.id, date, S.me, day).k;
-  const btn = !me ? '' : mine === 'ok' ? '<button class="btn ok" id="ackBtn">✓ Você está ciente · desfazer</button>'
-    : mine === 'old' ? '<button class="btn pri" id="ackBtn">Horários mudaram — confirmar de novo</button>'
-    : '<button class="btn pri" id="ackBtn">Estou ciente dos horários</button>';
-  const ok = people.filter(e => ackState(p.id, date, e, day).k === 'ok').length;
-  return `<div class="section ackbox"><div class="ackhead"><h3>Ciente · ${ok}/${people.length}</h3>${btn}</div>
-    <div class="ackgrid">${people.map(e => { const s = ackState(p.id, date, e, day).k;
-      return `<span class="ack ${s}"><i>${s === 'ok' ? '✓' : s === 'old' ? '!' : '○'}</i>${esc(personName(e))}${s === 'old' ? ' <small>confirmar de novo</small>' : ''}</span>`; }).join('')}</div></div>`;
-}
-
 // ---------- frente: visualização ----------
 function frontView(p, day, f) {
   return `<section class="front">
     ${day.fronts.length > 1 ? `<h4>${esc(f.name)}</h4>` : ''}
     <div class="kv"><span>Local</span><b>${esc(f.local || 'a definir')}</b></div>
+    ${placeHTML(f)}
     ${timelineHTML(f)}
     ${f.obs ? `<p class="info">${esc(f.obs)}</p>` : ''}
     ${carsHTML(p, f)}
@@ -124,6 +126,7 @@ function frontEdit(p, day, f, i) {
     <div class="front-top"><input class="title-in" id="fn-${f.id}" data-fld="${f.id}|name" value="${esc(f.name)}" aria-label="Nome da frente">
       ${day.fronts.length > 1 ? `<button class="btn sm danger" data-rmfront="${f.id}">Remover frente</button>` : ''}</div>
     <label class="lbl">Local / atividade<input type="text" id="fl-${f.id}" data-fld="${f.id}|local" value="${esc(f.local)}" placeholder="Ex.: Manguezal da Barra do Jucu — filmagem de caranguejos"></label>
+    ${placeEdit(f)}
     <div class="lbl">Horários</div>
     <div class="times">
       ${DEFAULT_TIMES.map(t => `<label class="time"><span>${esc(t.label)}</span><input type="time" id="ft-${f.id}-${t.id}" data-time="${f.id}|${t.id}" value="${esc(f.times?.[t.id] || '')}"></label>`).join('')}
@@ -140,6 +143,31 @@ function frontEdit(p, day, f, i) {
       return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-tveh="${f.id}|${esc(v.id)}">${esc(v.name)}${w && !on ? ` <small>· ${esc(w)}</small>` : ''}</button>`; }).join('') || '<span class="hint">Nenhum veículo de diária. Ajuste na aba Equipamentos.</span>'}</div>
     ${seatsEdit(p, f)}
   </section>`;
+}
+
+// ---------- local no mapa ----------
+function placeEdit(f) {
+  const pl = f.place;
+  return `<div class="lbl">Local no mapa</div>
+    ${pl?.url ? `<div class="place-cur"><span><b>${esc(pl.name || 'Local')}</b>${pl.desc ? ` <small>${esc(pl.desc)}</small>` : ''}</span>
+      <span class="place-links"><a class="btn sm" href="${esc(pl.url)}" target="_blank" rel="noopener">Ver no Google Maps</a><button class="btn sm danger" data-rmplace="${f.id}">Remover</button></span></div>` : ''}
+    <div class="psearch"><input type="search" id="pq-${f.id}" data-psearch="${f.id}" placeholder="${pl?.url ? 'Trocar: digite o nome do local…' : 'Digite o nome do local (ex.: Barra do Jucu)'}" autocomplete="off">
+      <div class="psugg" id="ps-${f.id}" hidden></div></div>
+    <div class="plink"><input type="url" id="pl-${f.id}" data-plink="${f.id}" placeholder="ou cole o link de compartilhamento do Google Maps">
+      <a class="btn sm" id="pg-${f.id}" href="${esc(mapsSearchURL(f.local || ''))}" target="_blank" rel="noopener">Procurar no Google Maps</a></div>`;
+}
+let searchTimer = null, searchCtl = null;
+async function searchPlaces(q, box, onPick) {
+  searchCtl?.abort(); searchCtl = new AbortController();
+  const u = `${PLACE_SEARCH.url}?q=${encodeURIComponent(q)}&limit=${PLACE_SEARCH.limit}&lat=${PLACE_SEARCH.lat}&lon=${PLACE_SEARCH.lon}`;
+  box.hidden = false; box.innerHTML = '<div class="hint" style="padding:8px">Buscando…</div>';
+  try {
+    const r = await fetch(u, { signal: searchCtl.signal }); const js = await r.json();
+    const list = (js.features || []).map(placeFromPhoton).filter(x => x.lat != null);
+    box.innerHTML = list.length ? list.map((x, i) => `<button type="button" data-pick="${i}"><b>${esc(x.name)}</b>${x.desc ? `<small>${esc(x.desc)}</small>` : ''}</button>`).join('')
+      : '<div class="hint" style="padding:8px">Nada encontrado. Tente outro nome ou cole o link do Google Maps.</div>';
+    box.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('mousedown', e => { e.preventDefault(); onPick(list[+b.dataset.pick]); }));
+  } catch (e) { if (e.name !== 'AbortError') box.innerHTML = '<div class="hint" style="padding:8px">Busca indisponível agora. Cole o link do Google Maps.</div>'; }
 }
 
 // ---------- quem vai em cada carro ----------

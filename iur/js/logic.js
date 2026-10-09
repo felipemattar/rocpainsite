@@ -93,7 +93,7 @@ export function getDay(p, date) {
 function normalizeDay(raw, p) {
   const d = JSON.parse(JSON.stringify(raw));
   d.info ||= ''; d.items ||= {}; d.fronts = (d.fronts && d.fronts.length) ? d.fronts : [Object.assign(newFront(p), { id: 'f1' })];
-  d.fronts.forEach(f => { f.times ||= fixedTimes(); f.extra ||= []; f.people ||= []; f.vehicles ||= []; f.local ||= ''; f.obs ||= ''; f.seats ||= {}; });
+  d.fronts.forEach(f => { f.times ||= fixedTimes(); f.extra ||= []; f.people ||= []; f.vehicles ||= []; f.local ||= ''; f.obs ||= ''; f.seats ||= {}; f.place ||= null; });
   d.saved = true; return d;
 }
 // Linha do tempo de uma frente (fixos + extras), em ordem de horário
@@ -104,7 +104,7 @@ export function timeline(f) {
 }
 // Assinatura do que exige nova confirmação (local, horários, equipe)
 export function scheduleSig(day) {
-  return JSON.stringify((day.fronts || []).map(f => [f.name, f.local, f.times, f.extra, f.people, f.vehicles, f.obs, f.seats || {}]).concat([day.info]));
+  return JSON.stringify((day.fronts || []).map(f => [f.name, f.local, f.times, f.extra, f.people, f.vehicles, f.obs, f.seats || {}, f.place || null]).concat([day.info]));
 }
 // Quem vai em cada carro de uma frente: [{v, driver, people}] + quem ficou sem carro
 export function carPlan(f) {
@@ -116,6 +116,17 @@ export function carPlan(f) {
 }
 // Tira uma pessoa de todos os lugares (motorista/passageiro) de uma frente
 export function unseat(f, e) { for (const s of Object.values(f.seats || {})) { if (s.driver === e) s.driver = ''; s.people = (s.people || []).filter(x => x !== e); } }
+// ---------- locais / mapa ----------
+export const mapsSearchURL = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+export const mapsDirURL = pl => pl?.lat != null ? `https://www.google.com/maps/dir/?api=1&destination=${pl.lat},${pl.lon}` : '';
+export function placeFromPhoton(ft) {
+  const pr = ft.properties || {}; const [lon, lat] = ft.geometry?.coordinates || [];
+  const name = pr.name || pr.street || pr.city || 'Local';
+  const desc = [pr.city || pr.county, pr.state].filter(Boolean).filter(x => x !== name).join(' – ');
+  return { name, desc, lat, lon, url: `https://www.google.com/maps/search/?api=1&query=${lat},${lon}` };
+}
+export const isMapsLink = u => /^https?:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(www\.)?google\.[a-z.]+\/maps|maps\.google\.[a-z.]+)/i.test(u.trim());
+
 export const dayPeople = day => [...new Set(day.fronts.flatMap(f => f.people || []))];
 export function ackState(pid, date, email, day) {
   const a = S.proj.acks.get(`${date}__${email}`);

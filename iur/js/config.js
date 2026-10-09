@@ -57,6 +57,9 @@ export const DEFAULT_VEHICLES = [
   { id: 'carretinha', name: 'Carretinha',   daily: false },
 ];
 
+// Busca de locais (gratuita, sem chave): Photon / OpenStreetMap. As sugestões priorizam a região abaixo.
+export const PLACE_SEARCH = { url: 'https://photon.komoot.io/api/', lat: -20.3, lon: -40.3, limit: 6 };
+
 // Nome da frente criada automaticamente em cada diária
 export const DEFAULT_FRONT_NAME = 'Equipe principal';
 

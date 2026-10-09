@@ -47,3 +47,8 @@ js/seed.js            inventário inicial (botão Importar com banco vazio)
 
 ## Testar localmente
 Abrir o `index.html` direto do disco não funciona (os módulos JS precisam de um servidor). Use, por exemplo, `python -m http.server` dentro da pasta e acesse `http://localhost:8000`. Também adicione `localhost` em Authentication → Domínios autorizados.
+
+## Local no mapa (diárias)
+Cada frente tem um campo "Local no mapa": digite o nome do lugar e escolha uma sugestão, ou cole o link de compartilhamento do Google Maps.
+As sugestões vêm do **Photon** (gratuito, sem chave, dados do OpenStreetMap), configurado em `PLACE_SEARCH` no `js/config.js`.
+A busca do próprio Google (Places) exigiria chave de API com conta de cobrança; se um dia quiserem, só a função `searchPlaces` em `js/views/diaria.js` precisa mudar.

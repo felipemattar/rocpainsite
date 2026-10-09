@@ -4,7 +4,7 @@ import { esc, fmtD, fmtDM, wday, todayStr, openSheet, closeSheet, toast, armButt
 import { FUNCTIONS, DEFAULT_TIMES } from '../config.js';
 import { blocks, projectStatus, featuredDay, getDay, conflictsFor, warningsFor, sortPeople, personName, personFuncs, funcLabel,
   vehiclesOf, projItems, stockOf, groupsSorted, gName, itemsSorted, allMembers, dayPeople, ackState, ITEM_STATUS, CONDITIONS, timeline } from '../logic.js';
-import { projBody, setProject, saveProjectChecked, deleteProject } from '../actions.js';
+import { projBody, setProject, saveProjectChecked, deleteProject, setAck } from '../actions.js';
 import { dayCardHTML, personLine, thumbHTML, emptyHTML, funcsText } from '../components.js';
 import { openItem } from './inventory.js';
 
@@ -45,11 +45,12 @@ function tabResumo(el, p) {
   const fd = featuredDay(p); const bl = blocks(p);
   const E = canEditProject(p); const conf = E ? conflictsFor(p) : []; const warn = E ? warningsFor(p) : [];
   el.innerHTML = `
-    ${fd ? (S.proj.loaded ? dayCardHTML(p, p.id, fd.date, getDay(p, fd.date), { kind: fd.kind, button: true }) : emptyHTML('Carregando diária…'))
+    ${fd ? (S.proj.loaded ? dayCardHTML(p, p.id, fd.date, getDay(p, fd.date), { kind: fd.kind, button: true, ack: true }) : emptyHTML('Carregando diária…'))
       : `<div class="empty">${bl.length ? 'As diárias deste projeto já passaram.' : 'Defina as datas na aba Diárias.'}</div>`}
     ${conf.length ? `<div class="section"><div class="alert bad"><strong>⚠ Conflito de equipamento</strong><ul>${conf.map(c => `<li><span class="id">${esc(c.itemId)}</span> ${esc(S.items.get(c.itemId)?.name || '')} — ${fmtD(c.date)}: também em ${c.others.map(o => `<a href="#/projeto/${esc(o)}/equipamentos">${esc(S.projects.get(o)?.name || '')}</a>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`).join('')}</ul></div></div>` : ''}
     ${warn.length ? `<div class="section"><div class="alert warn"><strong>Equipamentos com atenção</strong><ul>${warn.map(w => `<li><span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name || '')} — ${esc(w.t)}</li>`).join('')}</ul></div></div>` : ''}
 `;
+  el.querySelector('[data-ack]')?.addEventListener('click', () => { const day = getDay(p, fd.date); setAck(p.id, fd.date, ackState(p.id, fd.date, S.me, day).k !== 'ok'); });
 }
 
 // ---------------- DIÁRIAS ----------------
