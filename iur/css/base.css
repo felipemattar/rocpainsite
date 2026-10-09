@@ -1,25 +1,21 @@
-
-/* Layout: field-kit inventory — sticky top bar with tabs, single working column, bottom sheets for detail/edit */
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Open+Sans:wdth,wght@75,600;75,700;75,800&display=swap");
+/* Tema inspirado no site do Instituto Últimos Refúgios (ultimosrefugios.org.br):
+   topo verde-floresta, faixas verde-sálvia, títulos condensados, fundo claro. Tema único (claro). */
 :root{
-  --bg:#f2f5f3; --surface:#ffffff; --surface2:#e8eeeb; --ink:#14201c; --muted:#5a6964; --line:#d6dfdb;
-  --accent:#0b6b6f; --accent-ink:#ffffff; --accent-soft:#d7ecec;
-  --ok:#2c7a4b; --ok-soft:#dcefe3; --warn:#9a6212; --warn-soft:#fbecd2; --bad:#b42318; --bad-soft:#fbe0dd;
-  --use:#2552a0; --use-soft:#dfe8f8; --idle:#6b6f73; --idle-soft:#e9ebec;
-  --shadow:0 10px 30px rgba(10,30,25,.18);
-  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
-  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+  /* marca */
+  --forest:#1B3017; --forest-2:#24401f; --moss:#35612E; --fern:#6A8864; --sage:#BFD7BB; --sage-soft:#DDE9D9; --lime:#D9E8A5; --olive:#A3AE7C; --cream:#F3EEDC;
+  /* superfícies e texto */
+  --bg:#F2F5EC; --surface:#FFFFFF; --surface2:#E6EDDD; --ink:#1B3017; --muted:#566650; --line:#D2DCC7;
+  --accent:#35612E; --accent-ink:#FFFFFF; --accent-soft:#DCE9D6;
+  /* estados */
+  --ok:#2F6B2A; --ok-soft:#DDEBD6; --warn:#8A5A0B; --warn-soft:#F6E8C6; --bad:#A3311E; --bad-soft:#F7DDD6;
+  --use:#2B6CA3; --use-soft:#DCE8F4; --idle:#626B5D; --idle-soft:#E6E9E0;
+  --shadow:0 10px 30px rgba(27,48,23,.22);
+  --f-display:"Open Sans","Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Nunito Sans","Avenir Next",Avenir,"Segoe UI",Roboto,system-ui,sans-serif;
   --r:10px;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0e1412; --surface:#16201d; --surface2:#1d2925; --ink:#e4ebe8; --muted:#94a49e; --line:#2a3632;
-  --accent:#43b3b0; --accent-ink:#06201f; --accent-soft:#183634;
-  --ok:#62c78e; --ok-soft:#173326; --warn:#e5b154; --warn-soft:#3a2c12; --bad:#f2806f; --bad-soft:#3d1c18;
-  --use:#86aef2; --use-soft:#1a2740; --idle:#a3a9ad; --idle-soft:#262c2f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0e1412; --surface:#16201d; --surface2:#1d2925; --ink:#e4ebe8; --muted:#94a49e; --line:#2a3632;
-  --accent:#43b3b0; --accent-ink:#06201f; --accent-soft:#183634;
-  --ok:#62c78e; --ok-soft:#173326; --warn:#e5b154; --warn-soft:#3a2c12; --bad:#f2806f; --bad-soft:#3d1c18;
-  --use:#86aef2; --use-soft:#1a2740; --idle:#a3a9ad; --idle-soft:#262c2f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 img{max-width:100%}

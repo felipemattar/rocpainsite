@@ -99,3 +99,98 @@ ul.plain { list-style: none; padding: 0; margin: 0; display: flex; flex-directio
 .nophotos .check.eq { grid-template-columns: auto 1fr; }
 .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 24px; }
 .login p { margin: 0; }
+
+/* =====================================================================
+   TEMA ÚLTIMOS REFÚGIOS — topo verde-floresta com logo, abas claras
+   ===================================================================== */
+h1, h2, h3, h4, .tab, .id, .eyebrow, .tl time, .dnum b, .title-in, .lid, .ghead h2, .card h3, .phead h2, .pagehead h2,
+.sheet-h h2, .daycard h3, .dh-mid h2, .alert strong, .section > h3, .front h4, .front-sum h4, .brand h1, .lab .lid {
+  font-stretch: 75%; font-variation-settings: "wdth" 75;
+}
+body { background: var(--bg); color: var(--ink); }
+
+/* topo */
+.top { background: var(--forest); border-bottom: 0; color: #fff; box-shadow: 0 2px 0 var(--moss); }
+.top-in { padding-block: 12px 0; gap: 8px; }
+.brand { align-items: center; gap: 6px 14px; }
+.brand h1 { color: var(--cream); font-size: 22px; font-weight: 700; letter-spacing: .04em; display: flex; align-items: center; gap: 14px; line-height: 1; }
+.brand h1::before { content: ""; display: block; width: 190px; height: 31px; flex: none;
+  background: url("../img/logo-ur.png") left center / contain no-repeat; }
+.brand > span:not(.who) { color: var(--sage); font-size: 12.5px; flex-basis: 100%; }
+.who { color: var(--sage); }
+.who .btn.ghost { color: #fff; border: 1px solid rgba(255,255,255,.35); }
+.who .btn.ghost:hover { background: rgba(255,255,255,.1); }
+.top .tabs { gap: 2px; }
+.top .tab { color: rgba(255,255,255,.78); font-size: 16px; font-weight: 700; padding: 8px 12px 11px; border-bottom-width: 4px; }
+.top .tab:hover { color: #fff; }
+.top .tab[aria-selected="true"], .top a.tab[aria-selected="true"] { color: #fff; border-bottom-color: var(--lime); }
+@media (max-width: 520px) {
+  .brand h1 { font-size: 18px; gap: 10px; }
+  .brand h1::before { width: 150px; height: 25px; }
+  .brand > span:not(.who) { display: none; }
+}
+
+/* títulos de página e seções no estilo "NOVIDADES" do site */
+.pagehead h2, .phead h2 { color: var(--forest); font-weight: 800; }
+.ghead { border-bottom-color: var(--forest); }
+.ghead h2 { color: var(--forest); font-weight: 800; }
+.section > h3 { color: var(--moss); font-weight: 800; letter-spacing: .08em; }
+.subtabs .tab { color: var(--muted); }
+.subtabs .tab[aria-selected="true"] { color: var(--forest); border-bottom-color: var(--moss); }
+
+/* superfícies */
+.card, .daycard, .front, .ackbox, .info, .qrbox, .date, .checkline { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.card:hover { border-color: var(--fern); }
+.daycard { border-top: 5px solid var(--moss); }
+.front.edit { border-left-color: var(--moss); }
+.row:hover, .dayrow-link:hover { background: var(--sage-soft); }
+.banner { background: var(--lime); color: var(--forest); }
+.login { background: var(--surface); color: var(--ink); border-top: 5px solid var(--moss); }
+.login h2 { color: var(--forest); }
+
+/* controles: sempre texto escuro sobre fundo claro */
+input, select, textarea { color: var(--ink); background-color: var(--surface); }
+input::placeholder, textarea::placeholder { color: #8A9682; }
+.search, select.sel, .area, .form input[type=text], .form input[type=date], .form input[type=number], .form select, .form textarea,
+.inline-form input, .inline-form select, .lbl input[type=text], .time input, .extra input { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.front .area, .lbl input[type=text], .time input, .extra input { background: #FAFBF7; }
+.btn { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn:hover { border-color: var(--fern); }
+.btn.pri { background: var(--moss); color: #fff; border-color: var(--moss); }
+.btn.pri:hover { background: var(--forest); border-color: var(--forest); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.danger { color: var(--bad); border-color: var(--bad-soft); background: var(--surface); }
+.btn.danger.solid { background: var(--bad); color: #fff; border-color: var(--bad); }
+.btn.ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.x { color: var(--muted); }
+.stepper { background: var(--surface); }
+.stepper button, .stepper span, .stepper input { color: var(--ink); }
+
+/* chips e etiquetas */
+.chip { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.chip[aria-pressed="true"] { background: var(--forest); color: #fff; border-color: var(--forest); }
+.chip.on { background: var(--moss); color: #fff; border-color: var(--moss); }
+.id { background: var(--sage-soft); color: var(--forest); }
+.thumb, .photo-big { background: var(--sage-soft); color: var(--moss); }
+.prog { background: var(--surface2); } .prog i { background: var(--moss); }
+.seg button { background: var(--surface); color: var(--ink); }
+.tab .n { background: var(--sage-soft); color: var(--forest); }
+.top .tab .n { background: rgba(255,255,255,.15); color: #fff; }
+
+/* diária */
+.tl { border-left-color: var(--sage); }
+.tl li::before { border-color: var(--moss); background: var(--surface); }
+.tl time { color: var(--forest); }
+.kv > span { color: var(--fern); }
+.ack { background: var(--surface2); color: var(--ink); }
+.dayrow-link.today { box-shadow: inset 4px 0 0 var(--moss); background: var(--sage-soft); }
+.title-in { color: var(--moss); font-weight: 800; }
+.front-sum h4, .front h4 { color: var(--moss); }
+.eyebrow { color: var(--fern); }
+
+/* painéis */
+.scrim { background: rgba(27,48,23,.55); }
+.sheet { background: var(--bg); color: var(--ink); }
+.toast { background: var(--forest); color: #fff; }
+.alert.bad, .alert.warn { color: var(--ink); }
+.top .who, .top #whoMail { color: var(--lime); font-weight: 600; }
