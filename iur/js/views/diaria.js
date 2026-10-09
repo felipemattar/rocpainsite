@@ -1,10 +1,10 @@
 // Página da diária: frentes (local, horários, equipe, carros), equipamentos do dia e "ciente"
-import { S, can } from '../store.js';
+import { S, can, canEditProject } from '../store.js';
 import { DEFAULT_TIMES } from '../config.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr, toast, armButton, $$ } from '../utils.js';
-import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations } from '../logic.js';
+import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat } from '../logic.js';
 import { saveDay, setAck } from '../actions.js';
-import { personLine, timelineHTML, thumbHTML, emptyHTML } from '../components.js';
+import { personLine, timelineHTML, thumbHTML, emptyHTML, carsHTML } from '../components.js';
 import { stepper } from './project.js';
 import { openItem } from './inventory.js';
 import { ls } from '../utils.js';
@@ -18,7 +18,7 @@ export function renderDiaria(el, pid, date) {
   const days = projectDays(p);
   if (!days.includes(date)) { el.innerHTML = emptyHTML(`Esta data não faz parte do projeto. <a href="#/projeto/${esc(pid)}/diarias">Ver diárias</a>`); return; }
   if (!S.proj.loaded) { el.innerHTML = emptyHTML('Carregando diária…'); return; }
-  const E = can('edit');
+  const E = canEditProject(p);
   const day = getDay(p, date);
   const idx = days.indexOf(date), prev = days[idx - 1], next = days[idx + 1];
   const blk = blockOf(p, date); const bIdx = blocks(p).findIndex(b => b === blk || (b.start === blk?.start && b.end === blk?.end));
@@ -64,10 +64,20 @@ export function renderDiaria(el, pid, date) {
   $$('[data-rmex]', el).forEach(b => b.addEventListener('click', () => { const [fid, i] = b.dataset.rmex.split('|'); fr(fid, f => { f.extra.splice(+i, 1); }); }));
   $$('[data-addex]', el).forEach(b => b.addEventListener('click', () => fr(b.dataset.addex, f => { f.extra.push({ t: '', txt: '' }); })));
   $$('[data-tperson]', el).forEach(b => b.addEventListener('click', () => { const [fid, e] = b.dataset.tperson.split('|');
-    commit(d => { for (const f of d.fronts) { if (f.id === fid) f.people = f.people.includes(e) ? f.people.filter(x => x !== e) : [...f.people, e]; else if (!b.classList.contains('on')) f.people = f.people.filter(x => x !== e); } }); }));
+    commit(d => { const adding = !b.classList.contains('on');
+      for (const f of d.fronts) { const had = f.people.includes(e);
+        if (f.id === fid) f.people = had ? f.people.filter(x => x !== e) : [...f.people, e]; else if (adding) f.people = f.people.filter(x => x !== e);
+        if (!f.people.includes(e)) unseat(f, e); } }); }));
   $$('[data-tveh]', el).forEach(b => b.addEventListener('click', () => { const [fid, v] = b.dataset.tveh.split('|');
-    commit(d => { for (const f of d.fronts) { if (f.id === fid) f.vehicles = f.vehicles.includes(v) ? f.vehicles.filter(x => x !== v) : [...f.vehicles, v]; else if (!b.classList.contains('on')) f.vehicles = f.vehicles.filter(x => x !== v); }
+    commit(d => { for (const f of d.fronts) { if (f.id === fid) f.vehicles = f.vehicles.includes(v) ? f.vehicles.filter(x => x !== v) : [...f.vehicles, v]; else if (!b.classList.contains('on')) f.vehicles = f.vehicles.filter(x => x !== v);
+        if (!f.vehicles.includes(v) && f.seats) delete f.seats[v]; }
       for (const r of Object.values(d.items)) if (r.v === v && !d.fronts.find(f => f.id === r.f)?.vehicles.includes(v)) r.v = ''; }); }));
+  // lugares nos carros
+  $$('[data-driver]', el).forEach(s => s.addEventListener('change', () => { const [fid, v] = s.dataset.driver.split('|');
+    fr(fid, f => { const e = s.value; f.seats ||= {}; if (e) unseat(f, e); f.seats[v] = { ...(f.seats[v] || { people: [] }), driver: e }; }); }));
+  $$('[data-seat]', el).forEach(b => b.addEventListener('click', () => { const [fid, v, e] = b.dataset.seat.split('|');
+    fr(fid, f => { f.seats ||= {}; const inThis = (f.seats[v]?.people || []).includes(e); unseat(f, e);
+      if (!inThis) { f.seats[v] = { driver: '', ...(f.seats[v] || {}) }; f.seats[v].people = [...(f.seats[v].people || []), e]; } }); }));
   $$('[data-rmfront]', el).forEach(b => armButton(b, 'Confirmar remoção', () => commit(d => { const fid = b.dataset.rmfront;
     d.fronts = d.fronts.filter(f => f.id !== fid); for (const k of Object.keys(d.items)) if (d.items[k].f === fid) delete d.items[k]; })));
   // equipamentos
@@ -101,7 +111,7 @@ function frontView(p, day, f) {
     <div class="kv"><span>Local</span><b>${esc(f.local || 'a definir')}</b></div>
     ${timelineHTML(f)}
     ${f.obs ? `<p class="info">${esc(f.obs)}</p>` : ''}
-    <div class="kv"><span>Carros</span><b>${f.vehicles.length ? f.vehicles.map(v => esc(vehName(p, v))).join(' · ') : '—'}</b></div>
+    ${carsHTML(p, f)}
     <div class="kv"><span>Equipe</span><div class="people">${f.people.length ? sortPeople(p, f.people).map(e => personLine(p, e)).join('') : '—'}</div></div>
   </section>`;
 }
@@ -128,7 +138,24 @@ function frontEdit(p, day, f, i) {
     <div class="lbl">Carros</div>
     <div class="chipset">${vehs.map(v => { const on = f.vehicles.includes(v.id), w = where(v.id, 'vehicles');
       return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-tveh="${f.id}|${esc(v.id)}">${esc(v.name)}${w && !on ? ` <small>· ${esc(w)}</small>` : ''}</button>`; }).join('') || '<span class="hint">Nenhum veículo de diária. Ajuste na aba Equipamentos.</span>'}</div>
+    ${seatsEdit(p, f)}
   </section>`;
+}
+
+// ---------- quem vai em cada carro ----------
+function seatsEdit(p, f) {
+  if (!f.vehicles.length || !f.people.length) return '';
+  const { cars, loose } = carPlan(f);
+  const carOf = e => cars.find(c => c.driver === e || c.people.includes(e));
+  return `<div class="lbl">Quem vai em cada carro</div>
+    <div class="seats">${cars.map(c => `<div class="seatcar">
+      <div class="seatcar-h"><b>${esc(vehName(p, c.v))}</b>
+        <label class="drv">Motorista <select class="sel xs" id="dr-${f.id}-${esc(c.v)}" data-driver="${f.id}|${esc(c.v)}"><option value="">—</option>
+          ${sortPeople(p, f.people).map(e => `<option value="${esc(e)}" ${c.driver === e ? 'selected' : ''}>${esc(personName(e))}</option>`).join('')}</select></label></div>
+      <div class="chipset">${sortPeople(p, f.people).filter(e => e !== c.driver).map(e => { const on = c.people.includes(e); const other = !on && carOf(e);
+        return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-seat="${f.id}|${esc(c.v)}|${esc(e)}">${esc(personName(e))}${other ? ` <small>· ${esc(vehName(p, other.v))}</small>` : ''}</button>`; }).join('')}</div>
+    </div>`).join('')}</div>
+    ${loose.length ? `<p class="hint">Sem carro: ${sortPeople(p, loose).map(e => esc(personName(e))).join(', ')}</p>` : '<p class="hint">Toda a equipe da frente está alocada.</p>'}`;
 }
 
 // ---------- equipamentos do dia ----------

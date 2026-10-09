@@ -194,3 +194,20 @@ input::placeholder, textarea::placeholder { color: #8A9682; }
 .toast { background: var(--forest); color: #fff; }
 .alert.bad, .alert.warn { color: var(--ink); }
 .top .who, .top #whoMail { color: var(--lime); font-weight: 600; }
+
+/* resumo da expedição (topo da aba Diárias) */
+.summary { background: var(--surface); border: 1px solid var(--line); border-top: 5px solid var(--moss); border-radius: 12px; padding: 0 16px 14px; margin-top: 16px; }
+/* carros: motorista e passageiros */
+.cars { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.car { display: flex; flex-direction: column; gap: 1px; }
+.car > b { font-weight: 700; }
+.car > span { color: var(--ink); overflow-wrap: anywhere; }
+.car .driver { font-weight: 700; color: var(--moss); }
+.car .driver small { font-weight: 600; color: var(--fern); text-transform: uppercase; letter-spacing: .05em; font-size: 11px; }
+.car.loose > b { color: var(--warn); }
+.seats { display: flex; flex-direction: column; gap: 8px; }
+.seatcar { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: #FAFBF7; display: flex; flex-direction: column; gap: 8px; }
+.seatcar-h { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.seatcar-h b { font-size: 15px; color: var(--forest); }
+.drv { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.drv select { text-transform: none; letter-spacing: 0; font-weight: 600; }

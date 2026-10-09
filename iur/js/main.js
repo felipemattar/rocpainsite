@@ -21,7 +21,7 @@ const NAV = [
   { href: '#/', label: 'Projetos', match: r => r.view === 'home' || r.view === 'project' || r.view === 'diaria' },
   { href: '#/inventario', label: 'Equipamentos', match: r => r.view === 'inventory' },
   { href: '#/grupos', label: 'Grupos', match: r => r.view === 'groups', cap: 'edit' },
-  { href: '#/etiquetas', label: 'Etiquetas QR', match: r => r.view === 'labels', cap: 'edit' },
+  { href: '#/etiquetas', label: 'Etiquetas QR', match: r => r.view === 'labels', cap: 'team' },
   { href: '#/equipe', label: 'Equipe', match: r => r.view === 'team', cap: 'team' },
 ];
 function route() {
@@ -68,7 +68,7 @@ function render() {
     case 'diaria': renderDiaria(v, r.pid, r.date); break;
     case 'inventory': renderInventory(v); break;
     case 'groups': can('edit') ? renderGroups(v) : renderHome(v); break;
-    case 'labels': can('edit') ? renderLabels(v) : renderHome(v); break;
+    case 'labels': can('team') ? renderLabels(v) : renderHome(v); break;
     case 'team': renderTeam(v); break;
   }
   if (keep) { const n = document.getElementById(keep.id); if (n) { if (keep.dirty) n.value = keep.val; n.dataset.dirty = keep.dirty || ''; n.focus(); try { n.setSelectionRange(keep.s, keep.e); } catch (e) { } } }

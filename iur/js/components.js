@@ -1,7 +1,7 @@
 // Pedaços de interface reaproveitados em várias telas
 import { S } from './store.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr } from './utils.js';
-import { personName, personFuncs, funcLabel, sortPeople, timeline, vehName, itemFlags, ITEM_STATUS, CONDITIONS, dayPeople, ackState, gName } from './logic.js';
+import { personName, personFuncs, funcLabel, sortPeople, timeline, vehName, itemFlags, ITEM_STATUS, CONDITIONS, dayPeople, ackState, gName, carPlan, firstName } from './logic.js';
 
 export const thumbHTML = (it, cls = 'thumb') =>
   `<span class="${cls}">${it.photo ? `<img src="${esc(it.photo)}" alt="" loading="lazy">` : esc((it.group || '?').slice(0, 3))}</span>`;
@@ -47,12 +47,20 @@ export function dayCardHTML(p, pid, date, day, opts = {}) {
       <div class="kv"><span>Local</span><b>${esc(f.local || 'a definir')}</b></div>
       ${timelineHTML(f)}
       ${f.obs ? `<p class="hint" style="margin:6px 0 0">${esc(f.obs)}</p>` : ''}
-      <div class="kv"><span>Carros</span><b>${f.vehicles.length ? f.vehicles.map(v => esc(vehName(p, v))).join(' · ') : '—'}</b></div>
+      ${carsHTML(p, f)}
       <div class="kv"><span>Equipe</span><div class="people">${f.people.length ? sortPeople(p, f.people).map(e => personLine(p, e)).join('') : '—'}</div></div>
     </section>`).join('')}
     ${opts.button ? `<a class="btn pri" href="#/projeto/${esc(pid)}/diaria/${date}">Abrir diária completa →</a>` : ''}
   </article>`;
 }
 
+// Carros da frente: motorista e passageiros
+export function carsHTML(p, f) {
+  if (!f.vehicles.length) return '<div class="kv"><span>Carros</span><b>—</b></div>';
+  const { cars, loose } = carPlan(f);
+  return `<div class="kv"><span>Carros</span><div class="cars">${cars.map(c => `<div class="car"><b>${esc(vehName(p, c.v))}</b>
+      <span>${c.driver ? `<span class="driver">${esc(personName(c.driver))} <small>motorista</small></span>` : '<span class="hint">sem motorista</span>'}${c.people.length ? ' · ' + sortPeople(p, c.people).map(e => esc(personName(e))).join(', ') : ''}</span></div>`).join('')}
+    ${loose.length ? `<div class="car loose"><b>Sem carro definido</b><span>${sortPeople(p, loose).map(e => esc(personName(e))).join(', ')}</span></div>` : ''}</div></div>`;
+}
 export const emptyHTML = t => `<div class="empty">${t}</div>`;
 export { gName };

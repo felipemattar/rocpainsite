@@ -20,6 +20,8 @@ export function changed() {
 
 export const can = cap => !!ROLES[S.role]?.[cap];
 export const isOwner = () => OWNERS.includes(S.me);
+// Pode editar este projeto? Editores/admins: todos. Membros: só os projetos em que estão na equipe.
+export const canEditProject = p => can('edit') || (!!S.role && S.role !== 'none' && (p?.team || []).includes(S.me));
 
 let subs = {}; // nome → unsubscribe
 function sub(name, path, opts, apply, onErr) {

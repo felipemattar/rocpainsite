@@ -21,7 +21,7 @@ export function renderTeam(el) {
         <label style="flex:1 1 220px">E-mail da conta Google<input type="email" id="t-mail" required placeholder="nome@gmail.com" autocomplete="off" style="width:100%"></label>
         <label>Perfil<select id="t-role">${roleOptions('member')}</select></label>
         <button class="btn pri" type="submit">Dar acesso</button></form>
-      <ul class="plain hint"><li><b>Administrador</b>: tudo, inclusive esta tela.</li><li><b>Editor</b>: cria e edita projetos, diárias e inventário.</li><li><b>Membro</b>: vê os projetos em que foi incluído e marca “ciente” nas diárias.</li></ul>
+      <ul class="plain hint"><li><b>Administrador</b>: tudo, inclusive esta tela.</li><li><b>Editor</b>: cria e edita projetos, diárias e inventário.</li><li><b>Membro</b>: vê e edita só os projetos em que foi incluído, e marca “ciente” nas diárias.</li></ul>
     </div>
     <div class="section"><h3>Com acesso · ${list.length}</h3><div class="rows">${list.map(m => { const me = m.email === S.me, fixed = m.role === 'owner';
       return `<div class="row static">

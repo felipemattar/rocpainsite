@@ -74,7 +74,7 @@ export function sortProjects(arr) {
 export const fixedTimes = () => Object.fromEntries(DEFAULT_TIMES.map(t => [t.id, t.value]));
 export function newFront(p, n = 1) {
   return { id: 'f' + Date.now().toString(36) + n, name: n === 1 ? DEFAULT_FRONT_NAME : `Frente ${n}`, local: '', times: fixedTimes(), extra: [], obs: '',
-    people: n === 1 ? [...(p.team || [])] : [], vehicles: n === 1 ? dailyVehicles(p).map(v => v.id) : [] };
+    people: n === 1 ? [...(p.team || [])] : [], vehicles: n === 1 ? dailyVehicles(p).map(v => v.id) : [], seats: {} };
 }
 // Lê a diária salva (ou a do formato antigo, ou cria uma padrão)
 export function getDay(p, date) {
@@ -93,7 +93,7 @@ export function getDay(p, date) {
 function normalizeDay(raw, p) {
   const d = JSON.parse(JSON.stringify(raw));
   d.info ||= ''; d.items ||= {}; d.fronts = (d.fronts && d.fronts.length) ? d.fronts : [Object.assign(newFront(p), { id: 'f1' })];
-  d.fronts.forEach(f => { f.times ||= fixedTimes(); f.extra ||= []; f.people ||= []; f.vehicles ||= []; f.local ||= ''; f.obs ||= ''; });
+  d.fronts.forEach(f => { f.times ||= fixedTimes(); f.extra ||= []; f.people ||= []; f.vehicles ||= []; f.local ||= ''; f.obs ||= ''; f.seats ||= {}; });
   d.saved = true; return d;
 }
 // Linha do tempo de uma frente (fixos + extras), em ordem de horário
@@ -104,8 +104,18 @@ export function timeline(f) {
 }
 // Assinatura do que exige nova confirmação (local, horários, equipe)
 export function scheduleSig(day) {
-  return JSON.stringify((day.fronts || []).map(f => [f.name, f.local, f.times, f.extra, f.people, f.vehicles, f.obs]).concat([day.info]));
+  return JSON.stringify((day.fronts || []).map(f => [f.name, f.local, f.times, f.extra, f.people, f.vehicles, f.obs, f.seats || {}]).concat([day.info]));
 }
+// Quem vai em cada carro de uma frente: [{v, driver, people}] + quem ficou sem carro
+export function carPlan(f) {
+  const seats = f.seats || {}; const placed = new Set();
+  const cars = (f.vehicles || []).map(v => { const s = seats[v] || {}; const driver = (f.people || []).includes(s.driver) ? s.driver : '';
+    const people = (s.people || []).filter(e => (f.people || []).includes(e) && e !== driver);
+    if (driver) placed.add(driver); people.forEach(e => placed.add(e)); return { v, driver, people }; });
+  return { cars, loose: (f.people || []).filter(e => !placed.has(e)) };
+}
+// Tira uma pessoa de todos os lugares (motorista/passageiro) de uma frente
+export function unseat(f, e) { for (const s of Object.values(f.seats || {})) { if (s.driver === e) s.driver = ''; s.people = (s.people || []).filter(x => x !== e); } }
 export const dayPeople = day => [...new Set(day.fronts.flatMap(f => f.people || []))];
 export function ackState(pid, date, email, day) {
   const a = S.proj.acks.get(`${date}__${email}`);

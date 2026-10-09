@@ -12,9 +12,9 @@ App para organizar as diárias de projetos de documentário e fotografia de natu
 |---|---|
 | Administrador | tudo, inclusive dar e tirar acesso |
 | Editor | criar e editar projetos, diárias, equipamentos e grupos |
-| Membro | ver os projetos em que foi incluído, consultar o inventário e marcar "ciente" |
+| Membro | ver e editar só os projetos em que foi incluído (diárias, equipe, equipamentos da lista), consultar o inventário e marcar "ciente" |
 
-Quem estava como "Membro" na versão anterior agora só visualiza. Mude para **Editor** quem precisa editar.
+Membros não criam nem excluem projetos e não mexem no inventário geral nem nos grupos. Etiquetas QR e a aba Equipe são só para administradores.
 
 ## Como o app está organizado
 ```

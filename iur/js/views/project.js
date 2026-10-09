@@ -1,5 +1,5 @@
 // Página do projeto: Resumo · Diárias · Equipamentos · Equipe
-import { S, can } from '../store.js';
+import { S, can, canEditProject } from '../store.js';
 import { esc, fmtD, fmtDM, wday, todayStr, openSheet, closeSheet, toast, armButton, $$ } from '../utils.js';
 import { FUNCTIONS, DEFAULT_TIMES } from '../config.js';
 import { blocks, projectStatus, featuredDay, getDay, conflictsFor, warningsFor, sortPeople, personName, personFuncs, funcLabel,
@@ -13,18 +13,18 @@ const TABS = [['resumo', 'Resumo'], ['diarias', 'Diárias'], ['equipamentos', 'E
 export function renderProject(el, pid, tab = 'resumo') {
   const raw = S.projects.get(pid);
   if (!raw) { el.innerHTML = emptyHTML(S.loaded.projects ? 'Projeto não encontrado ou sem acesso. <a href="#/">Voltar</a>' : 'Carregando…'); return; }
-  const p = { id: pid, ...raw }; const st = projectStatus(p); const E = can('edit');
+  const p = { id: pid, ...raw }; const st = projectStatus(p); const E = canEditProject(p), DEL = can('edit');
   if (!TABS.some(t => t[0] === tab)) tab = 'resumo';
   el.innerHTML = `
     <a class="btn ghost back" href="#/">← Projetos</a>
     <div class="phead"><div style="min-width:0"><span class="pill ${{ ongoing: 'p-use', upcoming: 'p-acc' }[st.k] || 'p-idle'}">${st.t}</span><h2>${esc(p.name)}</h2>
       ${p.notes ? `<p class="hint" style="font-size:14px;margin:6px 0 0">${esc(p.notes)}</p>` : ''}</div>
-      ${E ? '<div style="display:flex;gap:6px"><button class="btn sm" id="pedit">Editar</button><button class="btn sm danger" id="pdel">Excluir</button></div>' : ''}</div>
+      ${E ? `<div style="display:flex;gap:6px"><button class="btn sm" id="pedit">Editar</button>${DEL ? '<button class="btn sm danger" id="pdel">Excluir</button>' : ''}</div>` : ''}</div>
     <nav class="tabs subtabs">${TABS.map(([k, t]) => `<a class="tab" href="#/projeto/${esc(pid)}/${k}" aria-selected="${k === tab}">${t}</a>`).join('')}</nav>
     <div id="pbody"></div>`;
   if (E) {
     el.querySelector('#pedit').addEventListener('click', () => editProject(pid));
-    armButton(el.querySelector('#pdel'), 'Confirmar exclusão', () => { deleteProject(pid); toast('Projeto excluído'); location.hash = '#/'; });
+    el.querySelector('#pdel') && armButton(el.querySelector('#pdel'), 'Confirmar exclusão', () => { deleteProject(pid); toast('Projeto excluído'); location.hash = '#/'; });
   }
   const body = el.querySelector('#pbody');
   ({ resumo: tabResumo, diarias: tabDiarias, equipamentos: tabEquip, equipe: tabEquipe })[tab](body, p);
@@ -42,14 +42,21 @@ function editProject(pid) {
 
 // ---------------- RESUMO ----------------
 function tabResumo(el, p) {
-  const fd = featuredDay(p); const bl = blocks(p); const team = sortPeople(p, p.team || []);
-  const E = can('edit'); const conf = E ? conflictsFor(p) : []; const warn = E ? warningsFor(p) : [];
-  const nDays = bl.reduce((a, b) => a + b.days.length, 0);
+  const fd = featuredDay(p); const bl = blocks(p);
+  const E = canEditProject(p); const conf = E ? conflictsFor(p) : []; const warn = E ? warningsFor(p) : [];
   el.innerHTML = `
     ${fd ? (S.proj.loaded ? dayCardHTML(p, p.id, fd.date, getDay(p, fd.date), { kind: fd.kind, button: true }) : emptyHTML('Carregando diária…'))
       : `<div class="empty">${bl.length ? 'As diárias deste projeto já passaram.' : 'Defina as datas na aba Diárias.'}</div>`}
     ${conf.length ? `<div class="section"><div class="alert bad"><strong>⚠ Conflito de equipamento</strong><ul>${conf.map(c => `<li><span class="id">${esc(c.itemId)}</span> ${esc(S.items.get(c.itemId)?.name || '')} — ${fmtD(c.date)}: também em ${c.others.map(o => `<a href="#/projeto/${esc(o)}/equipamentos">${esc(S.projects.get(o)?.name || '')}</a>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`).join('')}</ul></div></div>` : ''}
     ${warn.length ? `<div class="section"><div class="alert warn"><strong>Equipamentos com atenção</strong><ul>${warn.map(w => `<li><span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name || '')} — ${esc(w.t)}</li>`).join('')}</ul></div></div>` : ''}
+`;
+}
+
+// ---------------- DIÁRIAS ----------------
+function summaryHTML(p) {
+  const bl = blocks(p); const team = sortPeople(p, p.team || []);
+  const nDays = bl.reduce((a, b) => a + b.days.length, 0);
+  return `
     <div class="summary">
       <div class="section"><h3>Expedição</h3>
         ${bl.length ? `<ul class="plain">${bl.map((b, i) => `<li><b>${b.label ? esc(b.label) : `Bloco ${i + 1}`}</b> · ${fmtD(b.start)}${b.end !== b.start ? ' a ' + fmtD(b.end) : ''} <span class="hint">(${b.days.length} dia${b.days.length > 1 ? 's' : ''})</span></li>`).join('')}</ul>
@@ -61,11 +68,9 @@ function tabResumo(el, p) {
         <li>${(p.items || []).length} equipamentos na lista</li></ul></div>
     </div>`;
 }
-
-// ---------------- DIÁRIAS ----------------
 function tabDiarias(el, p) {
-  const E = can('edit'); const bl = blocks(p); const t = todayStr();
-  el.innerHTML = `
+  const E = canEditProject(p); const bl = blocks(p); const t = todayStr();
+  el.innerHTML = `${summaryHTML(p)}
     ${E ? `<div class="section"><h3>Blocos de datas</h3>
       <form class="inline-form" id="dform"><label>Início<input type="date" id="d-s" required></label><label>Fim<input type="date" id="d-e"></label>
       <label>Nome do bloco<input type="text" id="d-l" placeholder="Ex.: Expedição Guriri" size="18"></label><button class="btn" type="submit">Adicionar bloco</button></form></div>` : ''}
@@ -114,7 +119,7 @@ function dayRow(p, d, n, t) {
 
 // ---------------- EQUIPAMENTOS ----------------
 function tabEquip(el, p) {
-  const E = can('edit'); const pid = p.id;
+  const E = canEditProject(p); const pid = p.id;
   const items = projItems(p); const vehs = vehiclesOf(p);
   const nk = items.filter(x => p.checked?.[x.id]).length;
   const byG = new Map(); for (const x of items) { if (!byG.has(x.it.group)) byG.set(x.it.group, []); byG.get(x.it.group).push(x); }
@@ -196,7 +201,7 @@ function pickItems(pid) {
 
 // ---------------- EQUIPE ----------------
 function tabEquipe(el, p) {
-  const E = can('edit'); const pid = p.id;
+  const E = canEditProject(p); const pid = p.id;
   const team = sortPeople(p, p.team || []);
   const free = allMembers().filter(e => !team.includes(e));
   el.innerHTML = `
@@ -208,7 +213,7 @@ function tabEquipe(el, p) {
       <div class="rows">${team.map(e => `<div class="row static">
         <span class="main"><span class="name">${esc(personName(e))}</span>${e === S.me ? ' <span class="pill p-use">você</span>' : ''}
           <div class="meta">${personFuncs(p, e).length ? personFuncs(p, e).map(f => `<span class="pill p-acc">${esc(funcLabel(f))}</span>`).join(' ') : '<span class="hint">sem função</span>'}</div></span>
-        ${E ? `<button class="btn sm" data-funcs="${esc(e)}">Funções</button><button class="x" data-rmp="${esc(e)}" aria-label="Retirar do projeto">×</button>` : '<span></span><span></span>'}
+        ${E ? `<button class="btn sm" data-funcs="${esc(e)}">Funções</button>${e !== S.me || can('edit') ? `<button class="x" data-rmp="${esc(e)}" aria-label="Retirar do projeto">×</button>` : '<span></span>'}` : '<span></span><span></span>'}
       </div>`).join('') || emptyHTML('Ninguém no projeto ainda.')}</div></div>`;
   if (!E) return;
   el.querySelector('#addp')?.addEventListener('change', e => { const v = e.target.value; if (!v) return; const np = projBody(pid); np.team = [...(np.team || []), v]; setProject(pid, np); funcSheet(pid, v); });
