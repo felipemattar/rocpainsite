@@ -2,10 +2,16 @@
 
 App para organizar as diárias de projetos de documentário e fotografia de natureza: datas, equipe, horários, frentes de trabalho, carros e equipamentos.
 
+Endereço: **https://rocpaingames.com/iur/expedicoes-iur/**
+
 ## Publicar (GitHub Pages)
-1. Apague o `index.html` antigo do repositório e envie **todo o conteúdo desta pasta**, mantendo as subpastas `css/` e `js/`.
-2. No Firebase → Firestore → **Regras**, cole o `firestore.rules` e clique em **Publicar**. Sem esse passo as diárias e o "ciente" não funcionam.
-3. Os dados que já estão no Firebase (inventário, grupos, projetos, equipe) continuam valendo.
+O app é a pasta `iur/expedicoes-iur/` do repositório do site, [felipemattar/rocpainsite](https://github.com/felipemattar/rocpainsite). Ele não tem repositório próprio.
+1. Faça commit das alterações desta pasta no repositório `rocpainsite` e envie (push) o `main`. O GitHub Pages publica sozinho em alguns minutos.
+2. Se o `firestore.rules` mudou: no Firebase → Firestore → **Regras**, cole o arquivo e clique em **Publicar**. Sem as regras, as diárias e o "ciente" não funcionam.
+3. Em Firebase → Authentication → **Domínios autorizados**, o domínio `rocpaingames.com` precisa estar na lista, senão o login com Google falha.
+4. Os dados que já estão no Firebase (inventário, grupos, projetos, equipe) continuam valendo.
+
+**Etiquetas QR:** o QR code guarda o endereço da página onde a etiqueta foi gerada. Gere as etiquetas sempre a partir do endereço acima; se ele mudar, as etiquetas impressas param de funcionar.
 
 ## Perfis (aba Equipe, só para administradores)
 | Perfil | Pode |
@@ -29,6 +35,8 @@ js/actions.js         gravações (salvar diária, projeto, item…)
 js/components.js      peças visuais reaproveitadas (cartão da diária, linha do tempo)
 js/views/*.js         uma tela por arquivo: home, project, diaria, inventory, groups, labels, team
 js/seed.js            inventário inicial (botão Importar com banco vazio)
+firestore.rules       regras de segurança (colar no console do Firebase)
+tests/                teste automático, checagem de sintaxe e servidor local
 ```
 
 ### Ajustes comuns em `js/config.js`
@@ -46,7 +54,12 @@ js/seed.js            inventário inicial (botão Importar com banco vazio)
 - `projects/{id}/acks/{data__email}`: quem marcou "ciente"
 
 ## Testar localmente
-Abrir o `index.html` direto do disco não funciona (os módulos JS precisam de um servidor). Use, por exemplo, `python -m http.server` dentro da pasta e acesse `http://localhost:8000`. Também adicione `localhost` em Authentication → Domínios autorizados.
+Abrir o `index.html` direto do disco não funciona (os módulos JS precisam de um servidor). Com o [Node.js](https://nodejs.org) instalado, rode dentro desta pasta:
+- `npm run dev` e acesse `http://localhost:8000`. Para o login funcionar, `localhost` também precisa estar em Authentication → Domínios autorizados.
+- `npm run check`: confere a sintaxe dos arquivos JS.
+- `npm run test:e2e`: teste automático com um banco simulado (não mexe nos dados reais). Na primeira vez, rode antes `npm install` e `npx playwright install chromium`.
+
+Os comandos funcionam no Windows, macOS e Linux.
 
 ## Local no mapa (diárias)
 Cada frente tem um campo "Local no mapa": digite o nome do lugar e escolha uma sugestão, ou cole o link de compartilhamento do Google Maps.
