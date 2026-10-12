@@ -4,7 +4,7 @@ Webapp do **Instituto Últimos Refúgios (IUR)** para organizar expedições de 
 
 - Idioma da interface, do código comentado e das respostas: **português do Brasil**.
 - Usuários usam muito no **celular, em campo** (às vezes sem sinal). Toda tela precisa funcionar a ~400px de largura.
-- Hospedagem: **GitHub Pages** (site estático). Banco: **Firebase** (Firestore + Authentication com Google), projeto `equipamentosiur`.
+- Hospedagem: **GitHub Pages** (site estático), na pasta `iur/expedicoes-iur/` do repositório do site [felipemattar/rocpainsite](https://github.com/felipemattar/rocpainsite) → **https://rocpaingames.com/iur/expedicoes-iur/**. Banco: **Firebase** (Firestore + Authentication com Google), projeto `equipamentosiur`.
 
 ## Stack e regras de arquitetura
 - HTML + CSS + **JavaScript puro em módulos ES** (sem framework, sem build, sem bundler). Não introduzir React/Vite/etc. sem pedido explícito.
@@ -72,8 +72,11 @@ Membros listam projetos com consulta `where('team','array-contains', email)` —
 - Antes de entregar uma mudança: `npm run check` + `npm run test:e2e` e olhar as capturas em largura de celular.
 
 ## Publicar
-1. Enviar o conteúdo da pasta para o repositório do GitHub Pages (index.html na raiz, com `css/`, `js/`, `img/`). `tests/`, `package.json` e `CLAUDE.md` podem ir junto sem problema.
-2. Se `firestore.rules` mudou: colar no console do Firebase → Firestore → Regras → Publicar.
+O app **não** tem repositório git próprio: o repositório é o do site, com raiz em `D:\GitHub\rocpainsite` (o resto do site — `index.html`, `CNAME`, `Games/`… — não é deste app; não mexer). Caminhos nos comandos git são relativos a essa raiz (`iur/expedicoes-iur/...`).
+1. Commit só dos arquivos de `iur/expedicoes-iur/` e push do `main` do `rocpainsite`; o GitHub Pages publica sozinho em alguns minutos. `node_modules/` e `tests/screenshots/` ficam fora pelo `.gitignore` da pasta.
+2. Como o app fica numa subpasta, todo caminho no código precisa ser **relativo** (`css/…`, `js/…`), nunca começando com `/`.
+3. `rocpaingames.com` precisa estar em Firebase → Authentication → Domínios autorizados.
+4. Se `firestore.rules` mudou: colar no console do Firebase → Firestore → Regras → Publicar.
 
 ## Serviços externos
 - **Photon** (`photon.komoot.io`, OpenStreetMap): sugestões de local, grátis e sem chave. Debounce de 450ms. Google Places exigiria chave com cobrança — só trocar `searchPlaces()` em `js/views/diaria.js` se pedirem.
@@ -83,5 +86,5 @@ Membros listam projetos com consulta `where('team','array-contains', email)` —
 
 ## Pendências / ideias já discutidas
 - Fotos dos equipamentos ainda não foram cadastradas (campo existe; miniatura salva no próprio item).
-- Etiquetas QR: só admin por enquanto; imprimir depois que o endereço do GitHub Pages for definitivo (o QR usa `location.origin + pathname`).
+- Etiquetas QR: só admin por enquanto; o QR usa `location.origin + pathname`, então as etiquetas apontam para o endereço onde foram geradas — gerar a partir de https://rocpaingames.com/iur/expedicoes-iur/. Se o endereço mudar, as etiquetas impressas param de funcionar.
 - Rádios, lanternas e grampos: quantidades a confirmar no inventário.
