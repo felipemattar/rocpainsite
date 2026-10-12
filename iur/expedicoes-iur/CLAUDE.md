@@ -1,0 +1,87 @@
+# Expedições IUR
+
+Webapp do **Instituto Últimos Refúgios (IUR)** para organizar expedições de documentário e fotografia de natureza: projetos, blocos de datas, diárias (frentes, local, horários, equipe, carros, motoristas), confirmação de "ciente", lista de equipamentos e inventário.
+
+- Idioma da interface, do código comentado e das respostas: **português do Brasil**.
+- Usuários usam muito no **celular, em campo** (às vezes sem sinal). Toda tela precisa funcionar a ~400px de largura.
+- Hospedagem: **GitHub Pages** (site estático). Banco: **Firebase** (Firestore + Authentication com Google), projeto `equipamentosiur`.
+
+## Stack e regras de arquitetura
+- HTML + CSS + **JavaScript puro em módulos ES** (sem framework, sem build, sem bundler). Não introduzir React/Vite/etc. sem pedido explícito.
+- Firebase JS SDK **10.12.2** importado da CDN `gstatic` só em `js/firebase.js`.
+- **Só `js/firebase.js` fala com o Firebase.** As telas chamam `js/actions.js` (escrita) e leem de `js/store.js` (estado).
+- Escritas não esperam o servidor (`setDoc(...).catch(handler)`): o Firestore tem cache local persistente, então funciona offline e sincroniza depois.
+- Ajustes de negócio ficam em **`js/config.js`** (funções e hierarquia, horários padrão, veículos, perfis, busca de locais, nome do app). Preferir mudar lá a espalhar constantes.
+- Tema único **claro**, cores do site ultimosrefugios.org.br (tokens em `css/base.css`: `--forest #1B3017`, `--moss #35612E`, `--sage`, `--lime`…). Não reintroduzir modo escuro sem pedido; já causou texto preto em fundo escuro.
+- Renderização: cada tela gera HTML com template strings e **sempre** passa texto do usuário por `esc()` (`js/utils.js`). Rerender completo a cada mudança de dados (`store.onChange`); `main.js` preserva foco e texto digitado em inputs com `id`. Todo input editável precisa de `id` estável.
+- Sem `alert/confirm/prompt`: confirmações usam `armButton()` (segundo clique confirma) ou um painel (`openSheet`).
+
+## Estrutura
+```
+index.html          casca (topo, nav, #view, sheet e toasts)
+css/base.css        tokens de cor/tipografia + componentes básicos
+css/app.css         telas de projeto/diária + tema Últimos Refúgios (final do arquivo)
+img/logo-ur.png     logo (inserido via CSS em .brand h1::before)
+js/config.js        AJUSTES
+js/firebase.js      camada de dados (auth, listen, save, merge, remove, batchSet, newId)
+js/store.js         estado S, assinaturas em tempo real, permissões can()/canEditProject()
+js/logic.js         regras puras: blocos/dias, diária em destaque (20h → amanhã), getDay/normalizeDay,
+                    ciência (scheduleSig/ackState), carros (carPlan/unseat), conflitos de equipamento, mapa
+js/actions.js       gravações (projeto com checagem de conflito, diária com timesAt, ciente, itens, grupos, equipe)
+js/components.js    peças reaproveitadas (cartão da diária, painel ciente, carros, mapa, linha do tempo)
+js/views/*.js       uma tela por arquivo: home, project (abas resumo/diarias/equipamentos/equipe),
+                    diaria, inventory, groups, labels, team
+js/main.js          rotas por hash, login, nav, redesenho
+js/seed.js          inventário inicial (botão "Importar" com banco vazio)
+firestore.rules     regras de segurança (colar no console do Firebase)
+tests/              teste ponta a ponta com Firebase simulado, check.mjs (sintaxe), serve.mjs (servidor local)
+```
+
+### Rotas
+`#/` projetos · `#/projeto/ID[/resumo|diarias|equipamentos|equipe]` · `#/projeto/ID/diaria/AAAA-MM-DD` · `#/inventario` · `#/grupos` · `#/etiquetas` · `#/equipe` · `#/item/ID` (QR code). `#SUB-03` (formato antigo) também abre o item.
+
+## Modelo de dados (Firestore)
+- `team/{email}` → `{ name, role: 'admin'|'editor'|'member', addedBy, addedAt }` (o dono fixo pode ter `role:'owner'`)
+- `items/{GRP-NN}` → `{ name, group, qty, accessories, status: owned|ordered|tobuy, condition: ok|needs|repair, returnDate, location, notes, photo (data URL ~30-50KB) }`
+- `groups/{SIGLA}` → `{ name, desc, order }`
+- `projects/{id}` → `{ name, notes, dates:[{start,end,label}], team:[emails], roles:{email:[funcIds]}, vehicles:[{id,name,daily}], items:[{id,qty}], checked:{itemId:true}, load:{itemId:vehicleId}, created, createdBy }`
+  - campo legado `days` (mapa) pode existir em projetos antigos; `getDay()` converte.
+- `projects/{id}/days/{AAAA-MM-DD}` → `{ info, fronts:[{ id, name, local, place:{name,desc,lat,lon,url}|null, times:{saida,almoco,volta}, extra:[{t,txt}], obs, people:[emails], vehicles:[ids], seats:{vehicleId:{driver, people:[emails]}} }], items:{itemId:{f:frontId, v:vehicleId, qty}}, timesAt, updatedAt, updatedBy }`
+  - `timesAt` muda quando muda algo de `scheduleSig()` (local, mapa, horários, equipe, carros, lugares) → confirmações anteriores viram "confirmar de novo".
+- `projects/{id}/acks/{AAAA-MM-DD__email}` → `{ email, date, at }`
+
+## Perfis e permissões
+| Perfil | Pode |
+|---|---|
+| Administrador (`OWNERS` em config.js + role admin) | tudo, aba Equipe e Etiquetas QR |
+| Editor | criar/excluir/editar todos os projetos, inventário e grupos |
+| Membro | ver **e editar** só projetos em que está em `team` (não cria/exclui projeto, não sai da equipe), ler inventário, marcar ciente |
+
+As mesmas regras estão em **dois lugares**: no cliente (`can()`, `canEditProject()`) e em `firestore.rules`. **Ao mudar permissões, mudar os dois.** O e-mail do dono fixo também está duplicado: `OWNERS` (config.js) e `proprietario()` (firestore.rules).
+
+Membros listam projetos com consulta `where('team','array-contains', email)` — a regra de leitura depende disso.
+
+## Rodar e testar
+- Os scripts são em Node puro (sem bash/python), para rodar igual no Windows, macOS e Linux.
+- Local: `npm run dev` (servidor estático de `tests/serve.mjs`) e abrir `http://localhost:8000`. Abrir o `index.html` direto do disco **não** funciona (módulos ES). Para login real, `localhost` precisa estar em Authentication → Domínios autorizados.
+- Checagem de sintaxe: `npm run check`.
+- Teste ponta a ponta: `npm install`, `npx playwright install chromium` (uma vez) e `npm run test:e2e`.
+  - `tests/run-e2e.mjs` copia o app para uma pasta temporária, troca `js/firebase.js` por `tests/firebase-stub.js` (banco em memória via localStorage, usuário via `?as=email`) e roda `tests/e2e.mjs`.
+  - O teste importa o inventário, cria equipe (editor/membro), funções, blocos, uma diária com 2 frentes, mapa (busca Photon simulada), motoristas/passageiros, ciente, e testa a visão de membro, editor e de alguém sem acesso. Ele imprime o estado salvo e **falha só se houver erro de JavaScript** na página; leia a saída para conferir valores. Capturas ficam em `tests/screenshots/`.
+  - Se mudar nomes de ids/atributos usados no teste (`#d-info`, `#fl-<frente>`, `[data-ack]`, `#dr-<frente>-<carro>`…), atualizar `tests/e2e.mjs`.
+- Antes de entregar uma mudança: `npm run check` + `npm run test:e2e` e olhar as capturas em largura de celular.
+
+## Publicar
+1. Enviar o conteúdo da pasta para o repositório do GitHub Pages (index.html na raiz, com `css/`, `js/`, `img/`). `tests/`, `package.json` e `CLAUDE.md` podem ir junto sem problema.
+2. Se `firestore.rules` mudou: colar no console do Firebase → Firestore → Regras → Publicar.
+
+## Serviços externos
+- **Photon** (`photon.komoot.io`, OpenStreetMap): sugestões de local, grátis e sem chave. Debounce de 450ms. Google Places exigiria chave com cobrança — só trocar `searchPlaces()` em `js/views/diaria.js` se pedirem.
+- Links de mapa usam URLs públicas do Google Maps (`/maps/search/?api=1`, `/maps/dir/?api=1`), sem chave.
+- QR code: `qrcode-generator@1.4.4` via jsDelivr (global `qrcode`).
+- Fontes: Google Fonts (Nunito Sans, Open Sans condensada, Barlow Condensed, Public Sans).
+
+## Pendências / ideias já discutidas
+- Fotos dos equipamentos ainda não foram cadastradas (campo existe; miniatura salva no próprio item).
+- Etiquetas QR: só admin por enquanto; imprimir depois que o endereço do GitHub Pages for definitivo (o QR usa `location.origin + pathname`).
+- Rádios, lanternas e grampos: quantidades a confirmar no inventário.
