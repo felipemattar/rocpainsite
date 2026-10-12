@@ -19,11 +19,15 @@ export const APP_NAME = 'Expedições IUR';
 export const APP_SUB = 'Instituto Últimos Refúgios · documentário e fotografia de natureza';
 
 // Perfis de acesso. A ordem define o que aparece no seletor da aba Equipe.
-// edit: cria/edita projetos, diárias e inventário · team: gerencia pessoas · allProjects: vê todos os projetos
+// edit: cria/exclui/edita todos os projetos, diárias e o inventário · editOwn: edita os projetos em que está na equipe
+// (sem mexer em equipamentos) · equip: vê o inventário e os equipamentos dos projetos/diárias · qr: QR codes e etiquetas
+// team: gerencia pessoas · allProjects: vê todos os projetos
+// Ao mudar edit/editOwn/team, mudar também o firestore.rules.
 export const ROLES = {
-  admin:  { label: 'Administrador', edit: true,  team: true,  allProjects: true  },
-  editor: { label: 'Editor',        edit: true,  team: false, allProjects: true  },
-  member: { label: 'Membro',        edit: false, team: false, allProjects: false },
+  admin:    { label: 'Administrador', edit: true,  editOwn: true,  equip: true,  qr: true,  team: true,  allProjects: true  },
+  editor:   { label: 'Editor',        edit: true,  editOwn: true,  equip: true,  qr: false, team: false, allProjects: true  },
+  producer: { label: 'Produtor',      edit: false, editOwn: true,  equip: false, qr: false, team: false, allProjects: false },
+  member:   { label: 'Membro',        edit: false, editOwn: false, equip: false, qr: false, team: false, allProjects: false },
 };
 
 // Funções no projeto, em ordem de hierarquia (a primeira é a mais alta).

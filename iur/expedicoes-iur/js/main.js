@@ -15,13 +15,13 @@ import { personName } from './logic.js';
 // ---------- rotas ----------
 // #/                         projetos
 // #/projeto/ID[/aba]         resumo | diarias | equipamentos | equipe
-// #/projeto/ID/diaria/DATA   página da diária
+// #/projeto/ID/diaria/DATA   página da diária (+ /equipamentos: só os equipamentos do dia)
 // #/inventario  #/grupos  #/etiquetas  #/equipe   #/item/ID (QR code)
 const NAV = [
   { href: '#/', label: 'Projetos', match: r => r.view === 'home' || r.view === 'project' || r.view === 'diaria' },
-  { href: '#/inventario', label: 'Equipamentos', match: r => r.view === 'inventory' },
-  { href: '#/grupos', label: 'Grupos', match: r => r.view === 'groups', cap: 'edit' },
-  { href: '#/etiquetas', label: 'Etiquetas QR', match: r => r.view === 'labels', cap: 'team' },
+  { href: '#/inventario', label: 'Inventário', match: r => r.view === 'inventory', cap: 'equip' },
+  { href: '#/grupos', label: 'Grupos', match: r => r.view === 'groups', cap: ['equip', 'edit'] },
+  { href: '#/etiquetas', label: 'Etiquetas QR', match: r => r.view === 'labels', cap: 'qr' },
   { href: '#/equipe', label: 'Equipe', match: r => r.view === 'team', cap: 'team' },
 ];
 function route() {
@@ -29,7 +29,7 @@ function route() {
   const parts = h.split('/').filter(Boolean);
   if (/^[A-Z]{2,4}-\d+$/.test(h)) return { view: 'inventory', item: h };          // QR antigo (#SUB-03)
   switch (parts[0]) {
-    case 'projeto': return parts[2] === 'diaria' ? { view: 'diaria', pid: parts[1], date: parts[3] } : { view: 'project', pid: parts[1], tab: parts[2] || 'resumo' };
+    case 'projeto': return parts[2] === 'diaria' ? { view: 'diaria', pid: parts[1], date: parts[3], sub: parts[4] || '' } : { view: 'project', pid: parts[1], tab: parts[2] || 'resumo' };
     case 'inventario': return { view: 'inventory' };
     case 'item': return { view: 'inventory', item: parts[1] };
     case 'grupos': return { view: 'groups' };
@@ -54,7 +54,7 @@ function render() {
     $('#out2').addEventListener('click', signOutUser); return; }
   // navegação
   $('#nav').hidden = false;
-  $('#nav').innerHTML = NAV.filter(n => !n.cap || can(n.cap)).map(n => `<a class="tab" href="${n.href}" aria-selected="${n.match(r)}">${n.label}</a>`).join('');
+  $('#nav').innerHTML = NAV.filter(n => [].concat(n.cap || []).every(can)).map(n => `<a class="tab" href="${n.href}" aria-selected="${n.match(r)}">${n.label}</a>`).join('');
   $('#banner').hidden = !S.error; $('#banner').textContent = S.error ? `Problema de conexão com o banco (${S.error}). Recarregue a página.` : '';
   $('#importBox').hidden = !(can('edit') && S.loaded.items && S.loaded.groups && S.items.size === 0 && S.groups.size === 0);
   // dados do projeto aberto
@@ -65,15 +65,15 @@ function render() {
   switch (r.view) {
     case 'home': renderHome(v); break;
     case 'project': renderProject(v, r.pid, r.tab); break;
-    case 'diaria': renderDiaria(v, r.pid, r.date); break;
-    case 'inventory': renderInventory(v); break;
-    case 'groups': can('edit') ? renderGroups(v) : renderHome(v); break;
-    case 'labels': can('team') ? renderLabels(v) : renderHome(v); break;
+    case 'diaria': renderDiaria(v, r.pid, r.date, r.sub); break;
+    case 'inventory': can('equip') ? renderInventory(v) : renderHome(v); break;
+    case 'groups': can('equip') && can('edit') ? renderGroups(v) : renderHome(v); break;
+    case 'labels': can('qr') ? renderLabels(v) : renderHome(v); break;
     case 'team': renderTeam(v); break;
   }
   if (keep) { const n = document.getElementById(keep.id); if (n) { if (keep.dirty) n.value = keep.val; n.dataset.dirty = keep.dirty || ''; n.focus(); try { n.setSelectionRange(keep.s, keep.e); } catch (e) { } } }
   if (key === lastKey) window.scrollTo(0, scroll); else { window.scrollTo(0, 0); lastKey = key; }
-  if (r.item && S.loaded.items && !sheetOpen()) { openItem(r.item); history.replaceState(null, '', '#/inventario'); }
+  if (r.item && can('equip') && S.loaded.items && !sheetOpen()) { openItem(r.item); history.replaceState(null, '', '#/inventario'); }
 }
 // marca campos com texto ainda não salvo (para não perder o que está sendo digitado)
 document.addEventListener('input', e => { if (e.target.id) e.target.dataset.dirty = '1'; });

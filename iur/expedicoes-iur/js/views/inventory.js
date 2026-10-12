@@ -16,7 +16,7 @@ export const showPhotos = () => ls.get('iur.photos', true);
 export function renderInventory(el) {
   const E = can('edit');
   el.innerHTML = `
-    <div class="pagehead"><h2>Equipamentos</h2>${E ? '<button class="btn pri" id="addItem">+ Equipamento</button>' : ''}</div>
+    <div class="pagehead"><h2>Inventário</h2>${E ? '<button class="btn pri" id="addItem">+ Equipamento</button>' : ''}</div>
     <div class="bar">
       <input class="search" id="q" type="search" placeholder="Buscar por nome, ID, local…" autocomplete="off" value="${esc(V.q)}">
       <select class="sel" id="fgroup" aria-label="Filtrar por grupo"><option value="">Todos os grupos</option>${groupsSorted().map(g => `<option value="${esc(g.id)}" ${g.id === V.group ? 'selected' : ''}>${esc(g.name)}</option>`).join('')}</select>
@@ -72,7 +72,7 @@ export function openItem(id) {
       <div class="two"><label>Localização<input type="text" id="f-loc" value="${esc(it.location)}" ${ro}></label><label>Acessórios<input type="text" id="f-acc" value="${esc(it.accessories)}" ${ro}></label></div>
       <label>Pendência / observações<textarea id="f-notes" ${ro}>${esc(it.notes)}</textarea></label>
       ${isNew ? '' : `<div class="section" style="margin-top:4px"><h3>Projetos com este item</h3><div class="uses">${uses.length ? uses.map(([pid, p]) => `<a href="#/projeto/${esc(pid)}/equipamentos" data-close>${esc(p.name)}</a> <span class="hint">${blocks({ id: pid, ...p }).map(b => fmtD(b.start)).join(' · ') || 'sem datas'}</span>`).join('<br>') : '<span class="hint">Nenhum projeto.</span>'}</div></div>
-      <div class="qrbox"><div class="qr">${qrSVG(itemLink(id), 3)}</div><div><b>QR code</b><div class="hint">Escaneie com a câmera do celular para abrir esta ficha.</div>${can('team') ? '<button type="button" class="btn sm" id="qrDl" style="margin-top:6px">Baixar etiqueta</button>' : ''}</div></div>`}
+      ${can('qr') ? `<div class="qrbox"><div class="qr">${qrSVG(itemLink(id), 3)}</div><div><b>QR code</b><div class="hint">Escaneie com a câmera do celular para abrir esta ficha.</div><button type="button" class="btn sm" id="qrDl" style="margin-top:6px">Baixar etiqueta</button></div></div>` : ''}`}
       <div class="actions"><div>${!isNew && E ? '<button type="button" class="btn danger" id="delItem">Excluir</button>' : ''}</div>
         <div class="r"><button type="button" class="btn" data-close>Fechar</button>${E ? `<button type="submit" class="btn pri">${isNew ? 'Cadastrar' : 'Salvar'}</button>` : ''}</div></div>
     </form>`, sh => {

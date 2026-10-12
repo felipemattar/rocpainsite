@@ -3,7 +3,7 @@ import { listen } from './firebase.js';
 import { OWNERS, ROLES } from './config.js';
 
 export const S = {
-  user: null, me: '', role: null,          // role: 'admin' | 'editor' | 'member' | 'none' | null (carregando)
+  user: null, me: '', role: null,          // role: 'admin' | 'editor' | 'producer' | 'member' | 'none' | null (carregando)
   items: new Map(), groups: new Map(), team: new Map(), projects: new Map(),
   loaded: { items: false, groups: false, team: false, projects: false },
   proj: { pid: null, days: new Map(), acks: new Map(), loaded: false },
@@ -20,8 +20,10 @@ export function changed() {
 
 export const can = cap => !!ROLES[S.role]?.[cap];
 export const isOwner = () => OWNERS.includes(S.me);
-// Pode editar este projeto? Editores/admins: todos. Membros: só os projetos em que estão na equipe.
-export const canEditProject = p => can('edit') || (!!S.role && S.role !== 'none' && (p?.team || []).includes(S.me));
+// Pode editar este projeto? Editores/admins: todos. Produtores: só os projetos em que estão na equipe. Membros: nenhum.
+export const canEditProject = p => can('edit') || (can('editOwn') && (p?.team || []).includes(S.me));
+// Pode mexer nos equipamentos (lista do projeto, carregamento, equipamentos do dia)?
+export const canEditEquip = () => can('edit') && can('equip');
 
 let subs = {}; // nome → unsubscribe
 function sub(name, path, opts, apply, onErr) {

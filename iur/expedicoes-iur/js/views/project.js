@@ -1,5 +1,5 @@
 // Página do projeto: Resumo · Diárias · Equipamentos · Equipe
-import { S, can, canEditProject } from '../store.js';
+import { S, can, canEditProject, canEditEquip } from '../store.js';
 import { esc, fmtD, fmtDM, wday, todayStr, openSheet, closeSheet, toast, armButton, $$ } from '../utils.js';
 import { FUNCTIONS, DEFAULT_TIMES } from '../config.js';
 import { blocks, projectStatus, featuredDay, getDay, conflictsFor, warningsFor, sortPeople, personName, personFuncs, funcLabel,
@@ -14,13 +14,14 @@ export function renderProject(el, pid, tab = 'resumo') {
   const raw = S.projects.get(pid);
   if (!raw) { el.innerHTML = emptyHTML(S.loaded.projects ? 'Projeto não encontrado ou sem acesso. <a href="#/">Voltar</a>' : 'Carregando…'); return; }
   const p = { id: pid, ...raw }; const st = projectStatus(p); const E = canEditProject(p), DEL = can('edit');
-  if (!TABS.some(t => t[0] === tab)) tab = 'resumo';
+  const tabs = TABS.filter(([k]) => k !== 'equipamentos' || can('equip'));
+  if (!tabs.some(t => t[0] === tab)) tab = 'resumo';
   el.innerHTML = `
     <a class="btn ghost back" href="#/">← Projetos</a>
     <div class="phead"><div style="min-width:0"><span class="pill ${{ ongoing: 'p-use', upcoming: 'p-acc' }[st.k] || 'p-idle'}">${st.t}</span><h2>${esc(p.name)}</h2>
       ${p.notes ? `<p class="hint" style="font-size:14px;margin:6px 0 0">${esc(p.notes)}</p>` : ''}</div>
       ${E ? `<div style="display:flex;gap:6px"><button class="btn sm" id="pedit">Editar</button>${DEL ? '<button class="btn sm danger" id="pdel">Excluir</button>' : ''}</div>` : ''}</div>
-    <nav class="tabs subtabs">${TABS.map(([k, t]) => `<a class="tab" href="#/projeto/${esc(pid)}/${k}" aria-selected="${k === tab}">${t}</a>`).join('')}</nav>
+    <nav class="tabs subtabs">${tabs.map(([k, t]) => `<a class="tab" href="#/projeto/${esc(pid)}/${k}" aria-selected="${k === tab}">${t}</a>`).join('')}</nav>
     <div id="pbody"></div>`;
   if (E) {
     el.querySelector('#pedit').addEventListener('click', () => editProject(pid));
@@ -43,7 +44,7 @@ function editProject(pid) {
 // ---------------- RESUMO ----------------
 function tabResumo(el, p) {
   const fd = featuredDay(p); const bl = blocks(p);
-  const E = canEditProject(p); const conf = E ? conflictsFor(p) : []; const warn = E ? warningsFor(p) : [];
+  const E = canEditProject(p); const EQ = E && can('equip'); const conf = EQ ? conflictsFor(p) : []; const warn = EQ ? warningsFor(p) : [];
   el.innerHTML = `
     ${fd ? (S.proj.loaded ? dayCardHTML(p, p.id, fd.date, getDay(p, fd.date), { kind: fd.kind, button: true, ack: true }) : emptyHTML('Carregando diária…'))
       : `<div class="empty">${bl.length ? 'As diárias deste projeto já passaram.' : 'Defina as datas na aba Diárias.'}</div>`}
@@ -66,7 +67,7 @@ function summaryHTML(p) {
       <div class="section"><h3>Equipe · ${team.length}</h3><div class="people">${team.length ? team.map(e => personLine(p, e)).join('') : '<span class="hint">Ninguém ainda.</span>'}</div></div>
       <div class="section"><h3>Recursos</h3><ul class="plain">
         <li>${vehiclesOf(p).map(v => esc(v.name)).join(' · ')}</li>
-        <li>${(p.items || []).length} equipamentos na lista</li></ul></div>
+        ${can('equip') ? `<li>${(p.items || []).length} equipamentos na lista</li>` : ''}</ul></div>
     </div>`;
 }
 function tabDiarias(el, p) {
@@ -74,12 +75,14 @@ function tabDiarias(el, p) {
   el.innerHTML = `${summaryHTML(p)}
     ${E ? `<div class="section"><h3>Blocos de datas</h3>
       <form class="inline-form" id="dform"><label>Início<input type="date" id="d-s" required></label><label>Fim<input type="date" id="d-e"></label>
-      <label>Nome do bloco<input type="text" id="d-l" placeholder="Ex.: Expedição Guriri" size="18"></label><button class="btn" type="submit">Adicionar bloco</button></form></div>` : ''}
+      <label>Nome do bloco<input type="text" id="d-l" placeholder="Ex.: Expedição Guriri" size="18"></label><button class="btn" type="submit">Adicionar bloco</button></form></div>
+      ${can('equip') ? '' : vehiclesHTML(p, true)}` : ''}
     ${!bl.length ? emptyHTML('Nenhuma data ainda.') : bl.map((b, i) => `
       <div class="gsec block"><div class="ghead"><h2>${b.label ? esc(b.label) : `Bloco ${i + 1}`}</h2><small>${fmtD(b.start)}${b.end !== b.start ? ' a ' + fmtD(b.end) : ''} · ${b.days.length} dia${b.days.length > 1 ? 's' : ''}</small>
         ${E ? `<span style="margin-left:auto;display:flex;gap:6px"><button class="btn sm ghost" data-rnblock="${b.idx}">Renomear</button><button class="btn sm danger" data-rmblock="${b.idx}">Remover</button></span>` : ''}</div>
         <div class="daylist">${b.days.map((d, j) => dayRow(p, d, j + 1, t)).join('')}</div></div>`).join('')}`;
   if (!E) return;
+  if (!can('equip')) bindVehicles(el, p);
   const ds = el.querySelector('#d-s'), de = el.querySelector('#d-e');
   ds.addEventListener('change', () => { if (!de.value || de.value < ds.value) de.value = ds.value; });
   el.querySelector('#dform').addEventListener('submit', e => { e.preventDefault();
@@ -111,7 +114,7 @@ function dayRow(p, d, n, t) {
   return `<a class="dayrow-link ${d === t ? 'today' : ''} ${d < t ? 'past' : ''}" href="#/projeto/${esc(p.id)}/diaria/${d}">
     <span class="dnum"><b>${fmtDM(d)}</b><small>${wday(d)} · dia ${n}</small></span>
     <span class="dmain"><span class="name">${locs.length ? esc(locs.join(' / ')) : '<span class="hint">Local a definir</span>'}</span>
-      <span class="meta">${saida ? `saída ${esc(saida)} · ` : ''}${day.fronts.length > 1 ? day.fronts.length + ' frentes · ' : ''}${people.length} pessoas · ${nItems} equip.</span></span>
+      <span class="meta">${saida ? `saída ${esc(saida)} · ` : ''}${day.fronts.length > 1 ? day.fronts.length + ' frentes · ' : ''}${people.length} pessoas${can('equip') ? ` · ${nItems} equip.` : ''}</span></span>
     <span class="pills">${d === t ? '<span class="pill p-use">hoje</span>' : ''}${!day.saved ? '<span class="pill p-idle">rascunho</span>' : ''}
       ${people.length ? `<span class="pill ${ok === people.length ? 'p-ok' : 'p-warn'}">${ok}/${people.length}</span>` : ''}
       ${myAck === 'none' || myAck === 'old' ? '<span class="pill p-bad">confirme</span>' : ''}</span>
@@ -120,16 +123,13 @@ function dayRow(p, d, n, t) {
 
 // ---------------- EQUIPAMENTOS ----------------
 function tabEquip(el, p) {
-  const E = canEditProject(p); const pid = p.id;
+  const E = canEditEquip(); const pid = p.id;
   const items = projItems(p); const vehs = vehiclesOf(p);
   const nk = items.filter(x => p.checked?.[x.id]).length;
   const byG = new Map(); for (const x of items) { if (!byG.has(x.it.group)) byG.set(x.it.group, []); byG.get(x.it.group).push(x); }
   const conf = conflictsFor(p);
   el.innerHTML = `
-    <div class="section"><h3>Veículos</h3>
-      <div class="dates">${vehs.map(v => `<span class="date">${esc(v.name)} ${E ? `<button class="pill ${v.daily ? 'p-use' : 'p-idle'}" style="border:0;cursor:pointer" data-vdaily="${esc(v.id)}">${v.daily ? 'viagem e diárias' : 'só viagem'}</button><button class="x" data-rmveh="${esc(v.id)}" aria-label="Remover veículo">×</button>` : `<small>${v.daily ? 'viagem e diárias' : 'só viagem'}</small>`}</span>`).join('')}</div>
-      ${E ? '<form class="inline-form" id="vform"><label>Novo veículo<input type="text" id="v-n" placeholder="Ex.: Barco" size="16"></label><button class="btn" type="submit">Adicionar</button></form>' : ''}
-      <p class="hint">“Só viagem” aparece no carregamento sede → hospedagem. Nas diárias entram os de “viagem e diárias”.</p></div>
+    ${vehiclesHTML(p, canEditProject(p))}
     <div class="section"><h3>Lista geral · carregamento na sede ${nk}/${items.length}</h3>
       <div class="prog" style="margin-bottom:10px"><i style="width:${items.length ? Math.round(nk / items.length * 100) : 0}%"></i></div>
       ${E ? `<div class="bar" style="margin-top:0"><button class="btn pri" id="padd">+ Equipamentos</button>
@@ -148,13 +148,9 @@ function tabEquip(el, p) {
         </div>`; }).join('')}</div>`).join('') : emptyHTML('Nenhum equipamento nesta lista ainda.')}
     </div>`;
   $$('[data-item]', el).forEach(a => a.addEventListener('click', e => { if (e.target.closest('select,button,.stepper')) return; openItem(a.dataset.item); }));
+  if (canEditProject(p)) bindVehicles(el, p);
   if (!E) return;
   const upd = fn => { const np = projBody(pid); fn(np); setProject(pid, np); };
-  $$('[data-vdaily]', el).forEach(b => b.addEventListener('click', () => upd(np => { np.vehicles = vehiclesOf(np).map(v => v.id === b.dataset.vdaily ? { ...v, daily: !v.daily } : v); })));
-  $$('[data-rmveh]', el).forEach(b => b.addEventListener('click', () => upd(np => { const id = b.dataset.rmveh; np.vehicles = vehiclesOf(np).filter(v => v.id !== id);
-    if (np.load) for (const k of Object.keys(np.load)) if (np.load[k] === id) delete np.load[k]; })));
-  el.querySelector('#vform').addEventListener('submit', e => { e.preventDefault(); const n = el.querySelector('#v-n').value.trim(); if (!n) return;
-    upd(np => { const vs = vehiclesOf(np); let id = n.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'v'; while (vs.some(v => v.id === id)) id += '2'; np.vehicles = [...vs, { id, name: n, daily: true }]; }); });
   el.querySelector('#padd').addEventListener('click', () => pickItems(pid));
   el.querySelector('#pgsel').addEventListener('change', e => { const g = e.target.value; if (!g) return; e.target.value = '';
     const incl = el.querySelector('#pgall').checked; const np = projBody(pid); const have = new Set(np.items.map(x => x.id));
@@ -169,6 +165,23 @@ function tabEquip(el, p) {
   $$('[data-pq]', el).forEach(b => b.addEventListener('click', () => { const id = b.dataset.pq; const np = projBody(pid); const e = np.items.find(x => x.id === id); const st = stockOf(id);
     const nq = Math.max(1, Math.min(st || 1, (e.qty || 1) + (+b.dataset.d))); if (nq === (e.qty || 1)) return; e.qty = nq; saveProjectChecked(pid, np); }));
 }
+// Veículos do projeto (na aba Equipamentos, ou em Diárias para quem não vê equipamentos)
+function vehiclesHTML(p, E) {
+  return `<div class="section"><h3>Veículos</h3>
+      <div class="dates">${vehiclesOf(p).map(v => `<span class="date">${esc(v.name)} ${E ? `<button class="pill ${v.daily ? 'p-use' : 'p-idle'}" style="border:0;cursor:pointer" data-vdaily="${esc(v.id)}">${v.daily ? 'viagem e diárias' : 'só viagem'}</button><button class="x" data-rmveh="${esc(v.id)}" aria-label="Remover veículo">×</button>` : `<small>${v.daily ? 'viagem e diárias' : 'só viagem'}</small>`}</span>`).join('')}</div>
+      ${E ? '<form class="inline-form" id="vform"><label>Novo veículo<input type="text" id="v-n" placeholder="Ex.: Barco" size="16"></label><button class="btn" type="submit">Adicionar</button></form>' : ''}
+      <p class="hint">“Só viagem” aparece no carregamento sede → hospedagem. Nas diárias entram os de “viagem e diárias”.</p></div>`;
+}
+function bindVehicles(el, p) {
+  const upd = fn => { const np = projBody(p.id); fn(np); setProject(p.id, np); };
+  $$('[data-vdaily]', el).forEach(b => b.addEventListener('click', () => upd(np => { np.vehicles = vehiclesOf(np).map(v => v.id === b.dataset.vdaily ? { ...v, daily: !v.daily } : v); })));
+  // o carregamento (load) é parte dos equipamentos: só limpa quem pode editá-los
+  $$('[data-rmveh]', el).forEach(b => b.addEventListener('click', () => upd(np => { const id = b.dataset.rmveh; np.vehicles = vehiclesOf(np).filter(v => v.id !== id);
+    if (np.load && canEditEquip()) for (const k of Object.keys(np.load)) if (np.load[k] === id) delete np.load[k]; })));
+  el.querySelector('#vform').addEventListener('submit', e => { e.preventDefault(); const n = el.querySelector('#v-n').value.trim(); if (!n) return;
+    upd(np => { const vs = vehiclesOf(np); let id = n.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'v'; while (vs.some(v => v.id === id)) id += '2'; np.vehicles = [...vs, { id, name: n, daily: true }]; }); });
+}
+
 export const stepper = (key, id, q, max, on = true) =>
   `<span class="stepper sm">${on ? `<button data-${key}="${esc(id)}" data-d="-1" ${q <= 1 ? 'disabled' : ''} aria-label="Menos">−</button>` : ''}<span>${q}<small class="hint">/${max}</small></span>${on ? `<button data-${key}="${esc(id)}" data-d="1" ${q >= max ? 'disabled' : ''} aria-label="Mais">+</button>` : ''}</span>`;
 
@@ -210,7 +223,7 @@ function tabEquipe(el, p) {
       ${free.length ? `<div class="inline-form" style="margin-top:0"><select class="sel" id="addp" aria-label="Pessoa"><option value="">Escolha da equipe cadastrada…</option>${free.map(e => `<option value="${esc(e)}">${esc(personName(e))}</option>`).join('')}</select></div>`
       : '<p class="hint">Todas as pessoas cadastradas já estão no projeto. Novos acessos são criados pelo administrador na aba Equipe do app.</p>'}</div>` : ''}
     <div class="section"><h3>Equipe do projeto · ${team.length}</h3>
-      <p class="hint">Ordenada pela hierarquia de função. Membros só veem os projetos em que estão incluídos.</p>
+      <p class="hint">Ordenada pela hierarquia de função. Produtores e membros só veem os projetos em que estão incluídos.</p>
       <div class="rows">${team.map(e => `<div class="row static">
         <span class="main"><span class="name">${esc(personName(e))}</span>${e === S.me ? ' <span class="pill p-use">você</span>' : ''}
           <div class="meta">${personFuncs(p, e).length ? personFuncs(p, e).map(f => `<span class="pill p-acc">${esc(funcLabel(f))}</span>`).join(' ') : '<span class="hint">sem função</span>'}</div></span>

@@ -16,11 +16,12 @@ O app é a pasta `iur/expedicoes-iur/` do repositório do site, [felipemattar/ro
 ## Perfis (aba Equipe, só para administradores)
 | Perfil | Pode |
 |---|---|
-| Administrador | tudo, inclusive dar e tirar acesso |
-| Editor | criar e editar projetos, diárias, equipamentos e grupos |
-| Membro | ver e editar só os projetos em que foi incluído (diárias, equipe, equipamentos da lista), consultar o inventário e marcar "ciente" |
+| Administrador | tudo, inclusive dar e tirar acesso, etiquetas e QR codes |
+| Editor | criar e editar projetos, diárias, inventário e grupos |
+| Produtor | ver e editar só os projetos em que foi incluído (diárias, equipe, veículos) e marcar "ciente". Não vê inventário nem equipamentos |
+| Membro | só ver os projetos em que foi incluído e marcar "ciente". Não edita nada e não vê equipamentos |
 
-Membros não criam nem excluem projetos e não mexem no inventário geral nem nos grupos. Etiquetas QR e a aba Equipe são só para administradores.
+Produtores e membros veem no menu só **Projetos**. Os equipamentos de cada diária ficam numa tela à parte, aberta pelo botão "Ver equipamentos do dia" (só para administradores e editores). Etiquetas QR, os QR codes na ficha do equipamento e a aba Equipe são só para administradores.
 
 ## Como o app está organizado
 ```

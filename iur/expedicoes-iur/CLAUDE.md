@@ -38,10 +38,10 @@ tests/              teste ponta a ponta com Firebase simulado, check.mjs (sintax
 ```
 
 ### Rotas
-`#/` projetos · `#/projeto/ID[/resumo|diarias|equipamentos|equipe]` · `#/projeto/ID/diaria/AAAA-MM-DD` · `#/inventario` · `#/grupos` · `#/etiquetas` · `#/equipe` · `#/item/ID` (QR code). `#SUB-03` (formato antigo) também abre o item.
+`#/` projetos · `#/projeto/ID[/resumo|diarias|equipamentos|equipe]` · `#/projeto/ID/diaria/AAAA-MM-DD` · `#/projeto/ID/diaria/AAAA-MM-DD/equipamentos` (equipamentos do dia, tela à parte) · `#/inventario` · `#/grupos` · `#/etiquetas` · `#/equipe` · `#/item/ID` (QR code). `#SUB-03` (formato antigo) também abre o item.
 
 ## Modelo de dados (Firestore)
-- `team/{email}` → `{ name, role: 'admin'|'editor'|'member', addedBy, addedAt }` (o dono fixo pode ter `role:'owner'`)
+- `team/{email}` → `{ name, role: 'admin'|'editor'|'producer'|'member', addedBy, addedAt }` (o dono fixo pode ter `role:'owner'`)
 - `items/{GRP-NN}` → `{ name, group, qty, accessories, status: owned|ordered|tobuy, condition: ok|needs|repair, returnDate, location, notes, photo (data URL ~30-50KB) }`
 - `groups/{SIGLA}` → `{ name, desc, order }`
 - `projects/{id}` → `{ name, notes, dates:[{start,end,label}], team:[emails], roles:{email:[funcIds]}, vehicles:[{id,name,daily}], items:[{id,qty}], checked:{itemId:true}, load:{itemId:vehicleId}, created, createdBy }`
@@ -53,13 +53,16 @@ tests/              teste ponta a ponta com Firebase simulado, check.mjs (sintax
 ## Perfis e permissões
 | Perfil | Pode |
 |---|---|
-| Administrador (`OWNERS` em config.js + role admin) | tudo, aba Equipe e Etiquetas QR |
+| Administrador (`OWNERS` em config.js + role admin) | tudo, aba Equipe, Etiquetas QR e QR code na ficha do equipamento (só admin vê QR) |
 | Editor | criar/excluir/editar todos os projetos, inventário e grupos |
-| Membro | ver **e editar** só projetos em que está em `team` (não cria/exclui projeto, não sai da equipe), ler inventário, marcar ciente |
+| Produtor (`producer`) | ver **e editar** só projetos em que está em `team` (não cria/exclui projeto, não sai da equipe), marcar ciente. **Não vê equipamentos**: menu só com Projetos, sem aba Equipamentos do projeto nem equipamentos do dia; não altera `items`/`checked`/`load` do projeto nem `items` da diária. Edita os veículos (aparecem na aba Diárias) |
+| Membro | só **ver** projetos em que está em `team` e marcar ciente; não edita nada e não vê equipamentos |
+
+Capacidades por perfil ficam em `ROLES` (config.js): `edit`, `editOwn`, `equip`, `qr`, `team`, `allProjects`. No cliente: `can(cap)`, `canEditProject(p)`, `canEditEquip()`. Quem não pode editar equipamentos não faz cascata neles (remover carro/frente deixa o destino do equipamento "inválido" para o editor revisar), senão a regra do Firestore recusa a gravação.
 
 As mesmas regras estão em **dois lugares**: no cliente (`can()`, `canEditProject()`) e em `firestore.rules`. **Ao mudar permissões, mudar os dois.** O e-mail do dono fixo também está duplicado: `OWNERS` (config.js) e `proprietario()` (firestore.rules).
 
-Membros listam projetos com consulta `where('team','array-contains', email)` — a regra de leitura depende disso.
+Produtores e membros listam projetos com consulta `where('team','array-contains', email)` — a regra de leitura depende disso.
 
 ## Rodar e testar
 - Os scripts são em Node puro (sem bash/python), para rodar igual no Windows, macOS e Linux.

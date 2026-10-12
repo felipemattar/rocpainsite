@@ -13,7 +13,7 @@ await pg.goto(B); await pg.evaluate(()=>localStorage.clear()); await pg.reload()
 await pg.click('#doImport'); await w(500);
 // equipe
 await pg.goto(B+'#/equipe'); await w();
-for (const [n,m,r] of [['Leonardo','leo@gmail.com','editor'],['Ana Souza','ana@gmail.com','member']]) { await pg.fill('#t-name',n); await pg.fill('#t-mail',m); await pg.selectOption('#t-role',r); await pg.click('#tform button[type=submit]'); await w(); }
+for (const [n,m,r] of [['Leonardo','leo@gmail.com','editor'],['Ana Souza','ana@gmail.com','member'],['Bia Lima','bia@gmail.com','producer']]) { await pg.fill('#t-name',n); await pg.fill('#t-mail',m); await pg.selectOption('#t-role',r); await pg.click('#tform button[type=submit]'); await w(); }
 await pg.fill('[data-name="fdesigner@gmail.com"]','Felipe'); await pg.press('[data-name="fdesigner@gmail.com"]','Tab'); await w();
 console.log('team rows', await pg.locator('.row.static').count());
 // home
@@ -24,6 +24,7 @@ const pid = await pg.locator('a.card').first().getAttribute('href'); console.log
 await pg.goto(B+pid+'/equipe'); await w();
 await pg.selectOption('#addp','ana@gmail.com'); await w(); await pg.check('input[value=som]'); await pg.click('#fok'); await w();
 await pg.selectOption('#addp','leo@gmail.com'); await w(); await pg.check('input[value=direcao]'); await pg.click('#fok'); await w();
+await pg.selectOption('#addp','bia@gmail.com'); await w(); await pg.check('input[value=producao]'); await pg.click('#fok'); await w();
 await pg.click('[data-funcs="fdesigner@gmail.com"]'); await w(); await pg.check('input[value=dirfoto]'); await pg.check('input[value=producao]'); await pg.click('#fok'); await w();
 console.log('team order', (await pg.locator('.row.static .name').allInnerTexts()).join(' > '));
 // blocos
@@ -43,8 +44,13 @@ const fids = await pg.locator('[data-addex]').evaluateAll(n=>n.map(x=>x.dataset.
 await pg.fill('#fl-'+fids[1],'Ilha do Frade (drone)'); await pg.press('#fl-'+fids[1],'Tab'); await w();
 await pg.click('[data-tperson="'+fids[1]+'|leo@gmail.com"]'); await w();
 await pg.click('[data-tveh="'+fids[1]+'|hilux"]'); await w();
+// equipamentos do dia: tela separada, aberta pelo botão
+console.log('equip button', await pg.locator('#openEquip').count(), 'equip inline', await pg.locator('#allTo').count());
+await pg.click('#openEquip'); await w(400); console.log('equip url', pg.url().split('#')[1]);
 await pg.selectOption('#allTo', f1+'|toro'); await w();
 await pg.selectOption('[data-dest="SUB-14"]', fids[1]+'|hilux'); await w();
+await pg.screenshot({path:SHOTS+'/e1.png',fullPage:true});
+await pg.goto(B+pid+'/diaria/2026-10-08'); await w(400);
 const d = await pg.evaluate(([p])=>window.__db()['projects/'+p+'/days']['2026-10-08'], [pid.split('/')[2]]);
 console.log('day', JSON.stringify({info:d.info, fronts:d.fronts.map(f=>({n:f.name,l:f.local,ex:f.extra,p:f.people,v:f.vehicles})), items:d.items}));
 // mapa
@@ -70,7 +76,7 @@ await pm.goto(B.replace('index.html','index.html?as=ana@gmail.com')+'#/'); await
 console.log('member nav', (await pm.locator('#nav .tab').allInnerTexts()).join(','), 'cards', await pm.locator('a.card').count());
 await pm.goto(B.replace('index.html','index.html?as=ana@gmail.com')+'#'+pid.slice(1)+'/diaria/2026-10-08'); await pm.waitForTimeout(500);
 console.log('member nav2', (await pm.locator('#nav .tab').allInnerTexts()).join(','));
-console.log('member inputs', await pm.locator('#view input[type=text], #view textarea').count(), 'ackBtn', await pm.locator('[data-ack]').innerText());
+console.log('member inputs (0)', await pm.locator('#view input[type=text], #view textarea').count(), 'equip button (0)', await pm.locator('#openEquip').count(), 'ackBtn', await pm.locator('[data-ack]').innerText());
 await pm.click('[data-ack]'); await pm.waitForTimeout(300);
 console.log('after ack', await pm.locator('[data-ack]').innerText());
 await pm.screenshot({path:SHOTS+'/m1.png',fullPage:true});
@@ -88,6 +94,27 @@ console.log('member after change', await pm.locator('[data-ack]').first().innerT
 // editor não vê etiquetas
 const pe=await ctx.newPage(); await pe.route(/fonts\./, r=>r.abort()); await pe.goto(B.replace('index.html','index.html?as=leo@gmail.com')+'#/'); await pe.waitForTimeout(500);
 console.log('editor nav', (await pe.locator('#nav .tab').allInnerTexts()).join(','));
+await pe.goto(B.replace('index.html','index.html?as=leo@gmail.com')+'#/item/SUB-14'); await pe.waitForTimeout(500);
+console.log('editor item sheet', await pe.locator('.sheet').count(), 'qr (0)', await pe.locator('.sheet .qrbox').count());
+await pg.goto(B+'#/item/SUB-14'); await w(500); console.log('admin qr (1)', await pg.locator('.sheet .qrbox').count());
+// produtor: só Projetos, edita a diária, não vê equipamentos
+const pp=await ctx.newPage(); pp.on('pageerror',e=>errs.push('P PAGEERR '+e.message)); await pp.route(/fonts\./, r=>r.abort());
+const PB=B.replace('index.html','index.html?as=bia@gmail.com');
+await pp.goto(PB+'#/'); await pp.waitForTimeout(500);
+console.log('producer nav', (await pp.locator('#nav .tab').allInnerTexts()).join(','), 'cards', await pp.locator('a.card').count());
+await pp.goto(PB+'#'+pid.slice(1)); await pp.waitForTimeout(500);
+console.log('producer tabs', (await pp.locator('.subtabs .tab').allInnerTexts()).join(','));
+await pp.goto(PB+'#'+pid.slice(1)+'/diaria/2026-10-08'); await pp.waitForTimeout(500);
+console.log('producer equip button (0)', await pp.locator('#openEquip').count(), 'inputs', await pp.locator('#view input[type=text], #view textarea').count());
+await pp.fill('#fl-'+fids[1],'Ilha do Frade'); await pp.press('#fl-'+fids[1],'Tab'); await pp.waitForTimeout(300);
+await pp.click('[data-tveh="'+fids[1]+'|hilux"]'); await pp.waitForTimeout(300);
+const d3 = await pp.evaluate(([p])=>window.__db()['projects/'+p+'/days']['2026-10-08'], [pid.split('/')[2]]);
+console.log('producer saved', d3.fronts[1].local, JSON.stringify(d3.fronts[1].vehicles), 'items intact', JSON.stringify(d3.items));
+await pp.goto(PB+'#'+pid.slice(1)+'/diaria/2026-10-08/equipamentos'); await pp.waitForTimeout(400);
+console.log('producer equip route -> diaria', await pp.locator('#allTo').count(), await pp.locator('#d-info').count());
+await pp.goto(PB+'#'+pid.slice(1)+'/diarias'); await pp.waitForTimeout(400);
+console.log('producer vehicles in diarias', await pp.locator('#vform').count());
+await pp.screenshot({path:SHOTS+'/p1.png',fullPage:true});
 await pm.goto(B.replace('index.html','index.html?as=ana@gmail.com')+'#'+pid.slice(1)+'/diarias'); await pm.waitForTimeout(500);
 console.log('member diarias summary', await pm.locator('.summary').count(), 'resumo-free');
 await pm.screenshot({path:SHOTS+'/m2.png',fullPage:true});

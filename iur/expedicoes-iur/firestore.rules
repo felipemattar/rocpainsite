@@ -13,10 +13,11 @@ service cloud.firestore {
     function eu() { return request.auth.token.email.lower(); }
     function cadastro() { return /databases/$(database)/documents/team/$(eu()); }
 
-    // perfil salvo na aba Equipe: admin | editor | member
+    // perfil salvo na aba Equipe: admin | editor | producer | member
     function cadastrado() { return logado() && (proprietario() || exists(cadastro())); }
     function admin()      { return logado() && (proprietario() || (exists(cadastro()) && get(cadastro()).data.role in ['admin', 'owner'])); }
     function editor()     { return logado() && (proprietario() || (exists(cadastro()) && get(cadastro()).data.role in ['admin', 'owner', 'editor'])); }
+    function produtor()   { return logado() && exists(cadastro()) && get(cadastro()).data.role == 'producer'; }
 
     function noProjeto(pid) {
       return eu() in get(/databases/$(database)/documents/projects/$(pid)).data.team;
@@ -33,16 +34,22 @@ service cloud.firestore {
     match /groups/{id} { allow read: if cadastrado(); allow write: if editor(); }
 
     // ---------- projetos ----------
-    // Membros leem e editam só os projetos em que estão na equipe
-    // (não podem excluir o projeto nem se retirar dele).
+    // Produtores e membros leem só os projetos em que estão na equipe.
+    // Produtores editam esses projetos, mas não os equipamentos (items, checked, load),
+    // não excluem o projeto nem se retiram dele. Membros não editam nada.
     match /projects/{pid} {
       allow read: if editor() || (cadastrado() && eu() in resource.data.team);
       allow create, delete: if editor();
-      allow update: if editor() || (cadastrado() && eu() in resource.data.team && eu() in request.resource.data.team);
+      allow update: if editor() || (produtor() && eu() in resource.data.team && eu() in request.resource.data.team
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['items', 'checked', 'load']));
 
-      // diárias
+      // diárias (produtores não mexem nos equipamentos do dia: campo items)
       match /days/{date} {
-        allow read, write: if editor() || (cadastrado() && noProjeto(pid));
+        allow read: if editor() || (cadastrado() && noProjeto(pid));
+        allow create: if editor() || (produtor() && noProjeto(pid));
+        allow update: if editor() || (produtor() && noProjeto(pid)
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['items']));
+        allow delete: if editor();
       }
 
       // "estou ciente": cada pessoa grava só a própria confirmação (id = DATA__email)

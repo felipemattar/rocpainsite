@@ -1,5 +1,6 @@
-// Página da diária: frentes (local, horários, equipe, carros), equipamentos do dia e "ciente"
-import { S, can, canEditProject } from '../store.js';
+// Página da diária: frentes (local, horários, equipe, carros) e "ciente".
+// Os equipamentos do dia ficam numa tela à parte (#/projeto/ID/diaria/DATA/equipamentos), só para quem vê equipamentos.
+import { S, can, canEditProject, canEditEquip } from '../store.js';
 import { DEFAULT_TIMES, PLACE_SEARCH } from '../config.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr, toast, armButton, $$ } from '../utils.js';
 import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat, placeFromPhoton, isMapsLink, mapsSearchURL } from '../logic.js';
@@ -11,28 +12,42 @@ import { ls } from '../utils.js';
 
 const clone = o => JSON.parse(JSON.stringify(o));
 
-export function renderDiaria(el, pid, date) {
+export function renderDiaria(el, pid, date, sub = '') {
   const raw = S.projects.get(pid);
   if (!raw) { el.innerHTML = emptyHTML(S.loaded.projects ? 'Projeto não encontrado ou sem acesso. <a href="#/">Voltar</a>' : 'Carregando…'); return; }
   const p = { id: pid, ...raw };
   const days = projectDays(p);
   if (!days.includes(date)) { el.innerHTML = emptyHTML(`Esta data não faz parte do projeto. <a href="#/projeto/${esc(pid)}/diarias">Ver diárias</a>`); return; }
   if (!S.proj.loaded) { el.innerHTML = emptyHTML('Carregando diária…'); return; }
-  const E = canEditProject(p);
+  const E = canEditProject(p), EE = canEditEquip();
+  if (sub !== 'equipamentos' || !can('equip')) sub = '';
   const day = getDay(p, date);
   const idx = days.indexOf(date), prev = days[idx - 1], next = days[idx + 1];
   const blk = blockOf(p, date); const bIdx = blocks(p).findIndex(b => b === blk || (b.start === blk?.start && b.end === blk?.end));
   const commit = mut => { const d = clone(day); mut(d); saveDay(pid, date, d); };
+  const dayURL = d => `#/projeto/${esc(pid)}/diaria/${d}${sub ? '/' + sub : ''}`;
 
-  el.innerHTML = `
-    <a class="btn ghost back" href="#/projeto/${esc(pid)}/diarias">← ${esc(p.name)}</a>
+  const head = `
+    ${sub ? `<a class="btn ghost back" href="#/projeto/${esc(pid)}/diaria/${date}">← Diária de ${fmtDM(date)}</a>`
+      : `<a class="btn ghost back" href="#/projeto/${esc(pid)}/diarias">← ${esc(p.name)}</a>`}
     <div class="dayhead">
-      <a class="btn sm ${prev ? '' : 'disabled'}" ${prev ? `href="#/projeto/${esc(pid)}/diaria/${prev}"` : 'aria-disabled="true"'} aria-label="Dia anterior">‹</a>
-      <div class="dh-mid"><span class="eyebrow">${esc(blk?.label || `Bloco ${bIdx + 1}`)} · dia ${blk ? blk.days.indexOf(date) + 1 : idx + 1} de ${blk ? blk.days.length : days.length}</span>
+      <a class="btn sm ${prev ? '' : 'disabled'}" ${prev ? `href="${dayURL(prev)}"` : 'aria-disabled="true"'} aria-label="Dia anterior">‹</a>
+      <div class="dh-mid"><span class="eyebrow">${sub ? 'Equipamentos do dia · ' : ''}${esc(blk?.label || `Bloco ${bIdx + 1}`)} · dia ${blk ? blk.days.indexOf(date) + 1 : idx + 1} de ${blk ? blk.days.length : days.length}</span>
         <h2>${esc(wdayLong(date))}, ${fmtD(date)}</h2>
         ${date === todayStr() ? '<span class="pill p-use">hoje</span>' : ''}</div>
-      <a class="btn sm ${next ? '' : 'disabled'}" ${next ? `href="#/projeto/${esc(pid)}/diaria/${next}"` : 'aria-disabled="true"'} aria-label="Próximo dia">›</a>
-    </div>
+      <a class="btn sm ${next ? '' : 'disabled'}" ${next ? `href="${dayURL(next)}"` : 'aria-disabled="true"'} aria-label="Próximo dia">›</a>
+    </div>`;
+
+  // ---- tela só dos equipamentos do dia ----
+  if (sub) {
+    el.innerHTML = head + equipSection(p, day, EE);
+    $$('[data-item]', el).forEach(a => a.addEventListener('click', e => { if (e.target.closest('select,button,.stepper')) return; openItem(a.dataset.item); }));
+    $$('[data-dview]', el).forEach(s => s.addEventListener('change', () => { ls.set('iur.dview', s.value); renderDiaria(el, pid, date, sub); }));
+    if (EE) bindEquip(el, p, day, commit);
+    return;
+  }
+
+  el.innerHTML = `${head}
     ${E && !day.saved ? '<div class="banner">Rascunho com os valores padrão. Qualquer alteração já salva a diária.</div>' : ''}
     <div class="section">${ackPanelHTML(p, date, day)}</div>
     <div class="section"><h3>Informações gerais</h3>
@@ -43,18 +58,17 @@ export function renderDiaria(el, pid, date) {
       <div class="fronts">${day.fronts.map((f, i) => E ? frontEdit(p, day, f, i) : frontView(p, day, f)).join('')}</div>
       ${E ? '<div class="bar"><button class="btn" id="addFront">+ Nova frente</button><span class="hint">Use frentes quando parte da equipe e dos equipamentos vai para outro local no mesmo dia.</span></div>' : ''}
     </div>
-    ${equipSection(p, day, E)}`;
+    ${can('equip') ? equipButton(p, pid, date, day) : ''}`;
 
   // ---- ciente ----
   el.querySelector('[data-ack]')?.addEventListener('click', () => { const st = ackState(pid, date, S.me, day).k; setAck(pid, date, st !== 'ok'); });
-  $$('[data-item]', el).forEach(a => a.addEventListener('click', e => { if (e.target.closest('select,button,.stepper')) return; openItem(a.dataset.item); }));
-  $$('[data-dview]', el).forEach(s => s.addEventListener('change', () => { ls.set('iur.dview', s.value); renderDiaria(el, pid, date); }));
   if (!E) return;
 
   // ---- edição ----
   el.querySelector('#d-info').addEventListener('change', e => commit(d => { d.info = e.target.value.trim(); }));
   el.querySelector('#copyPrev')?.addEventListener('click', () => {
     const src = getDay(p, prev); const d = clone(src); delete d.saved; d.fronts.forEach(f => { f.extra = f.extra || []; });
+    if (!EE) d.items = clone(day.items); // quem não edita equipamentos mantém os do dia
     saveDay(pid, date, d); toast(`Copiado de ${fmtDM(prev)}`); });
   el.querySelector('#addFront').addEventListener('click', () => commit(d => { d.fronts.push(newFront(p, d.fronts.length + 1)); }));
   const fr = (fid, fn) => commit(d => { const f = d.fronts.find(x => x.id === fid); if (f) fn(f, d); });
@@ -71,7 +85,7 @@ export function renderDiaria(el, pid, date) {
   $$('[data-tveh]', el).forEach(b => b.addEventListener('click', () => { const [fid, v] = b.dataset.tveh.split('|');
     commit(d => { for (const f of d.fronts) { if (f.id === fid) f.vehicles = f.vehicles.includes(v) ? f.vehicles.filter(x => x !== v) : [...f.vehicles, v]; else if (!b.classList.contains('on')) f.vehicles = f.vehicles.filter(x => x !== v);
         if (!f.vehicles.includes(v) && f.seats) delete f.seats[v]; }
-      for (const r of Object.values(d.items)) if (r.v === v && !d.fronts.find(f => f.id === r.f)?.vehicles.includes(v)) r.v = ''; }); }));
+      if (EE) for (const r of Object.values(d.items)) if (r.v === v && !d.fronts.find(f => f.id === r.f)?.vehicles.includes(v)) r.v = ''; }); }));
   // local no mapa
   $$('[data-psearch]', el).forEach(inp => {
     const fid = inp.dataset.psearch, box = el.querySelector('#ps-' + fid), gl = el.querySelector('#pg-' + fid);
@@ -94,8 +108,11 @@ export function renderDiaria(el, pid, date) {
     fr(fid, f => { f.seats ||= {}; const inThis = (f.seats[v]?.people || []).includes(e); unseat(f, e);
       if (!inThis) { f.seats[v] = { driver: '', ...(f.seats[v] || {}) }; f.seats[v].people = [...(f.seats[v].people || []), e]; } }); }));
   $$('[data-rmfront]', el).forEach(b => armButton(b, 'Confirmar remoção', () => commit(d => { const fid = b.dataset.rmfront;
-    d.fronts = d.fronts.filter(f => f.id !== fid); for (const k of Object.keys(d.items)) if (d.items[k].f === fid) delete d.items[k]; })));
-  // equipamentos
+    d.fronts = d.fronts.filter(f => f.id !== fid); if (EE) for (const k of Object.keys(d.items)) if (d.items[k].f === fid) delete d.items[k]; })));
+}
+
+// ---------- equipamentos do dia: edição ----------
+function bindEquip(el, p, day, commit) {
   $$('[data-dest]', el).forEach(s => s.addEventListener('change', () => commit(d => { const id = s.dataset.dest;
     if (!s.value) delete d.items[id]; else { const [f, v] = s.value.split('|'); d.items[id] = { ...(d.items[id] || {}), f, v }; } })));
   $$('[data-dq]', el).forEach(b => b.addEventListener('click', () => commit(d => { const id = b.dataset.dq; const pq = (p.items.find(x => x.id === id)?.qty) || 1;
@@ -140,7 +157,7 @@ function frontEdit(p, day, f, i) {
       return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-tperson="${f.id}|${esc(e)}">${esc(personName(e))}${w && !on ? ` <small>· ${esc(w)}</small>` : ''}</button>`; }).join('') || '<span class="hint">Adicione pessoas na aba Equipe do projeto.</span>'}</div>
     <div class="lbl">Carros</div>
     <div class="chipset">${vehs.map(v => { const on = f.vehicles.includes(v.id), w = where(v.id, 'vehicles');
-      return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-tveh="${f.id}|${esc(v.id)}">${esc(v.name)}${w && !on ? ` <small>· ${esc(w)}</small>` : ''}</button>`; }).join('') || '<span class="hint">Nenhum veículo de diária. Ajuste na aba Equipamentos.</span>'}</div>
+      return `<button class="chip ${on ? 'on' : ''}" aria-pressed="${on}" data-tveh="${f.id}|${esc(v.id)}">${esc(v.name)}${w && !on ? ` <small>· ${esc(w)}</small>` : ''}</button>`; }).join('') || '<span class="hint">Nenhum veículo de diária. Ajuste os veículos do projeto.</span>'}</div>
     ${seatsEdit(p, f)}
   </section>`;
 }
@@ -187,6 +204,14 @@ function seatsEdit(p, f) {
 }
 
 // ---------- equipamentos do dia ----------
+// Na diária, só um botão com o resumo; a lista fica na tela /equipamentos
+function equipButton(p, pid, date, day) {
+  const n = projItems(p).length; if (!n) return '';
+  const take = projItems(p).filter(x => day.items[x.id]).length;
+  return `<div class="section"><h3>Equipamentos do dia</h3>
+    <div class="bar" style="margin-top:0"><span class="hint">${take} levando · ${n - take} na base</span><span style="flex:1"></span>
+      <a class="btn" id="openEquip" href="#/projeto/${esc(pid)}/diaria/${date}/equipamentos">Ver equipamentos do dia →</a></div></div>`;
+}
 function equipSection(p, day, E) {
   const items = projItems(p); if (!items.length) return `<div class="section"><h3>Equipamentos do dia</h3>${emptyHTML('A lista de equipamentos do projeto está vazia.')}</div>`;
   const dests = destinations(p, day); const destOf = id => { const r = day.items[id]; return r ? `${r.f}|${r.v || ''}` : ''; };
