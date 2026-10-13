@@ -51,6 +51,9 @@ export const DEFAULT_TIMES = [
   { id: 'volta',  label: 'Volta',  value: '18:00' },
 ];
 
+// Fuso dos horários das diárias (usado no botão "Adicionar à agenda")
+export const TIMEZONE = 'America/Sao_Paulo';
+
 // A partir desta hora, o resumo do projeto mostra a diária do dia seguinte.
 export const NEXT_DAY_FROM_HOUR = 20;
 

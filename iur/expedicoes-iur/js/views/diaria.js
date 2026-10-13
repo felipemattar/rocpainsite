@@ -3,7 +3,7 @@
 import { S, can, canEditProject, canEditEquip } from '../store.js';
 import { DEFAULT_TIMES, PLACE_SEARCH } from '../config.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr, toast, armButton, $$ } from '../utils.js';
-import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat, placeFromPhoton, isMapsLink, mapsSearchURL } from '../logic.js';
+import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat, placeFromPhoton, isMapsLink, mapsSearchURL, dayShareText, whatsappURL, gcalURL } from '../logic.js';
 import { saveDay, setAck } from '../actions.js';
 import { personLine, timelineHTML, thumbHTML, emptyHTML, carsHTML, placeHTML, ackPanelHTML } from '../components.js';
 import { stepper } from './project.js';
@@ -48,6 +48,10 @@ export function renderDiaria(el, pid, date, sub = '') {
   }
 
   el.innerHTML = `${head}
+    <div class="bar share">
+      <a class="btn sm" id="shareWa" href="${esc(whatsappURL(dayShareText(p, date, day)))}" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+      <a class="btn sm" id="addCal" href="${esc(gcalURL(p, date, day, S.me))}" target="_blank" rel="noopener">Adicionar à minha agenda</a>
+    </div>
     ${E && !day.saved ? '<div class="banner">Rascunho com os valores padrão. Qualquer alteração já salva a diária.</div>' : ''}
     <div class="section">${ackPanelHTML(p, date, day)}</div>
     <div class="section"><h3>Informações gerais</h3>

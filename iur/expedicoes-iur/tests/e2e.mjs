@@ -66,6 +66,9 @@ const d2 = await pg.evaluate(([p])=>window.__db()['projects/'+p+'/days']['2026-1
 console.log('places', JSON.stringify(d2.fronts.map(f=>f.place)));
 console.log('seats', JSON.stringify(d2.fronts.map(f=>f.seats)));
 await pg.click('[data-ack]'); await w();
+// compartilhar
+const wa = await pg.locator('#shareWa').getAttribute('href'); console.log('whatsapp text:\n' + decodeURIComponent(wa.split('text=')[1]));
+const cal = new URL(await pg.locator('#addCal').getAttribute('href')); console.log('agenda', JSON.stringify({text:cal.searchParams.get('text'), dates:cal.searchParams.get('dates'), ctz:cal.searchParams.get('ctz'), location:cal.searchParams.get('location')}));
 await pg.screenshot({path:SHOTS+'/d1.png',fullPage:true});
 // resumo
 await pg.goto(B+pid); await w(400); await pg.screenshot({path:SHOTS+'/r1.png',fullPage:true});
@@ -76,6 +79,7 @@ await pm.goto(B.replace('index.html','index.html?as=ana@gmail.com')+'#/'); await
 console.log('member nav', (await pm.locator('#nav .tab').allInnerTexts()).join(','), 'cards', await pm.locator('a.card').count());
 await pm.goto(B.replace('index.html','index.html?as=ana@gmail.com')+'#'+pid.slice(1)+'/diaria/2026-10-08'); await pm.waitForTimeout(500);
 console.log('member nav2', (await pm.locator('#nav .tab').allInnerTexts()).join(','));
+console.log('member agenda', new URL(await pm.locator('#addCal').getAttribute('href')).searchParams.get('dates'));
 console.log('member inputs (0)', await pm.locator('#view input[type=text], #view textarea').count(), 'equip button (0)', await pm.locator('#openEquip').count(), 'ackBtn', await pm.locator('[data-ack]').innerText());
 await pm.click('[data-ack]'); await pm.waitForTimeout(300);
 console.log('after ack', await pm.locator('[data-ack]').innerText());

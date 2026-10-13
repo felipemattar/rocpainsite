@@ -1,6 +1,6 @@
 // Regras de negócio: projetos, diárias, equipe, inventário. Sem HTML aqui.
 import { S } from './store.js';
-import { OWNERS, FUNCTIONS, DEFAULT_TIMES, DEFAULT_VEHICLES, DEFAULT_FRONT_NAME, NEXT_DAY_FROM_HOUR, ITEM_STATUS, CONDITIONS } from './config.js';
+import { OWNERS, FUNCTIONS, DEFAULT_TIMES, DEFAULT_VEHICLES, DEFAULT_FRONT_NAME, NEXT_DAY_FROM_HOUR, ITEM_STATUS, CONDITIONS, TIMEZONE } from './config.js';
 import { todayStr, addDays, parseD, dateStr } from './utils.js';
 
 // ---------- pessoas ----------
@@ -126,6 +126,48 @@ export function placeFromPhoton(ft) {
   return { name, desc, lat, lon, url: `https://www.google.com/maps/search/?api=1&query=${lat},${lon}` };
 }
 export const isMapsLink = u => /^https?:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(www\.)?google\.[a-z.]+\/maps|maps\.google\.[a-z.]+)/i.test(u.trim());
+
+// ---------- compartilhar: WhatsApp e Google Agenda ----------
+export const dayLink = (pid, date) => `${location.origin}${location.pathname}#/projeto/${pid}/diaria/${date}`;
+const placeText = f => f.place?.name ? [f.place.name, f.place.desc].filter(Boolean).join(', ') : f.local;
+// Texto da diária para mandar no grupo (formatação do WhatsApp: *negrito*)
+export function dayShareText(p, date, day) {
+  const [y, m, d] = date.split('-'); const WDL = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  const out = [`*${p.name}*`, `Diária de ${WDL[parseD(date).getDay()]}, ${d}/${m}/${y}`];
+  if (day.info) out.push('', day.info);
+  for (const f of day.fronts) {
+    out.push('');
+    if (day.fronts.length > 1) out.push(`*${f.name}*`);
+    out.push(`📍 ${f.local || 'Local a definir'}`);
+    if (f.place?.url) out.push(f.place.url);
+    for (const x of timeline(f)) out.push(`🕗 ${x.t || '--:--'} ${x.label || ''}`.trim());
+    const { cars, loose } = carPlan(f);
+    for (const c of cars) { const ppl = [c.driver ? `${personName(c.driver)} (motorista)` : '', ...sortPeople(p, c.people).map(personName)].filter(Boolean);
+      out.push(`🚗 ${vehName(p, c.v) || c.v}: ${ppl.join(', ') || '—'}`); }
+    if (loose.length) out.push(`${f.vehicles.length ? '👤 Sem carro' : '👥 Equipe'}: ${sortPeople(p, loose).map(personName).join(', ')}`);
+    if (f.obs) out.push(`📝 ${f.obs}`);
+  }
+  out.push('', `Detalhes e "estou ciente": ${dayLink(p.id, date)}`);
+  return out.join('\n');
+}
+export const whatsappURL = text => 'https://wa.me/?text=' + encodeURIComponent(text);
+// Link que abre o Google Agenda com o evento preenchido. Usa a frente de quem está vendo (ou a primeira).
+// Do horário de saída até a volta; sem horários, vira evento de dia inteiro.
+export function gcalURL(p, date, day, me) {
+  const f = day.fronts.find(x => (x.people || []).includes(me)) || day.fronts[0];
+  const tl = timeline(f).filter(x => /^\d\d:\d\d$/.test(x.t || ''));
+  const ymd = date.replace(/-/g, '');
+  let dates;
+  if (!tl.length) dates = `${ymd}/${addDays(date, 1).replace(/-/g, '')}`;
+  else {
+    const start = f.times?.saida || tl[0].t; let end = f.times?.volta || tl[tl.length - 1].t;
+    if (end <= start) { const h = Math.min(23, +start.slice(0, 2) + 1); end = `${String(h).padStart(2, '0')}:${start.slice(3)}`; }
+    dates = `${ymd}T${start.replace(':', '')}00/${ymd}T${end.replace(':', '')}00`;
+  }
+  const title = `${p.name} · ${f.local || (day.fronts.length > 1 ? f.name : 'Diária')}`;
+  const q = new URLSearchParams({ action: 'TEMPLATE', text: title, dates, ctz: TIMEZONE, details: dayShareText(p, date, day), location: placeText(f) || '' });
+  return 'https://calendar.google.com/calendar/render?' + q.toString();
+}
 
 export const dayPeople = day => [...new Set(day.fronts.flatMap(f => f.people || []))];
 export function ackState(pid, date, email, day) {

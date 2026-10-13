@@ -84,6 +84,7 @@ O app **não** tem repositório git próprio: o repositório é o do site, com r
 ## Serviços externos
 - **Photon** (`photon.komoot.io`, OpenStreetMap): sugestões de local, grátis e sem chave. Debounce de 450ms. Google Places exigiria chave com cobrança — só trocar `searchPlaces()` em `js/views/diaria.js` se pedirem.
 - Links de mapa usam URLs públicas do Google Maps (`/maps/search/?api=1`, `/maps/dir/?api=1`), sem chave.
+- Compartilhar a diária (botões no topo da diária, texto e links em `dayShareText()`/`whatsappURL()`/`gcalURL()` no `logic.js`): WhatsApp por `wa.me/?text=` e Google Agenda pelo link público `calendar.google.com/calendar/render?action=TEMPLATE` (fuso em `TIMEZONE` no config.js). Não atualizam sozinhos se a diária mudar. Ideia discutida para depois: convites automáticos no Google Agenda via Google Apps Script (botão "Avisar equipe").
 - QR code: `qrcode-generator@1.4.4` via jsDelivr (global `qrcode`).
 - Fontes: Google Fonts (Nunito Sans, Open Sans condensada, Barlow Condensed, Public Sans).
 
