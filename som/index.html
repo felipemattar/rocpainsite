@@ -112,6 +112,18 @@ a.feature-media::after { content: ""; position: absolute; left: 12px; bottom: 12
 .poster-type { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 16px; font-family: var(--display); font-weight: 800; font-stretch: 55%; font-size: 1.75rem; line-height: .95; color: var(--brass); border: 1px solid var(--line); border-radius: 8px; }
 .feature-body { padding-top: 14px; }
 a.feature-media.no-thumb::after { left: auto; bottom: auto; right: 12px; top: 12px; }
+.feature-media.poster img { object-fit: contain; filter: none; }
+a.feature-media.poster::after { content: none; }
+
+/* Spotlight */
+.spotlight { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: 28px 40px; align-items: center; padding: 28px; margin-top: 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; }
+.spotlight .feature-media { background: var(--bg); }
+.spotlight .eyebrow { margin: 0 0 6px; font-size: .8125rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); }
+.spotlight h3 { font-family: var(--display); font-weight: 800; font-stretch: 62%; font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; margin: 0 0 10px; }
+.spotlight .lede { margin: 12px 0 0; }
+.spotlight .award { margin-top: 14px; }
+.spotlight .watch { display: inline-block; margin-top: 18px; }
+@media (max-width: 760px) { .spotlight { grid-template-columns: minmax(0,1fr); padding: 18px; } }
 .year { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9375rem; margin: 0; }
 .feature h4, .credit h4 { font-family: var(--display); font-weight: 700; font-stretch: 78%; font-size: 1.625rem; line-height: 1.05; margin: 2px 0 6px; }
 .meta { color: var(--muted); font-size: .9375rem; margin: 0 0 6px; }
@@ -212,10 +224,23 @@ footer a { color: var(--muted); }
       <h2 class="section-title" data-i18n="films.t">Filmografia</h2>
       <p class="section-lede" data-i18n="films.d">Trabalhos de som em longas, médias, curtas e séries desde 2009. Os links levam aos trailers e filmes disponíveis online.</p>
 
+      <article class="spotlight" aria-labelledby="spot-equase">
+        <a class="feature-media" href="https://youtu.be/KesjlGJNiGw" target="_blank" rel="noopener" aria-label="Chamada de É Quase Verdade na Tela Quente"><img src="https://i.ytimg.com/vi/KesjlGJNiGw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+        <div>
+          <p class="eyebrow" data-i18n="spot.eye">Destaque · Tela Quente, TV Globo</p>
+          <h3 id="spot-equase">É Quase Verdade</h3>
+          <p class="meta"><span data-i18n="m.equaseverdade.k">Telefilme · Comédia</span> · 2026 · Dir. Gustavo Moraes · 55 Cine · Globo Filmes</p>
+          <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+          <p class="award"><span data-i18n="aw.equase">Coprodução com a Globo Filmes, exibida em rede nacional na Tela Quente, da TV Globo, em 2026.</span></p>
+          <a class="watch" href="https://youtu.be/KesjlGJNiGw" target="_blank" rel="noopener"><span data-i18n="spot.watch">Ver a chamada</span></a>
+          <a class="watch" href="https://www.imdb.com/title/tt41296717/" target="_blank" rel="noopener">IMDb</a>
+        </div>
+      </article>
+
       <h3 class="group-title" data-i18n="films.longas">Longas-metragens</h3>
       <div class="features">
 <article class="feature">
-  <div class="feature-media"><div class="poster-type" aria-hidden="true">Lacuna</div></div>
+  <a class="feature-media poster" href="https://www.instagram.com/lacuna.filme/" target="_blank" rel="noopener" aria-label="Lacuna no Instagram"><img src="imagens/lacuna.webp" alt="Cartaz de Lacuna" loading="lazy" width="730" height="956"></a>
   <div class="feature-body">
     <p class="year" data-i18n="yr.post">Em finalização</p>
     <h4>Lacuna</h4>
@@ -298,16 +323,6 @@ footer a { color: var(--muted); }
 
       <h3 class="group-title" data-i18n="films.medias">Médias-metragens</h3>
       <ul class="credits">
-<li>
-  <span class="year">2026</span>
-  <div class="credit">
-    <h4>É Quase Verdade</h4>
-    <p class="meta"><span data-i18n="m.equaseverdade.k">Telefilme · Comédia</span> · Dir. Gustavo Moraes · 55 Cine e Globo Filmes · <a href="https://www.imdb.com/title/tt41296717/" target="_blank" rel="noopener">IMDb</a></p>
-    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
-    <p class="award"><span data-i18n="aw.equase">Exibido na Tela Quente, da TV Globo, em 2026.</span></p>
-  </div>
-  <a class="watch" href="https://youtu.be/KesjlGJNiGw" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> É Quase Verdade</span></a>
-</li>
 <li>
   <span class="year">2016</span>
   <div class="credit">
@@ -598,7 +613,7 @@ footer a { color: var(--muted); }
 <script>
 (function () {
   var en = {
-    "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "yr.post": "In post-production", "f.lacuna.k": "Fiction · Horror", "f.aguasdoitapemiri.k": "Documentary", "m.equaseverdade.k": "TV movie · Comedy", "aw.equase": "Aired on TV Globo's Tela Quente, 2026.", "f.corredoresdapedr.k": "Documentary","f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
+    "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "yr.post": "In post-production", "f.lacuna.k": "Fiction · Horror", "f.aguasdoitapemiri.k": "Documentary", "m.equaseverdade.k": "TV movie · Comedy", "aw.equase": "Co-produced with Globo Filmes and broadcast nationwide on TV Globo's Tela Quente in 2026.", "spot.eye": "Highlight · Tela Quente, TV Globo", "spot.watch": "Watch the promo", "f.corredoresdapedr.k": "Documentary","f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
     "skip": "Skip to content", "menu": "Menu",
     "nav.films": "Filmography", "nav.highlights": "Highlights", "nav.research": "Research", "nav.contact": "Contact",
     "hero.lede": "Sound editing, sound design and mixing for film, documentary and series. Over fifteen years on fiction features, documentaries and shorts, with <strong>Best Sound Editing at Cine PE</strong> and a Berlinale selection.",
