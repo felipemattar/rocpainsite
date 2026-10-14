@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Felipe Mattar — edição, desenho e mixagem de som</title>
+<meta name="description" content="Portfólio de Felipe Mattar: edição de som, desenho de som e mixagem para cinema e audiovisual. Mar Negro, A Mata Negra, O Cemitério das Almas Perdidas, Das Águas que Passam (Melhor Edição de Som, Cine PE 2016).">
+<meta name="theme-color" content="#0F1F1D">
+<link rel="icon" type="image/png" href="../imagens/favicon.png">
+<link rel="canonical" href="https://rocpaingames.com/som/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Felipe Mattar — som para cinema">
+<meta property="og:description" content="Edição de som, desenho de som e mixagem para longas, curtas, documentários e séries.">
+<meta property="og:image" content="https://i.ytimg.com/vi/EkAeb4XFsaE/hqdefault.jpg">
+<meta property="og:url" content="https://rocpaingames.com/som/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Felipe Mattar",
+  "jobTitle": "Editor de som e desenhista de som",
+  "url": "https://rocpaingames.com/som/",
+  "email": "fdesigner@gmail.com",
+  "alumniOf": "Universidade Federal do Espírito Santo",
+  "award": "Melhor Edição de Som, 20º Cine PE (2016)",
+  "sameAs": [
+    "http://lattes.cnpq.br/9348473635588890",
+    "https://www.linkedin.com/in/felipe-mattar-93505b16"
+  ],
+  "worksFor": { "@type": "Organization", "name": "ROCPAIN Games", "url": "https://rocpaingames.com" }
+}
+</script>
+
+<style>
+:root {
+  --bg: #0F1F1D;
+  --raised: #172B28;
+  --brass: #D9A441;
+  --text: #ECE6DA;
+  --muted: #A3B2AB;
+  --line: rgba(236, 230, 218, .14);
+  --display: "Anybody", "Arial Narrow", sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1160px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--brass); text-underline-offset: .2em; }
+a:hover { color: var(--text); }
+:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; border-radius: 4px; }
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 16px; top: 16px; z-index: 100; background: var(--brass); color: var(--bg); padding: 8px 14px; }
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 50; background: rgba(15, 31, 29, .9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 22px; height: 64px; }
+.brand { font-family: var(--display); font-weight: 800; font-stretch: 62%; font-size: 1.5rem; color: var(--text); text-decoration: none; margin-right: auto; letter-spacing: .01em; }
+.nav-links { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { color: var(--text); text-decoration: none; font-weight: 500; }
+.nav-links a:hover { color: var(--brass); }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.lang button { background: none; border: 0; color: var(--muted); font: 700 .8125rem var(--body); padding: 6px 11px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--brass); color: var(--bg); }
+.menu-btn { display: none; background: none; border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: 6px 12px; font: 500 .9375rem var(--body); cursor: pointer; }
+@media (max-width: 860px) {
+  .menu-btn { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--raised); border-bottom: 1px solid var(--line); }
+  .nav-links.open { display: flex; }
+  .nav-links a { display: block; padding: 14px var(--gutter); border-top: 1px solid var(--line); }
+}
+
+/* Hero: the name set like an opening title, over a waveform */
+.hero { padding: clamp(56px, 10vw, 120px) 0 0; }
+.name { font-family: var(--display); font-weight: 800; font-stretch: 55%; font-size: clamp(4.5rem, 19vw, 15rem); line-height: .82; letter-spacing: -.005em; margin: 0; }
+.lede { max-width: 32em; margin: 28px 0 0; font-size: clamp(1.125rem, 2vw, 1.375rem); line-height: 1.5; }
+.lede strong { color: var(--brass); font-weight: 700; }
+.wave { display: block; width: 100%; height: clamp(70px, 11vw, 130px); margin-top: clamp(40px, 6vw, 72px); fill: var(--brass); }
+.wave rect { transform-box: fill-box; transform-origin: center; animation: rise .9s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 9ms); }
+@keyframes rise { from { transform: scaleY(.04); opacity: .3; } to { transform: scaleY(1); opacity: 1; } }
+
+/* Services strip */
+.services { list-style: none; margin: 0; padding: 22px 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; border-bottom: 1px solid var(--line); }
+.services h2 { font-family: var(--display); font-weight: 700; font-stretch: 75%; font-size: 1.5rem; line-height: 1.1; margin: 0 0 4px; }
+.services p { margin: 0; color: var(--muted); font-size: .9688rem; }
+@media (max-width: 860px) { .services { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 480px) { .services { grid-template-columns: minmax(0,1fr); } }
+
+section { padding: clamp(64px, 9vw, 112px) 0 0; }
+.section-title { font-family: var(--display); font-weight: 800; font-stretch: 60%; font-size: clamp(3rem, 9vw, 6rem); line-height: .9; margin: 0 0 12px; }
+.section-lede { color: var(--muted); max-width: 38em; margin: 0 0 40px; font-size: 1.125rem; }
+.group-title { font-family: var(--display); font-weight: 700; font-stretch: 80%; font-size: 1.75rem; margin: 56px 0 8px; color: var(--brass); }
+
+/* Feature films */
+.features { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 36px 28px; }
+@media (max-width: 900px) { .features { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 560px) { .features { grid-template-columns: minmax(0,1fr); } }
+.feature-media { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: var(--raised); }
+.feature-media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); transition: transform .4s; }
+a.feature-media:hover img { transform: scale(1.04); }
+a.feature-media::after { content: ""; position: absolute; left: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%; background: var(--brass) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%230F1F1D'/%3E%3C/svg%3E") center / 22px no-repeat; }
+.poster-type { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 16px; font-family: var(--display); font-weight: 800; font-stretch: 55%; font-size: 1.75rem; line-height: .95; color: var(--brass); border: 1px solid var(--line); border-radius: 8px; }
+.feature-body { padding-top: 14px; }
+a.feature-media.no-thumb::after { left: auto; bottom: auto; right: 12px; top: 12px; }
+.year { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9375rem; margin: 0; }
+.feature h4, .credit h4 { font-family: var(--display); font-weight: 700; font-stretch: 78%; font-size: 1.625rem; line-height: 1.05; margin: 2px 0 6px; }
+.meta { color: var(--muted); font-size: .9375rem; margin: 0 0 6px; }
+.role { margin: 0; font-weight: 700; color: var(--brass); font-size: .9688rem; }
+.award { margin: 8px 0 0; font-size: .9375rem; padding-left: 12px; border-left: 2px solid var(--brass); }
+
+/* Credit list */
+.credits { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.credits li { display: grid; grid-template-columns: 4.5rem minmax(0,1fr) auto; gap: 8px 20px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.credits .year { padding-top: 6px; }
+.credit h4 { font-size: 1.375rem; }
+.watch { align-self: center; font-weight: 700; text-decoration: none; border: 1px solid var(--brass); border-radius: 999px; padding: 5px 14px; font-size: .9375rem; white-space: nowrap; }
+.watch:hover { background: var(--brass); color: var(--bg); }
+@media (max-width: 600px) {
+  .credits li { grid-template-columns: minmax(0,1fr); gap: 4px; }
+  .credits .year { padding-top: 0; }
+  .watch { justify-self: start; margin-top: 8px; }
+}
+
+/* Highlights */
+.highlights { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 48px; }
+.highlights li { padding: 22px 0; border-top: 1px solid var(--line); }
+.highlights strong { display: block; font-family: var(--display); font-weight: 700; font-stretch: 75%; font-size: 1.5rem; line-height: 1.1; margin-bottom: 4px; }
+.highlights span { color: var(--muted); }
+@media (max-width: 700px) { .highlights { grid-template-columns: minmax(0,1fr); } }
+
+/* Research & about */
+.two { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(32px, 6vw, 80px); }
+@media (max-width: 800px) { .two { grid-template-columns: minmax(0,1fr); } }
+.two h3 { font-family: var(--display); font-weight: 700; font-stretch: 80%; font-size: 1.75rem; margin: 0 0 10px; color: var(--brass); }
+.two p { margin: 0 0 14px; }
+.cite { font-style: italic; }
+.muted { color: var(--muted); }
+
+/* Contact */
+.contact { padding-bottom: clamp(64px, 9vw, 112px); }
+.contact-box { background: var(--raised); border-radius: 16px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 32px; align-items: center; }
+.contact-box h2 { font-family: var(--display); font-weight: 800; font-stretch: 62%; font-size: clamp(2.5rem, 7vw, 4.5rem); line-height: .92; margin: 0 0 12px; }
+.contact-box p { margin: 0; color: var(--muted); }
+.contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.contact-list a { color: var(--text); text-decoration: none; font-weight: 500; }
+.contact-list a:hover { color: var(--brass); }
+.contact-list span { display: block; color: var(--muted); font-size: .875rem; }
+@media (max-width: 760px) { .contact-box { grid-template-columns: minmax(0,1fr); } }
+
+footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: .9375rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
+footer a { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .wave rect { animation: none; }
+  .feature-media img { transition: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#topo">Felipe Mattar</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu" data-i18n="menu">Menu</button>
+    <ul class="nav-links" id="menu">
+      <li><a href="#filmografia" data-i18n="nav.films">Filmografia</a></li>
+      <li><a href="#destaques" data-i18n="nav.highlights">Destaques</a></li>
+      <li><a href="#pesquisa" data-i18n="nav.research">Pesquisa</a></li>
+      <li><a href="#contato" data-i18n="nav.contact">Contato</a></li>
+      <li><a href="../">ROCPAIN Games</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+  <div class="hero" id="topo">
+    <div class="wrap">
+      <h1 class="name">Felipe Mattar</h1>
+      <p class="lede" data-i18n-html="hero.lede">Edição, desenho e mixagem de som para cinema, documentário e séries. Mais de quinze anos em longas de ficção, documentários e curtas, com <strong>Melhor Edição de Som no Cine PE</strong> e passagem pela Berlinale.</p>
+      <svg class="wave" viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true"><rect x="2" y="35.7" width="6" height="28.6" rx="3" style="--i:0"/><rect x="12" y="36.3" width="6" height="27.4" rx="3" style="--i:1"/><rect x="22" y="29.9" width="6" height="40.3" rx="3" style="--i:2"/><rect x="32" y="35.1" width="6" height="29.8" rx="3" style="--i:3"/><rect x="42" y="28.4" width="6" height="43.2" rx="3" style="--i:4"/><rect x="52" y="29.3" width="6" height="41.4" rx="3" style="--i:5"/><rect x="62" y="32.4" width="6" height="35.3" rx="3" style="--i:6"/><rect x="72" y="25.0" width="6" height="50.1" rx="3" style="--i:7"/><rect x="82" y="30.9" width="6" height="38.2" rx="3" style="--i:8"/><rect x="92" y="23.8" width="6" height="52.3" rx="3" style="--i:9"/><rect x="102" y="28.8" width="6" height="42.4" rx="3" style="--i:10"/><rect x="112" y="27.8" width="6" height="44.5" rx="3" style="--i:11"/><rect x="122" y="21.3" width="6" height="57.4" rx="3" style="--i:12"/><rect x="132" y="13.4" width="6" height="73.2" rx="3" style="--i:13"/><rect x="142" y="25.5" width="6" height="49.1" rx="3" style="--i:14"/><rect x="152" y="23.2" width="6" height="53.5" rx="3" style="--i:15"/><rect x="162" y="15.4" width="6" height="69.3" rx="3" style="--i:16"/><rect x="172" y="9.1" width="6" height="81.8" rx="3" style="--i:17"/><rect x="182" y="16.0" width="6" height="68.0" rx="3" style="--i:18"/><rect x="192" y="19.5" width="6" height="61.1" rx="3" style="--i:19"/><rect x="202" y="8.8" width="6" height="82.3" rx="3" style="--i:20"/><rect x="212" y="26.5" width="6" height="46.9" rx="3" style="--i:21"/><rect x="222" y="12.2" width="6" height="75.7" rx="3" style="--i:22"/><rect x="232" y="23.1" width="6" height="53.8" rx="3" style="--i:23"/><rect x="242" y="26.4" width="6" height="47.2" rx="3" style="--i:24"/><rect x="252" y="27.6" width="6" height="44.7" rx="3" style="--i:25"/><rect x="262" y="25.5" width="6" height="49.1" rx="3" style="--i:26"/><rect x="272" y="18.9" width="6" height="62.3" rx="3" style="--i:27"/><rect x="282" y="29.7" width="6" height="40.5" rx="3" style="--i:28"/><rect x="292" y="25.6" width="6" height="48.8" rx="3" style="--i:29"/><rect x="302" y="26.6" width="6" height="46.8" rx="3" style="--i:30"/><rect x="312" y="31.6" width="6" height="36.8" rx="3" style="--i:31"/><rect x="322" y="31.5" width="6" height="37.0" rx="3" style="--i:32"/><rect x="332" y="38.0" width="6" height="23.9" rx="3" style="--i:33"/><rect x="342" y="39.6" width="6" height="20.8" rx="3" style="--i:34"/><rect x="352" y="40.1" width="6" height="19.8" rx="3" style="--i:35"/><rect x="362" y="39.2" width="6" height="21.6" rx="3" style="--i:36"/><rect x="372" y="38.8" width="6" height="22.5" rx="3" style="--i:37"/><rect x="382" y="37.6" width="6" height="24.8" rx="3" style="--i:38"/><rect x="392" y="33.2" width="6" height="33.7" rx="3" style="--i:39"/><rect x="402" y="32.3" width="6" height="35.4" rx="3" style="--i:40"/><rect x="412" y="32.1" width="6" height="35.8" rx="3" style="--i:41"/><rect x="422" y="23.9" width="6" height="52.2" rx="3" style="--i:42"/><rect x="432" y="22.9" width="6" height="54.2" rx="3" style="--i:43"/><rect x="442" y="27.7" width="6" height="44.6" rx="3" style="--i:44"/><rect x="452" y="20.8" width="6" height="58.3" rx="3" style="--i:45"/><rect x="462" y="19.9" width="6" height="60.1" rx="3" style="--i:46"/><rect x="472" y="12.0" width="6" height="76.0" rx="3" style="--i:47"/><rect x="482" y="13.0" width="6" height="73.9" rx="3" style="--i:48"/><rect x="492" y="20.3" width="6" height="59.4" rx="3" style="--i:49"/><rect x="502" y="5.2" width="6" height="89.6" rx="3" style="--i:50"/><rect x="512" y="22.0" width="6" height="56.0" rx="3" style="--i:51"/><rect x="522" y="15.0" width="6" height="70.1" rx="3" style="--i:52"/><rect x="532" y="7.0" width="6" height="86.0" rx="3" style="--i:53"/><rect x="542" y="19.8" width="6" height="60.4" rx="3" style="--i:54"/><rect x="552" y="12.1" width="6" height="75.7" rx="3" style="--i:55"/><rect x="562" y="22.0" width="6" height="56.0" rx="3" style="--i:56"/><rect x="572" y="8.2" width="6" height="83.6" rx="3" style="--i:57"/><rect x="582" y="6.4" width="6" height="87.3" rx="3" style="--i:58"/><rect x="592" y="11.0" width="6" height="77.9" rx="3" style="--i:59"/><rect x="602" y="5.2" width="6" height="89.6" rx="3" style="--i:60"/><rect x="612" y="17.9" width="6" height="64.2" rx="3" style="--i:61"/><rect x="622" y="11.0" width="6" height="78.1" rx="3" style="--i:62"/><rect x="632" y="14.2" width="6" height="71.7" rx="3" style="--i:63"/><rect x="642" y="15.7" width="6" height="68.6" rx="3" style="--i:64"/><rect x="652" y="19.4" width="6" height="61.3" rx="3" style="--i:65"/><rect x="662" y="14.1" width="6" height="71.8" rx="3" style="--i:66"/><rect x="672" y="14.2" width="6" height="71.5" rx="3" style="--i:67"/><rect x="682" y="23.6" width="6" height="52.7" rx="3" style="--i:68"/><rect x="692" y="22.6" width="6" height="54.9" rx="3" style="--i:69"/><rect x="702" y="32.7" width="6" height="34.7" rx="3" style="--i:70"/><rect x="712" y="26.1" width="6" height="47.9" rx="3" style="--i:71"/><rect x="722" y="28.7" width="6" height="42.5" rx="3" style="--i:72"/><rect x="732" y="27.2" width="6" height="45.5" rx="3" style="--i:73"/><rect x="742" y="31.2" width="6" height="37.6" rx="3" style="--i:74"/><rect x="752" y="37.8" width="6" height="24.4" rx="3" style="--i:75"/><rect x="762" y="38.7" width="6" height="22.6" rx="3" style="--i:76"/><rect x="772" y="38.7" width="6" height="22.6" rx="3" style="--i:77"/><rect x="782" y="42.2" width="6" height="15.6" rx="3" style="--i:78"/><rect x="792" y="37.8" width="6" height="24.5" rx="3" style="--i:79"/><rect x="802" y="38.6" width="6" height="22.8" rx="3" style="--i:80"/><rect x="812" y="37.8" width="6" height="24.4" rx="3" style="--i:81"/><rect x="822" y="37.3" width="6" height="25.5" rx="3" style="--i:82"/><rect x="832" y="28.7" width="6" height="42.7" rx="3" style="--i:83"/><rect x="842" y="34.6" width="6" height="30.9" rx="3" style="--i:84"/><rect x="852" y="32.2" width="6" height="35.5" rx="3" style="--i:85"/><rect x="862" y="29.6" width="6" height="40.9" rx="3" style="--i:86"/><rect x="872" y="22.4" width="6" height="55.2" rx="3" style="--i:87"/><rect x="882" y="32.3" width="6" height="35.5" rx="3" style="--i:88"/><rect x="892" y="26.6" width="6" height="46.7" rx="3" style="--i:89"/><rect x="902" y="24.7" width="6" height="50.5" rx="3" style="--i:90"/><rect x="912" y="19.5" width="6" height="61.0" rx="3" style="--i:91"/><rect x="922" y="20.1" width="6" height="59.7" rx="3" style="--i:92"/><rect x="932" y="19.3" width="6" height="61.4" rx="3" style="--i:93"/><rect x="942" y="27.9" width="6" height="44.2" rx="3" style="--i:94"/><rect x="952" y="26.0" width="6" height="48.0" rx="3" style="--i:95"/></svg>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <ul class="services">
+      <li><h2 data-i18n="sv.1.t">Edição de som</h2><p data-i18n="sv.1.d">Diálogos, ambientes e efeitos organizados e limpos para a mixagem.</p></li>
+      <li><h2 data-i18n="sv.2.t">Desenho de som</h2><p data-i18n="sv.2.d">Atmosferas e efeitos criados para a narrativa, do terror ao documentário.</p></li>
+      <li><h2 data-i18n="sv.3.t">Mixagem</h2><p data-i18n="sv.3.d">Mix final para cinema, TV e internet, com entregas nos formatos pedidos.</p></li>
+      <li><h2 data-i18n="sv.4.t">Captação ambisônica</h2><p data-i18n="sv.4.d">Gravação multicanal em ambisônico com o Zoom H3-VR, para ambientes imersivos e áudio 360°.</p></li>
+    </ul>
+  </div>
+
+  <section id="filmografia">
+    <div class="wrap">
+      <h2 class="section-title" data-i18n="films.t">Filmografia</h2>
+      <p class="section-lede" data-i18n="films.d">Trabalhos de som em longas, médias, curtas e séries desde 2009. Os links levam aos trailers e filmes disponíveis online.</p>
+
+      <h3 class="group-title" data-i18n="films.longas">Longas-metragens</h3>
+      <div class="features">
+<article class="feature">
+  <div class="feature-media"><div class="poster-type" aria-hidden="true">Corredores: Da Pedra Azul ao Forno Grande</div></div>
+  <div class="feature-body">
+    <p class="year">2024</p>
+    <h4>Corredores: Da Pedra Azul ao Forno Grande</h4>
+    <p class="meta"><span data-i18n="f.corredoresdapedr.k">Documentário</span> · Dir. Klaus&#x27;Berg · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+</article>
+<article class="feature">
+  <a class="feature-media" href="https://youtu.be/SJv66w4hPDU" target="_blank" rel="noopener" aria-label="Trailer de O Cemitério das Almas Perdidas"><img src="https://i.ytimg.com/vi/SJv66w4hPDU/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <div class="feature-body">
+    <p class="year">2020</p>
+    <h4>O Cemitério das Almas Perdidas</h4>
+    <p class="meta"><span data-i18n="f.ocemitriodasalma.k">Ficção</span> · Dir. Rodrigo Aragão · Fábulas Negras</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+</article>
+<article class="feature">
+  <a class="feature-media" href="https://youtu.be/m798QAphoKM" target="_blank" rel="noopener" aria-label="Trailer de A Mata Negra"><img src="https://i.ytimg.com/vi/m798QAphoKM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <div class="feature-body">
+    <p class="year">2018</p>
+    <h4>A Mata Negra</h4>
+    <p class="meta"><span data-i18n="f.amatanegra.k">Ficção</span> · Dir. Rodrigo Aragão · Fábulas Negras</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    <p class="award"><span data-i18n="aw.matanegra">Melhor Filme Ibero-Americano e menção honrosa da imprensa no Macabro Film Festival, México, 2018.</span></p>
+  </div>
+</article>
+<article class="feature">
+  <a class="feature-media no-thumb" href="https://vimeo.com/286784205" target="_blank" rel="noopener" aria-label="Trailer de Destino das Sombras"><div class="poster-type" aria-hidden="true">Destino das Sombras</div></a>
+  <div class="feature-body">
+    <p class="year">2018</p>
+    <h4>Destino das Sombras</h4>
+    <p class="meta"><span data-i18n="f.destinodassombra.k">Ficção</span> · Dir. Klaus&#x27;Berg · Finordia</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+</article>
+<article class="feature">
+  <a class="feature-media" href="https://youtu.be/SssmQ4Oeivw" target="_blank" rel="noopener" aria-label="Trailer de Punhal"><img src="https://i.ytimg.com/vi/SssmQ4Oeivw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <div class="feature-body">
+    <p class="year">2015</p>
+    <h4>Punhal</h4>
+    <p class="meta"><span data-i18n="f.punhal.k">Ficção</span> · Dir. Luiza Lubiana · Satírica Filmes</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    <p class="award"><span data-i18n="aw.punhal">Exibido na grade do Canal Brasil.</span></p>
+  </div>
+</article>
+<article class="feature">
+  <a class="feature-media" href="https://www.youtube.com/watch?v=EkAeb4XFsaE" target="_blank" rel="noopener" aria-label="Trailer de Mar Negro"><img src="https://i.ytimg.com/vi/EkAeb4XFsaE/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <div class="feature-body">
+    <p class="year">2013</p>
+    <h4>Mar Negro</h4>
+    <p class="meta"><span data-i18n="f.marnegro.k">Ficção</span> · Dir. Rodrigo Aragão · Fábulas Negras</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    <p class="award"><span data-i18n="aw.marnegro">Sitges 2013, filme de abertura do Fantaspoa 2013, Festival do Rio 2013. Prêmio de distribuição no Ventana Sur 2013; lançado em DVD e Blu-ray na Alemanha e no Japão.</span></p>
+  </div>
+</article>
+      </div>
+
+      <h3 class="group-title" data-i18n="films.medias">Médias-metragens</h3>
+      <ul class="credits">
+<li>
+  <span class="year">2016</span>
+  <div class="credit">
+    <h4>Gustavo Macacko: Despontando para o Anonimato</h4>
+    <p class="meta"><span data-i18n="m.gustavomacackode.k">Documentário</span> · Dir. Raphael Gaspar · Expurgação</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://youtu.be/APSC6k7Ca6Y" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Gustavo Macacko: Despontando para o Anonimato</span></a>
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>Das Águas que Passam</h4>
+    <p class="meta"><span data-i18n="m.dasguasquepassam.k">Documentário</span> · Dir. Diego Zon · Moveme</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    <p class="award"><span data-i18n="aw.aguas">Melhor Edição de Som no 20º Cine PE, 2016. Seleção oficial da Berlinale 2016. Melhor Documentário na Mostra ABD Capixaba.</span></p>
+  </div>
+  <a class="watch" href="https://vimeo.com/151709238" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Das Águas que Passam</span></a>
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>João</h4>
+    <p class="meta"><span data-i18n="m.joo.k">Ficção</span> · Dir. Carlos Augusto de Oliveira</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    <p class="award"><span data-i18n="aw.joao">Estreia no Festival de Cinema de Vitória 2015.</span></p>
+  </div>
+  
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>Estradas de Bárbara</h4>
+    <p class="meta"><span data-i18n="m.estradasdebrbara.k">Experimental</span> · Dir. Adriana Jacobsen</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    <p class="award"><span data-i18n="aw.barbara">Estreia no Cine Rua 7, 2015.</span></p>
+  </div>
+  
+</li>
+<li>
+  <span class="year">2014</span>
+  <div class="credit">
+    <h4>Últimos Refúgios: Reserva Biológica de Duas Bocas</h4>
+    <p class="meta"><span data-i18n="m.ltimosrefgiosres.k">Documentário</span> · Dir. Alexandre Barcelos · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://www.youtube.com/watch?v=vzYVze0fd_c" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Últimos Refúgios: Reserva Biológica de Duas Bocas</span></a>
+</li>
+<li>
+  <span class="year">2014</span>
+  <div class="credit">
+    <h4>Redescobrindo a Mata Atlântica</h4>
+    <p class="meta"><span data-i18n="m.redescobrindoama.k">Ficção</span> · Dir. Leonardo Merçon · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+  <a class="watch" href="https://www.youtube.com/watch?v=TjYAwYJJoy4" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Redescobrindo a Mata Atlântica</span></a>
+</li>
+<li>
+  <span class="year">2013</span>
+  <div class="credit">
+    <h4>Últimos Refúgios: Toninho Mateiro</h4>
+    <p class="meta"><span data-i18n="m.ltimosrefgioston.k">Documentário</span> · Dir. Reinaldo Guedes · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://www.youtube.com/watch?v=-VSvJy1_Oqg" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Últimos Refúgios: Toninho Mateiro</span></a>
+</li>
+<li>
+  <span class="year">2011</span>
+  <div class="credit">
+    <h4>Últimos Refúgios: Parque Estadual de Itaúnas</h4>
+    <p class="meta"><span data-i18n="m.ltimosrefgiospar.k">Documentário</span> · Dir. Yuri Salvador · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://youtu.be/oQsdIiRPZF4" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Últimos Refúgios: Parque Estadual de Itaúnas</span></a>
+</li>
+      </ul>
+
+      <h3 class="group-title" data-i18n="films.series">Séries</h3>
+      <ul class="credits">
+<li>
+  <span class="year">2016</span>
+  <div class="credit">
+    <h4>Ernesto, o Exterminador de Seres Monstruosos e Outras Porcarias</h4>
+    <p class="meta"><span data-i18n="s.ernestooextermin.k">Série de TV · TV Brasil</span> · Dir. Gustavo Spolidoro</p>
+    <p class="role"><span data-i18n="r.dsab">Desenho de som da abertura</span></p>
+    
+  </div>
+  <a class="watch" href="https://vimeo.com/245736193" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Ernesto, o Exterminador de Seres Monstruosos e Outras Porcarias</span></a>
+</li>
+<li>
+  <span class="year">2016</span>
+  <div class="credit">
+    <h4>Palavra Negra</h4>
+    <p class="meta"><span data-i18n="s.palavranegra.k">Websérie</span> · Dir. Adriano Monteiro · Coletivo Palavra Negra</p>
+    <p class="role"><span data-i18n="r.tr">Trilha sonora</span>, <span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://youtu.be/YHLtznTR0gU" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Palavra Negra</span></a>
+</li>
+<li>
+  <span class="year">2011</span>
+  <div class="credit">
+    <h4>Meine Weltwunder – Ilha Grande/RJ</h4>
+    <p class="meta"><span data-i18n="s.meineweltwunderi.k">Piloto de série</span> · Dir. Leonardo Merçon · Instituto Últimos Refúgios</p>
+    <p class="role"><span data-i18n="r.cap">Captação de som</span>, <span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+  <a class="watch" href="https://youtu.be/UaMbnWPthSI" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Meine Weltwunder – Ilha Grande/RJ</span></a>
+</li>
+      </ul>
+
+      <h3 class="group-title" data-i18n="films.curtas">Curtas-metragens</h3>
+      <ul class="credits">
+<li>
+  <span class="year">2016</span>
+  <div class="credit">
+    <h4>Meninas</h4>
+    <p class="meta"><span data-i18n="c.meninas.k">Ficção</span> · Dir. Ana Murta e André Ehrlich</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    
+  </div>
+  
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>Dinossauros</h4>
+    <p class="meta"><span data-i18n="c.dinossauros.k">Ficção</span> · Dir. Eduardo Madeira · Expurgação</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span></p>
+    <p class="award"><span data-i18n="aw.dinos">Melhor Curta no Festival de Cinema de Vitória 2015.</span></p>
+  </div>
+  
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>Expedição Rio Doce</h4>
+    <p class="meta">Dir. Vitor Oliveira · Marlin Azul</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://vimeo.com/160684145" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Expedição Rio Doce</span></a>
+</li>
+<li>
+  <span class="year">2015</span>
+  <div class="credit">
+    <h4>Memórias de um Casarão</h4>
+    <p class="meta">Dir. Josias Rodrigues · Marlin Azul</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  
+</li>
+<li>
+  <span class="year">2014</span>
+  <div class="credit">
+    <h4>Vinillis Frutíferis</h4>
+    <p class="meta"><span data-i18n="c.vinillisfrutferi.k">Ficção</span> · Dir. Vitor Hugo Passabon · Marlin Azul</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://vimeo.com/160684148" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Vinillis Frutíferis</span></a>
+</li>
+<li>
+  <span class="year">2014</span>
+  <div class="credit">
+    <h4>Vida, Saudosa Lembrança</h4>
+    <p class="meta">Dir. Luciano Guimarães · Marlin Azul</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.ds">Desenho de som</span>, <span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://vimeo.com/160684146" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Vida, Saudosa Lembrança</span></a>
+</li>
+<li>
+  <span class="year">2014</span>
+  <div class="credit">
+    <h4>Cavalo Ferro</h4>
+    <p class="meta">Dir. Gui Castor · Aiê Produções</p>
+    <p class="role"><span data-i18n="r.mx">Mixagem</span></p>
+    
+  </div>
+  <a class="watch" href="https://vimeo.com/151681015" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Cavalo Ferro</span></a>
+</li>
+<li>
+  <span class="year">2012</span>
+  <div class="credit">
+    <h4>Confinópolis</h4>
+    <p class="meta"><span data-i18n="c.confinpolis.k">Ficção</span> · Dir. Raphael Araújo · Camarão Filmes</p>
+    <p class="role"><span data-i18n="r.tr">Trilha sonora</span></p>
+    <p class="award"><span data-i18n="aw.confin">Melhor Curta no FEST 2012 (Portugal) e na Mostra Capixaba 2011.</span></p>
+  </div>
+  <a class="watch" href="https://youtu.be/hGJYzEROlZo" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Confinópolis</span></a>
+</li>
+<li>
+  <span class="year">2011</span>
+  <div class="credit">
+    <h4>Angorá</h4>
+    <p class="meta">Dir. Emerson Evêncio · Cabelo Seco</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.tr">Trilha sonora</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    
+  </div>
+  <a class="watch" href="https://www.youtube.com/watch?v=NIefdeXqFI4" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Angorá</span></a>
+</li>
+<li>
+  <span class="year">2010</span>
+  <div class="credit">
+    <h4>Ao Vivo de Bergue</h4>
+    <p class="meta">Dir. Paulo Sena · Cabelo Seco</p>
+    <p class="role"><span data-i18n="r.ed">Edição de som</span>, <span data-i18n="r.tr">Trilha sonora</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    
+  </div>
+  <a class="watch" href="https://www.youtube.com/watch?v=hBqs4qV0ms4" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Ao Vivo de Bergue</span></a>
+</li>
+<li>
+  <span class="year">2009</span>
+  <div class="credit">
+    <h4>Milagre</h4>
+    <p class="meta"><span data-i18n="c.milagre.k">Ficção</span> · Dir. Luiza Lubiana · Satírica Filmes</p>
+    <p class="role"><span data-i18n="r.tr">Trilha sonora</span>, <span data-i18n="r.ds">Desenho de som</span></p>
+    <p class="award"><span data-i18n="aw.milagre">Selecionado no festival BOMMER, Ucrânia, 2010.</span></p>
+  </div>
+  <a class="watch" href="https://vimeo.com/89232907" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Milagre</span></a>
+</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="destaques">
+    <div class="wrap">
+      <h2 class="section-title" data-i18n="hl.t">Destaques</h2>
+      <ul class="highlights">
+        <li><strong data-i18n="hl.1.t">Melhor Edição de Som, 20º Cine PE</strong><span data-i18n="hl.1.d">Por “Das Águas que Passam”, de Diego Zon. Recife, 2016.</span></li>
+        <li><strong data-i18n="hl.2.t">Berlinale 2016</strong><span data-i18n="hl.2.d">“Das Águas que Passam” na seleção oficial do Festival de Berlim.</span></li>
+        <li><strong data-i18n="hl.3.t">Mar Negro em Sitges e no mundo</strong><span data-i18n="hl.3.d">Sitges, Festival do Rio e Fantaspoa; lançado na Alemanha, no Japão e em mais de 140 países sob demanda.</span></li>
+        <li><strong data-i18n="hl.4.t">A Mata Negra no Macabro</strong><span data-i18n="hl.4.d">Melhor Filme Ibero-Americano no Macabro Film Festival, México, 2018.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="pesquisa">
+    <div class="wrap two">
+      <div>
+        <h2 class="section-title" data-i18n="rs.t">Pesquisa</h2>
+        <h3 data-i18n="rs.h">Hiper-realismo sonoro</h3>
+        <p data-i18n="rs.p">Mestrado em Artes pela UFES (2016) com a dissertação</p>
+        <p class="cite">Usos do hiper-realismo sonoro no cinema brasileiro de ficção contemporâneo: análises de O Som ao Redor (2012) e Mar Negro (2013).</p>
+        <p class="muted" data-i18n="rs.art">Artigo: “O conceito de photogénie como visualidade háptica”, Revista do Colóquio de Arte e Pesquisa do PPGA-UFES, v. 4, 2014.</p>
+        <p><a href="http://lattes.cnpq.br/9348473635588890" target="_blank" rel="noopener" data-i18n="rs.lattes">Currículo Lattes</a></p>
+      </div>
+      <div id="sobre">
+        <h2 class="section-title" data-i18n="ab.t">Sobre</h2>
+        <p data-i18n="ab.p1">Bacharel em Desenho Industrial e mestre em Artes pela UFES. Foi cofundador do Coletivo Expurgação e sócio da Expurgação Filmes (2013–2019), onde fez edição, desenho e mixagem de som para dezenas de produções capixabas e nacionais.</p>
+        <p data-i18n="ab.p2">Foi professor substituto no curso de Design da UFES (2018–2019 e 2023–2024), com disciplinas de som, vídeo e cinema, e hoje é professor do curso Técnico em Multimídia no CEET Giuseppe Altoé, em Vargem Alta/ES.</p>
+        <p data-i18n-html="ab.p3">Também cria jogos e aplicativos na <a href="../">ROCPAIN Games</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="contact">
+    <div class="wrap">
+      <div class="contact-box">
+        <div>
+          <h2 data-i18n="ct.t">Som para o seu filme</h2>
+          <p data-i18n="ct.d">Conte sobre o projeto, o prazo e em que etapa ele está. Edição, desenho, mixagem ou captação ambisônica.</p>
+        </div>
+        <ul class="contact-list">
+          <li><a href="mailto:fdesigner@gmail.com?subject=Som%20-%20projeto"><span>E-mail</span>fdesigner@gmail.com</a></li>
+          <li><a href="https://wa.me/5527995013617" target="_blank" rel="noopener"><span>WhatsApp</span>(27) 99501-3617</a></li>
+          <li><a href="https://www.linkedin.com/in/felipe-mattar-93505b16" target="_blank" rel="noopener"><span>LinkedIn</span>Felipe Mattar</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Felipe Mattar · Espírito Santo, Brasil</span>
+    <a href="../" data-i18n="ft.back">Conheça a ROCPAIN Games</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var en = {
+    "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "f.corredoresdapedr.k": "Documentary", "f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
+    "skip": "Skip to content", "menu": "Menu",
+    "nav.films": "Filmography", "nav.highlights": "Highlights", "nav.research": "Research", "nav.contact": "Contact",
+    "hero.lede": "Sound editing, sound design and mixing for film, documentary and series. Over fifteen years on fiction features, documentaries and shorts, with <strong>Best Sound Editing at Cine PE</strong> and a Berlinale selection.",
+    "sv.1.t": "Sound editing", "sv.1.d": "Dialogue, ambiences and effects cleaned and organised for the mix.",
+    "sv.2.t": "Sound design", "sv.2.d": "Atmospheres and effects built for the story, from horror to documentary.",
+    "sv.3.t": "Mixing", "sv.3.d": "Final mix for cinema, TV and online, delivered in the formats you need.",
+    "sv.4.t": "Ambisonic recording", "sv.4.d": "Multichannel ambisonic recording with the Zoom H3-VR, for immersive ambiences and 360° audio.",
+    "films.t": "Filmography",
+    "films.d": "Sound work on features, mid-length films, shorts and series since 2009. Links go to trailers and films available online.",
+    "films.longas": "Feature films", "films.medias": "Mid-length films", "films.series": "Series", "films.curtas": "Short films",
+    "hl.t": "Highlights",
+    "hl.1.t": "Best Sound Editing, 20th Cine PE", "hl.1.d": "For “Das Águas que Passam” by Diego Zon. Recife, 2016.",
+    "hl.2.t": "Berlinale 2016", "hl.2.d": "“Das Águas que Passam” in the official selection of the Berlin Film Festival.",
+    "hl.3.t": "Mar Negro at Sitges and worldwide", "hl.3.d": "Sitges, Festival do Rio and Fantaspoa; released in Germany, Japan and on demand in over 140 countries.",
+    "hl.4.t": "A Mata Negra at Macabro", "hl.4.d": "Best Ibero-American Film at Macabro Film Festival, Mexico, 2018.",
+    "rs.t": "Research", "rs.h": "Sound hyperrealism",
+    "rs.p": "Master's in Arts from UFES (2016) with the dissertation",
+    "rs.art": "Article: “O conceito de photogénie como visualidade háptica” (Photogénie as haptic visuality), Revista do Colóquio de Arte e Pesquisa do PPGA-UFES, v. 4, 2014.",
+    "rs.lattes": "Lattes CV",
+    "ab.t": "About",
+    "ab.p1": "Degree in Industrial Design and Master's in Arts from UFES. Co-founded Coletivo Expurgação and was a partner at Expurgação Filmes (2013–2019), doing sound editing, design and mixing for dozens of productions from Espírito Santo and across Brazil.",
+    "ab.p2": "He was a substitute lecturer in UFES's Design program (2018–2019 and 2023–2024), teaching sound, video and film, and now teaches in the multimedia technical program at CEET Giuseppe Altoé in Vargem Alta, Espírito Santo.",
+    "ab.p3": "He also makes games and apps at <a href=\"../\">ROCPAIN Games</a>.",
+    "ct.t": "Sound for your film", "ct.d": "Tell us about the project, the deadline and what stage it is at. Editing, design, mixing or ambisonic recording.",
+    "ft.back": "Visit ROCPAIN Games",
+    "watch": "Watch"
+  };
+
+  var nodes = document.querySelectorAll("[data-i18n]");
+  var htmlNodes = document.querySelectorAll("[data-i18n-html]");
+  var pt = {};
+  nodes.forEach(function (n) { pt[n.getAttribute("data-i18n")] = n.textContent; });
+  htmlNodes.forEach(function (n) { pt[n.getAttribute("data-i18n-html")] = n.innerHTML; });
+
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  function setLang(lang) {
+    var dict = lang === "en" ? en : pt;
+    nodes.forEach(function (n) { var v = dict[n.getAttribute("data-i18n")]; if (v) n.textContent = v; });
+    htmlNodes.forEach(function (n) { var v = dict[n.getAttribute("data-i18n-html")]; if (v) n.innerHTML = v; });
+    document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
+    document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
+    store("lang", lang);
+  }
+
+  var param = new URLSearchParams(location.search).get("lang");
+  var initial = param || read("lang") || ((navigator.language || "en").toLowerCase().indexOf("pt") === 0 ? "pt" : "en");
+  if (initial !== "pt") setLang(initial);
+  document.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
+
+  var btn = document.querySelector(".menu-btn"), menu = document.getElementById("menu");
+  btn.addEventListener("click", function () { var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });
+  menu.addEventListener("click", function (e) { if (e.target.tagName === "A") { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
+})();
+</script>
+</body>
+</html>
