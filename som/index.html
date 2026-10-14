@@ -101,6 +101,25 @@ section { padding: clamp(64px, 9vw, 112px) 0 0; }
 .section-lede { color: var(--muted); max-width: 38em; margin: 0 0 40px; font-size: 1.125rem; }
 .group-title { font-family: var(--display); font-weight: 700; font-stretch: 80%; font-size: 1.75rem; margin: 56px 0 8px; color: var(--brass); }
 
+/* Collapsible categories */
+.group { border-bottom: 1px solid var(--line); }
+.group > summary { list-style: none; cursor: pointer; }
+.group > summary::-webkit-details-marker { display: none; }
+.group > summary .group-title { display: flex; align-items: center; gap: 12px; margin: 0; padding: 22px 0; }
+.group:first-of-type > summary .group-title { margin-top: 32px; }
+.group > summary .group-title::after { content: "+"; margin-left: auto; width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 1px solid var(--brass); border-radius: 50%; font-family: var(--body); font-size: 1.375rem; line-height: 1; transition: background .2s, color .2s; }
+.group[open] > summary .group-title::after { content: "−"; }
+.group > summary:hover .group-title::after { background: var(--brass); color: var(--bg); }
+.group .count { font-family: var(--body); font-size: 1rem; font-weight: 700; color: var(--muted); }
+.group > .features, .group > .credits { margin-bottom: 32px; }
+.group > .credits { border-top: 0; }
+.features.clamped > .feature:nth-child(n+7) { display: none; }
+.more { display: block; margin: -8px auto 36px; font: inherit; font-weight: 700; color: var(--brass); background: none; border: 1px solid var(--brass); border-radius: 999px; padding: 8px 22px; cursor: pointer; text-transform: uppercase; letter-spacing: .06em; font-size: .9375rem; }
+.more:hover { background: var(--brass); color: var(--bg); }
+.more[hidden] { display: none; }
+.more .more-close, .more[aria-expanded="true"] .more-open { display: none; }
+.more[aria-expanded="true"] .more-close { display: inline; }
+
 /* Feature films */
 .features { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 36px 28px; }
 @media (max-width: 900px) { .features { grid-template-columns: repeat(2, minmax(0,1fr)); } }
@@ -236,8 +255,9 @@ footer a { color: var(--muted); }
         </div>
       </article>
 
-      <h3 class="group-title" data-i18n="films.longas">Longas-metragens</h3>
-      <div class="features">
+      <details class="group" open>
+        <summary><h3 class="group-title"><span data-i18n="films.longas">Longas-metragens</span> <span class="count"></span></h3></summary>
+      <div class="features clamped" data-limit="6">
 <article class="feature">
   <a class="feature-media poster" href="https://www.instagram.com/lacuna.filme/" target="_blank" rel="noopener" aria-label="Lacuna no Instagram"><img src="imagens/lacuna.webp" alt="Lacuna: coprodução Horizonte Líquido e Livres Filmes" loading="lazy" width="1280" height="720"></a>
   <div class="feature-body">
@@ -319,8 +339,11 @@ footer a { color: var(--muted); }
   </div>
 </article>
       </div>
+      <button type="button" class="more" aria-expanded="false" hidden><span class="more-open"><span data-i18n="more">Ver mais</span> <span class="more-n"></span></span><span class="more-close" data-i18n="less">Ver menos</span></button>
+      </details>
 
-      <h3 class="group-title" data-i18n="films.medias">Médias-metragens</h3>
+      <details class="group">
+        <summary><h3 class="group-title"><span data-i18n="films.medias">Médias-metragens</span> <span class="count"></span></h3></summary>
       <ul class="credits">
 <li>
   <span class="year">2016</span>
@@ -403,8 +426,10 @@ footer a { color: var(--muted); }
   <a class="watch" href="https://youtu.be/oQsdIiRPZF4" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Últimos Refúgios: Parque Estadual de Itaúnas</span></a>
 </li>
       </ul>
+      </details>
 
-      <h3 class="group-title" data-i18n="films.series">Séries</h3>
+      <details class="group">
+        <summary><h3 class="group-title"><span data-i18n="films.series">Séries</span> <span class="count"></span></h3></summary>
       <ul class="credits">
 <li>
   <span class="year">2016</span>
@@ -437,8 +462,10 @@ footer a { color: var(--muted); }
   <a class="watch" href="https://youtu.be/UaMbnWPthSI" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Meine Weltwunder – Ilha Grande/RJ</span></a>
 </li>
       </ul>
+      </details>
 
-      <h3 class="group-title" data-i18n="films.curtas">Curtas-metragens</h3>
+      <details class="group">
+        <summary><h3 class="group-title"><span data-i18n="films.curtas">Curtas-metragens</span> <span class="count"></span></h3></summary>
       <ul class="credits">
 <li>
   <span class="year">2016</span>
@@ -551,6 +578,7 @@ footer a { color: var(--muted); }
   <a class="watch" href="https://vimeo.com/89232907" target="_blank" rel="noopener"><span data-i18n="watch">Assistir</span><span class="sr"> Milagre</span></a>
 </li>
       </ul>
+      </details>
     </div>
   </section>
 
@@ -622,7 +650,7 @@ footer a { color: var(--muted); }
     "sv.4.t": "Ambisonic recording", "sv.4.d": "Multichannel ambisonic recording with the Zoom H3-VR, for immersive ambiences and 360° audio.",
     "films.t": "Filmography",
     "films.d": "Sound work on features, mid-length films, shorts and series since 2009. Links go to trailers and films available online.",
-    "films.longas": "Feature films", "films.medias": "Mid-length films", "films.series": "Series", "films.curtas": "Short films",
+    "more": "See more", "less": "See less", "films.longas": "Feature films", "films.medias": "Mid-length films", "films.series": "Series", "films.curtas": "Short films",
     "hl.t": "Highlights",
     "hl.1.t": "Best Sound Editing, 20th Cine PE", "hl.1.d": "For “Das Águas que Passam” by Diego Zon. Recife, 2016.",
     "hl.2.t": "Berlinale 2016", "hl.2.d": "“Das Águas que Passam” in the official selection of the Berlin Film Festival.",
@@ -663,6 +691,22 @@ footer a { color: var(--muted); }
   var initial = param || read("lang") || ((navigator.language || "en").toLowerCase().indexOf("pt") === 0 ? "pt" : "en");
   if (initial !== "pt") setLang(initial);
   document.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
+
+  document.querySelectorAll("details.group").forEach(function (g) {
+    var list = g.querySelector(".features, .credits");
+    g.querySelector(".count").textContent = "(" + list.children.length + ")";
+  });
+  document.querySelectorAll(".features.clamped").forEach(function (list) {
+    var limit = +list.dataset.limit, more = list.nextElementSibling, extra = list.children.length - limit;
+    if (!more || extra <= 0) { list.classList.remove("clamped"); return; }
+    more.querySelector(".more-n").textContent = "(+" + extra + ")";
+    more.hidden = false;
+    more.addEventListener("click", function () {
+      var open = list.classList.toggle("clamped") === false;
+      more.setAttribute("aria-expanded", String(open));
+      if (!open) list.parentElement.scrollIntoView({ block: "start" });
+    });
+  });
 
   var btn = document.querySelector(".menu-btn"), menu = document.getElementById("menu");
   btn.addEventListener("click", function () { var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });
