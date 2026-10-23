@@ -207,14 +207,6 @@ footer a { color: var(--muted); }
 footer a { display: inline-block; padding: 10px 4px; }
 @media (max-width: 820px) { .lang button { min-height: 40px; } }
 
-/* Reel */
-.reel-player { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--raised); }
-.reel-play, .reel-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.reel-play { padding: 0; background: none; cursor: pointer; }
-.reel-play img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); }
-.reel-label { position: absolute; left: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 10px; background: var(--brass); color: var(--bg); font: 700 1rem var(--body); padding: 10px 20px; border-radius: 999px; }
-.reel-label::before { content: ""; border-style: solid; border-width: 7px 0 7px 12px; border-color: transparent transparent transparent var(--bg); }
-.reel-play:hover .reel-label { background: var(--text); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -262,15 +254,6 @@ footer a { display: inline-block; padding: 10px 4px; }
       <li><h2 data-i18n="sv.4.t">Captação ambisônica</h2><p data-i18n="sv.4.d">Gravação multicanal em ambisônico com o Zoom H3-VR, para ambientes imersivos e áudio 360°.</p></li>
     </ul>
   </div>
-
-  <section id="reel" class="reel" hidden data-youtube="">
-    <div class="wrap">
-      <h2 class="section-title" data-i18n="reel.t">Reel</h2>
-      <div class="reel-player">
-        <button type="button" class="reel-play"><img alt="" width="480" height="360"><span class="reel-label" data-i18n="reel.play">Assistir ao reel</span></button>
-      </div>
-    </div>
-  </section>
 
   <section id="filmografia">
     <div class="wrap">
@@ -678,7 +661,7 @@ footer a { display: inline-block; padding: 10px 4px; }
     "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "yr.post": "In post-production", "f.lacuna.k": "Fiction · Horror", "f.aguasdoitapemiri.k": "Documentary", "m.equaseverdade.k": "TV movie · Comedy", "aw.equase": "Co-produced with Globo Filmes and broadcast nationwide on TV Globo's Tela Quente in 2026.", "spot.eye": "Highlight · Tela Quente, TV Globo", "spot.watch": "Watch the promo", "f.corredoresdapedr.k": "Documentary","f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
     "skip": "Skip to content", "menu": "Menu",
     "al.1": "Promo for É Quase Verdade on Tela Quente", "al.2": "Lacuna on Instagram", "al.3": "Trailer for Águas do Itapemirim", "al.4": "Trailer for Corredores: Da Pedra Azul ao Forno Grande", "al.5": "Trailer for O Cemitério das Almas Perdidas", "al.6": "Trailer for A Mata Negra", "al.7": "Trailer for Destino das Sombras", "al.8": "Trailer for Punhal", "al.9": "Trailer for Mar Negro",
-    "hero.cta": "Tell us about your film", "reel.t": "Reel", "reel.play": "Watch the reel",
+    "hero.cta": "Tell us about your film",
     "nav.films": "Filmography", "nav.highlights": "Highlights", "nav.research": "Research", "nav.contact": "Contact",
     "hero.lede": "Sound editing, sound design and mixing for film, documentary and series. Over fifteen years on fiction features, documentaries and shorts, with <strong>Best Sound Editing at Cine PE</strong> and a Berlinale selection.",
     "sv.1.t": "Sound editing", "sv.1.d": "Dialogue, ambiences and effects cleaned and organised for the mix.",
@@ -750,21 +733,6 @@ footer a { display: inline-block; padding: 10px 4px; }
       if (!open) list.parentElement.scrollIntoView({ block: "start" });
     });
   });
-
-  var reel = document.getElementById("reel");
-  if (reel && /^[\w-]{11}$/.test(reel.dataset.youtube)) {
-    var vid = reel.dataset.youtube, play = reel.querySelector(".reel-play");
-    play.querySelector("img").src = "https://i.ytimg.com/vi/" + vid + "/hqdefault.jpg";
-    play.addEventListener("click", function () {
-      var fr = document.createElement("iframe");
-      fr.src = "https://www.youtube-nocookie.com/embed/" + vid + "?autoplay=1&rel=0";
-      fr.title = "Reel";
-      fr.allow = "autoplay; encrypted-media; picture-in-picture";
-      fr.allowFullscreen = true;
-      play.replaceWith(fr);
-    });
-    reel.hidden = false;
-  }
 
   var btn = document.querySelector(".menu-btn"), menu = document.getElementById("menu");
   btn.addEventListener("click", function () { var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });

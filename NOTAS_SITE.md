@@ -44,7 +44,7 @@ Registro de como o site novo foi montado e do que ficou em aberto. Atualizado em
 - **Acessibilidade**: `aria-label` agora é traduzido junto com o idioma (atributo `data-i18n-label="chave"` + chave no objeto `en`). Os três "H2" do bloco de áreas da home viraram `<strong>` (não são seções). Botões e links ganharam altura de toque de 36 a 44 px; ficaram só links dentro de texto.
 - **Categorias da filmografia**: continuam `<details>/<summary>` com `<h3>` dentro. Esse é o padrão nativo e funciona sem JavaScript, mas leitores de tela não listam as categorias na navegação por títulos. Trocar exigiria um acordeão com botões e JS; decidi não fazer.
 - **Botão de contato no topo do /som/** ("Fale sobre o seu filme").
-- **Reel no /som/**: a seção já existe e fica oculta. Para ligar, coloque o ID do vídeo do YouTube (11 caracteres) em `<section id="reel" ... data-youtube="">` no `som/index.html`. O vídeo só carrega ao clicar (youtube-nocookie).
+- **Reel no /som/**: foi feito e depois removido a pedido (23/10/2026). Se quiser voltar, é uma seção com player que só carrega ao clicar (youtube-nocookie), recuperável no commit `ba0157d`.
 
 ## Pendências e ideias
 
