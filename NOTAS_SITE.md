@@ -46,6 +46,13 @@ Registro de como o site novo foi montado e do que ficou em aberto. Atualizado em
 - **Botão de contato no topo do /som/** ("Fale sobre o seu filme").
 - **Reel no /som/**: foi feito e depois removido a pedido (23/10/2026). Se quiser voltar, é uma seção com player que só carrega ao clicar (youtube-nocookie), recuperável no commit `ba0157d`.
 
+- **Fontes hospedadas no site** (`fonts/`: Anybody e Atkinson Hyperlegible Next, subsets latin e latin-ext, licença OFL), carregadas por `fonts/fonts.css` com `preload`. Nenhuma requisição ao Google Fonts. Se aparecer caractere fora do latin (ex.: vietnamita), é preciso baixar o subset.
+- **Imagens locais**: capas dos 5 jogos em `imagens/jogos/*.webp` (as da Steam deixaram de ser hotlink; o Choque de Cultura caiu de 810 KB para 56 KB). Miniaturas do YouTube continuam externas, agora com `width`/`height`.
+- **Ícones**: `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`, gerados de `favicon.png` (que continua no JSON-LD).
+- **Botões flutuantes** (home e /som/): "voltar ao topo" e, no celular, "Contato". Aparecem depois de rolar 700 px e somem na seção de contato e no rodapé.
+- **Hero da home no celular**: o "ROCPAIN" sobre o planeta parece normal no celular do Felipe; nenhuma mudança.
+- `imagens/icon2048.png` (3 MB) não é usado por nenhuma página do site; não foi apagado. Confirmar antes de remover.
+
 ## Pendências e ideias
 
 1. Conferir o site no ar depois do último push (nunca foi aberto em rocpaingames.com, só em localhost).
@@ -54,7 +61,6 @@ Registro de como o site novo foi montado e do que ficou em aberto. Atualizado em
 4. Se tiver link oficial ou trailer de É Quase Verdade (Globoplay ou canal da produtora), trocar o da chamada.
 5. Médias, séries e curtas são listas só de texto (com botão "Assistir"), sem miniaturas; dá para acrescentar imagens se quiser.
 6. Remover da pasta raiz, quando não precisar mais: `rocpain-site-novo.patch`, `INSTRUCOES_CLAUDE_CODE.md`, `debug.log`, `index_backup.html`, `index portfolio.html`, `FelipeMattar.html` (arquivos antigos; confirmar antes de apagar qualquer um).
-7. Falta o item 6 da revisão: imagens pesadas (`favicon.png` 512 px/387 KB, `icon2048.png` 3 MB), capas da Steam hospedadas fora, 9 imagens sem `width`/`height` e Google Fonts externas (hospedar localmente).
 8. O Git avisa que `som/index.html` vai trocar LF por CRLF; é inofensivo, mas dá para fixar com um `.gitattributes`.
 
 ## Fora do escopo desta sessão

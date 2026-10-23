@@ -6,7 +6,9 @@
 <title>Felipe Mattar — edição, desenho e mixagem de som</title>
 <meta name="description" content="Portfólio de Felipe Mattar: edição de som, desenho de som e mixagem para cinema e audiovisual. É Quase Verdade (Tela Quente, TV Globo), Corredores, Águas do Itapemirim, O Cemitério das Almas Perdidas, Mar Negro e Das Águas que Passam (Melhor Edição de Som, Cine PE 2016).">
 <meta name="theme-color" content="#0F1F1D">
-<link rel="icon" type="image/png" href="../imagens/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192.png">
+<link rel="apple-touch-icon" href="../imagens/apple-touch-icon.png">
 <link rel="canonical" href="https://rocpaingames.com/som/">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Felipe Mattar — som para cinema">
@@ -21,9 +23,9 @@
 <meta name="twitter:image" content="https://rocpaingames.com/som/imagens/og-som.jpg">
 <meta property="og:url" content="https://rocpaingames.com/som/">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../fonts/anybody-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/atkinson-hyperlegible-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../fonts/fonts.css">
 
 <script type="application/ld+json">
 {
@@ -207,6 +209,16 @@ footer a { color: var(--muted); }
 footer a { display: inline-block; padding: 10px 4px; }
 @media (max-width: 820px) { .lang button { min-height: 40px; } }
 
+
+/* Floating shortcuts */
+.fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; display: flex; gap: 10px; align-items: center; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .2s, transform .2s, visibility .2s; }
+.fab.visible { opacity: 1; visibility: visible; transform: none; }
+.fab a, .fab button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 999px; font: 700 1rem var(--body); cursor: pointer; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.45); }
+.fab-contact { padding: 0 22px; background: var(--brass); color: var(--bg); border: 0; }
+.fab-top { width: 48px; background: var(--bg); color: var(--brass); border: 2px solid var(--brass); padding: 0; }
+.fab-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (min-width: 821px) { .fab-contact { display: none; } }
+@media (prefers-reduced-motion: reduce) { .fab { transition: none; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -655,11 +667,16 @@ footer a { display: inline-block; padding: 10px 4px; }
   </div>
 </footer>
 
+<div class="fab" id="fab">
+  <a class="fab-contact" href="#contato" data-i18n="fab.contact">Contato</a>
+  <button type="button" class="fab-top" aria-label="Voltar ao topo" data-i18n-label="fab.top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+</div>
+
 <script>
 (function () {
   var en = {
     "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "yr.post": "In post-production", "f.lacuna.k": "Fiction · Horror", "f.aguasdoitapemiri.k": "Documentary", "m.equaseverdade.k": "TV movie · Comedy", "aw.equase": "Co-produced with Globo Filmes and broadcast nationwide on TV Globo's Tela Quente in 2026.", "spot.eye": "Highlight · Tela Quente, TV Globo", "spot.watch": "Watch the promo", "f.corredoresdapedr.k": "Documentary","f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
-    "skip": "Skip to content", "menu": "Menu",
+    "skip": "Skip to content", "menu": "Menu", "fab.contact": "Contact", "fab.top": "Back to top",
     "al.1": "Promo for É Quase Verdade on Tela Quente", "al.2": "Lacuna on Instagram", "al.3": "Trailer for Águas do Itapemirim", "al.4": "Trailer for Corredores: Da Pedra Azul ao Forno Grande", "al.5": "Trailer for O Cemitério das Almas Perdidas", "al.6": "Trailer for A Mata Negra", "al.7": "Trailer for Destino das Sombras", "al.8": "Trailer for Punhal", "al.9": "Trailer for Mar Negro",
     "hero.cta": "Tell us about your film",
     "nav.films": "Filmography", "nav.highlights": "Highlights", "nav.research": "Research", "nav.contact": "Contact",
@@ -733,6 +750,25 @@ footer a { display: inline-block; padding: 10px 4px; }
       if (!open) list.parentElement.scrollIntoView({ block: "start" });
     });
   });
+
+  var fab = document.getElementById("fab");
+  if (fab) {
+    var covered = 0, pastTop = false;
+    function updateFab() { fab.classList.toggle("visible", pastTop && covered === 0); }
+    window.addEventListener("scroll", function () { pastTop = window.scrollY > 700; updateFab(); }, { passive: true });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { covered += e.isIntersecting ? 1 : -1; });
+        covered = Math.max(0, covered);
+        updateFab();
+      });
+      ["contato"].forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+      var ft = document.querySelector("footer"); if (ft) io.observe(ft);
+    }
+    fab.querySelector(".fab-top").addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+  }
 
   var btn = document.querySelector(".menu-btn"), menu = document.getElementById("menu");
   btn.addEventListener("click", function () { var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });

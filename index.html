@@ -6,7 +6,9 @@
 <title>ROCPAIN Games — jogos, aplicativos e soluções com IA</title>
 <meta name="description" content="Estúdio do Espírito Santo que cria jogos para PC e celular, aplicativos sob medida e soluções com inteligência artificial. DeckToon, Cyber Control, Rio de Lama e ROCPAIN.">
 <meta name="theme-color" content="#2A0811">
-<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="imagens/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="imagens/favicon-192.png">
+<link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
 <link rel="canonical" href="https://rocpaingames.com/">
 
 <meta property="og:type" content="website">
@@ -23,9 +25,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://rocpaingames.com/imagens/og-rocpain.jpg">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/anybody-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/atkinson-hyperlegible-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 
 <script type="application/ld+json">
 {
@@ -324,6 +326,16 @@ footer ul a { display: inline-block; padding: 12px 8px; }
 .game > a { display: inline-flex; align-items: center; min-height: 44px; }
 .about a { display: inline-block; padding: 10px 0; }
 
+/* Floating shortcuts */
+.fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; display: flex; gap: 10px; align-items: center; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .2s, transform .2s, visibility .2s; }
+.fab.visible { opacity: 1; visibility: visible; transform: none; }
+.fab a, .fab button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 999px; font: 700 1rem var(--body); cursor: pointer; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.45); }
+.fab-contact { padding: 0 22px; background: var(--gold); color: var(--bg); border: 0; }
+.fab-top { width: 48px; background: var(--bg); color: var(--gold); border: 2px solid var(--gold); padding: 0; }
+.fab-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (min-width: 821px) { .fab-contact { display: none; } }
+@media (prefers-reduced-motion: reduce) { .fab { transition: none; transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .wordmark { animation: none; }
@@ -384,7 +396,7 @@ footer ul a { display: inline-block; padding: 12px 8px; }
       </div>
 
       <article class="featured">
-        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3903170/f3e97fa2104cf88a8d8a34529c79ae504260a8ba/header.jpg" alt="Arte de capa de DeckToon" width="460" height="215" loading="eager">
+        <img src="imagens/jogos/decktoon.webp" alt="Arte de capa de DeckToon" width="460" height="215" loading="eager">
         <div class="featured-body">
           <span class="tag" data-i18n="games.dev">Em desenvolvimento</span>
           <h3 class="game-title">DeckToon</h3>
@@ -397,28 +409,28 @@ footer ul a { display: inline-block; padding: 12px 8px; }
 
       <div class="games">
         <article class="game">
-          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2601230/header.jpg" alt="Arte de capa de Cyber Control" width="460" height="215" loading="lazy">
+          <img src="imagens/jogos/cyber-control.webp" alt="Arte de capa de Cyber Control" width="460" height="215" loading="lazy">
           <h3 class="game-title">Cyber Control</h3>
           <p class="game-meta" data-i18n="games.cc.m">2024 · Plataforma e puzzle 3D · Windows</p>
           <p class="game-desc" data-i18n="games.cc.d">Num futuro distópico, os rebeldes Jones Murdock e Jenny Li tentam escapar da rede neural Alpha, que domina a sociedade.</p>
           <a href="https://store.steampowered.com/app/2601230/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1642600/header_brazilian.jpg" alt="Arte de capa de Rio de Lama" width="460" height="215" loading="lazy">
+          <img src="imagens/jogos/rio-de-lama.webp" alt="Arte de capa de Rio de Lama" width="460" height="215" loading="lazy">
           <h3 class="game-title" data-i18n="games.rdl.t">Rio de Lama</h3>
           <p class="game-meta" data-i18n="games.rdl.m">2021 · Shoot 'em up 2D · Windows, Mac, Linux</p>
           <p class="game-desc" data-i18n="games.rdl.d">Pacal sobe voando o Rio Doce para impedir que o industrial Dr. Wellin termine de destruí-lo.</p>
           <a href="https://store.steampowered.com/app/1642600/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2194910/header.jpg" alt="Arte de capa de ROCPAIN: Pedra Papel Tesoura" width="460" height="215" loading="lazy">
+          <img src="imagens/jogos/pedra-papel-tesoura.webp" alt="Arte de capa de ROCPAIN: Pedra Papel Tesoura" width="460" height="215" loading="lazy">
           <h3 class="game-title" data-i18n="games.rps.t">ROCPAIN: Pedra Papel Tesoura</h3>
           <p class="game-meta" data-i18n="games.rps.m">2022 · Ação casual · Windows, Mac, Linux</p>
           <p class="game-desc" data-i18n="games.rps.d">Um avião de papel enfrenta inimigos de pedra, papel e tesoura. Cada um só cai com o tiro certo.</p>
           <a href="https://store.steampowered.com/app/2194910/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <img src="Games/ChoqueImages/Store_Capsule_Main.png" alt="Arte de capa de Choque de Cultura Racing" width="460" height="215" loading="lazy">
+          <img src="imagens/jogos/choque-de-cultura.webp" alt="Arte de capa de Choque de Cultura Racing" width="460" height="215" loading="lazy">
           <h3 class="game-title">Choque de Cultura Racing</h3>
           <p class="game-meta" data-i18n="games.ccr.m">Demo · Corrida 3D · Windows</p>
           <p class="game-desc" data-i18n="games.ccr.d">Uma corrida 3D caótica e irreverente, inspirada no transporte alternativo brasileiro.</p>
@@ -430,10 +442,10 @@ footer ul a { display: inline-block; padding: 12px 8px; }
       <div class="trailers">
         <h3 data-i18n="games.trailers">Trailers e gameplay</h3>
         <div class="trailer-row">
-          <a href="https://www.youtube.com/watch?v=z8QFfksfJeY" target="_blank" rel="noopener" aria-label="Vídeo 1 no YouTube" data-i18n-label="vid.1"><img src="https://i.ytimg.com/vi/z8QFfksfJeY/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=DEoo5GehR-k" target="_blank" rel="noopener" aria-label="Vídeo 2 no YouTube" data-i18n-label="vid.2"><img src="https://i.ytimg.com/vi/DEoo5GehR-k/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=kysvOg-nxdY" target="_blank" rel="noopener" aria-label="Vídeo 3 no YouTube" data-i18n-label="vid.3"><img src="https://i.ytimg.com/vi/kysvOg-nxdY/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=-sBfFRd1yMw" target="_blank" rel="noopener" aria-label="Vídeo 4 no YouTube" data-i18n-label="vid.4"><img src="https://i.ytimg.com/vi/-sBfFRd1yMw/hqdefault.jpg" alt="" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=z8QFfksfJeY" target="_blank" rel="noopener" aria-label="Vídeo 1 no YouTube" data-i18n-label="vid.1"><img src="https://i.ytimg.com/vi/z8QFfksfJeY/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=DEoo5GehR-k" target="_blank" rel="noopener" aria-label="Vídeo 2 no YouTube" data-i18n-label="vid.2"><img src="https://i.ytimg.com/vi/DEoo5GehR-k/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=kysvOg-nxdY" target="_blank" rel="noopener" aria-label="Vídeo 3 no YouTube" data-i18n-label="vid.3"><img src="https://i.ytimg.com/vi/kysvOg-nxdY/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=-sBfFRd1yMw" target="_blank" rel="noopener" aria-label="Vídeo 4 no YouTube" data-i18n-label="vid.4"><img src="https://i.ytimg.com/vi/-sBfFRd1yMw/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"></a>
         </div>
       </div>
     </div>
@@ -532,11 +544,16 @@ footer ul a { display: inline-block; padding: 12px 8px; }
   </div>
 </footer>
 
+<div class="fab" id="fab">
+  <a class="fab-contact" href="#contato" data-i18n="fab.contact">Contato</a>
+  <button type="button" class="fab-top" aria-label="Voltar ao topo" data-i18n-label="fab.top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+</div>
+
 <script>
 (function () {
   var en = {
     "skip": "Skip to content", "hero.sub": "Games · Apps · AI",
-    "menu": "Menu",
+    "menu": "Menu", "fab.contact": "Contact", "fab.top": "Back to top",
     "areas.nav": "Areas", "vid.1": "Video 1 on YouTube", "vid.2": "Video 2 on YouTube", "vid.3": "Video 3 on YouTube", "vid.4": "Video 4 on YouTube",
     "nav.games": "Games", "nav.apps": "Apps", "nav.ai": "AI", "nav.about": "About", "nav.contact": "Contact",
     "hero.lede": "We make games for PC and mobile, custom apps and AI-powered tools. A small studio from Espírito Santo, Brazil, that treats sound and image with the care of people who came from film.",
@@ -631,6 +648,25 @@ footer ul a { display: inline-block; padding: 12px 8px; }
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () { setLang(b.dataset.lang); });
   });
+
+  var fab = document.getElementById("fab");
+  if (fab) {
+    var covered = 0, pastTop = false;
+    function updateFab() { fab.classList.toggle("visible", pastTop && covered === 0); }
+    window.addEventListener("scroll", function () { pastTop = window.scrollY > 700; updateFab(); }, { passive: true });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { covered += e.isIntersecting ? 1 : -1; });
+        covered = Math.max(0, covered);
+        updateFab();
+      });
+      ["contato"].forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+      var ft = document.querySelector("footer"); if (ft) io.observe(ft);
+    }
+    fab.querySelector(".fab-top").addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+  }
 
   var btn = document.querySelector(".menu-btn");
   var menu = document.getElementById("menu");
