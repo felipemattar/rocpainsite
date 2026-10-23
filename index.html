@@ -246,8 +246,14 @@ section { padding: clamp(64px, 9vw, 112px) 0 0; }
 @media (max-width: 900px) { .games { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 @media (max-width: 600px) { .games { grid-template-columns: minmax(0,1fr); } }
 
-.video { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: var(--bg-raised); }
-.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.video-link { position: relative; display: block; border-radius: 12px; overflow: hidden; background: var(--bg-raised); }
+.video-link img { transition: transform .3s; }
+.video-link:hover img { transform: scale(1.04); }
+.video-link::after {
+  content: ""; position: absolute; left: 12px; bottom: 12px; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%232A0811'/%3E%3C/svg%3E") center / 26px no-repeat;
+  box-shadow: 0 4px 18px rgba(0,0,0,.5);
+}
 
 /* Apps & AI: two-column service lists */
 .split { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
@@ -329,6 +335,7 @@ footer ul a { display: inline-block; padding: 12px 8px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .video-link img { transition: none; }
   .wordmark { animation: none; }
 }
 </style>
@@ -399,36 +406,28 @@ footer ul a { display: inline-block; padding: 12px 8px; }
 
       <div class="games">
         <article class="game">
-          <div class="video">
-            <iframe src="https://www.youtube-nocookie.com/embed/DEoo5GehR-k?rel=0" title="Cyber Control" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-          </div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=DEoo5GehR-k" target="_blank" rel="noopener" aria-label="Assistir ao vídeo de Cyber Control (abre em nova aba)" data-i18n-label="vid.cc"><img src="imagens/jogos/cyber-control.webp" alt="Arte de capa de Cyber Control" width="460" height="215" loading="lazy"></a>
           <h3 class="game-title">Cyber Control</h3>
           <p class="game-meta" data-i18n="games.cc.m">2024 · Plataforma e puzzle 3D · Windows</p>
           <p class="game-desc" data-i18n="games.cc.d">Num futuro distópico, os rebeldes Jones Murdock e Jenny Li tentam escapar da rede neural Alpha, que domina a sociedade.</p>
           <a href="https://store.steampowered.com/app/2601230/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <div class="video">
-            <iframe src="https://www.youtube-nocookie.com/embed/kysvOg-nxdY?rel=0" title="Rio de Lama" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-          </div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=kysvOg-nxdY" target="_blank" rel="noopener" aria-label="Assistir ao vídeo de Rio de Lama (abre em nova aba)" data-i18n-label="vid.rdl"><img src="imagens/jogos/rio-de-lama.webp" alt="Arte de capa de Rio de Lama" width="460" height="215" loading="lazy"></a>
           <h3 class="game-title" data-i18n="games.rdl.t">Rio de Lama</h3>
           <p class="game-meta" data-i18n="games.rdl.m">2021 · Shoot 'em up 2D · Windows, Mac, Linux</p>
           <p class="game-desc" data-i18n="games.rdl.d">Pacal sobe voando o Rio Doce para impedir que o industrial Dr. Wellin termine de destruí-lo.</p>
           <a href="https://store.steampowered.com/app/1642600/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <div class="video">
-            <iframe src="https://www.youtube-nocookie.com/embed/-sBfFRd1yMw?rel=0" title="ROCPAIN: Pedra Papel Tesoura" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-          </div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=-sBfFRd1yMw" target="_blank" rel="noopener" aria-label="Assistir ao vídeo de ROCPAIN: Pedra Papel Tesoura (abre em nova aba)" data-i18n-label="vid.rps"><img src="imagens/jogos/pedra-papel-tesoura.webp" alt="Arte de capa de ROCPAIN: Pedra Papel Tesoura" width="460" height="215" loading="lazy"></a>
           <h3 class="game-title" data-i18n="games.rps.t">ROCPAIN: Pedra Papel Tesoura</h3>
           <p class="game-meta" data-i18n="games.rps.m">2022 · Ação casual · Windows, Mac, Linux</p>
           <p class="game-desc" data-i18n="games.rps.d">Um avião de papel enfrenta inimigos de pedra, papel e tesoura. Cada um só cai com o tiro certo.</p>
           <a href="https://store.steampowered.com/app/2194910/" target="_blank" rel="noopener" data-i18n="games.steam">Ver na Steam</a>
         </article>
         <article class="game">
-          <div class="video">
-            <iframe src="https://www.youtube-nocookie.com/embed/z8QFfksfJeY?rel=0" title="Choque de Cultura Racing" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-          </div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=z8QFfksfJeY" target="_blank" rel="noopener" aria-label="Assistir ao vídeo de Choque de Cultura Racing (abre em nova aba)" data-i18n-label="vid.ccr"><img src="imagens/jogos/choque-de-cultura.webp" alt="Arte de capa de Choque de Cultura Racing" width="460" height="215" loading="lazy"></a>
           <h3 class="game-title">Choque de Cultura Racing</h3>
           <p class="game-meta" data-i18n="games.ccr.m">Demo · Corrida 3D · Windows</p>
           <p class="game-desc" data-i18n="games.ccr.d">Uma corrida 3D caótica e irreverente, inspirada no transporte alternativo brasileiro.</p>
@@ -543,7 +542,7 @@ footer ul a { display: inline-block; padding: 12px 8px; }
   var en = {
     "skip": "Skip to content", "hero.sub": "Games · Apps · AI",
     "menu": "Menu", "fab.contact": "Contact", "fab.top": "Back to top",
-    "areas.nav": "Areas",
+    "areas.nav": "Areas", "vid.cc": "Watch the Cyber Control video (opens in a new tab)", "vid.rdl": "Watch the Rio de Lama video (opens in a new tab)", "vid.rps": "Watch the ROCPAIN: Rock Paper Scissors video (opens in a new tab)", "vid.ccr": "Watch the Choque de Cultura Racing video (opens in a new tab)",
     "nav.games": "Games", "nav.apps": "Apps", "nav.ai": "AI", "nav.about": "About", "nav.contact": "Contact",
     "hero.lede": "We make games for PC and mobile, custom apps and AI-powered tools. A small studio from Espírito Santo, Brazil, that treats sound and image with the care of people who came from film.",
     "hero.cta1": "See the games", "hero.cta2": "Tell us about your project",
