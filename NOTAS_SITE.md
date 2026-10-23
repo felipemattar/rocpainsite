@@ -37,6 +37,15 @@ Registro de como o site novo foi montado e do que ficou em aberto. Atualizado em
 - É Quase Verdade: as funções (edição e mixagem) vieram de Felipe; o IMDb não lista a equipe de som. O vídeo linkado é uma chamada da Tela Quente 04/05/2026 de um canal de terceiros, não o trailer oficial.
 - Corredores: o card agora usa o trailer do YouTube (Wei6ujBgdYc) como capa e link.
 
+## Melhorias aplicadas em 23/10/2026 (revisão de UX/SEO)
+
+- **Imagens de compartilhamento 1200x630**: `imagens/og-rocpain.jpg` (home) e `som/imagens/og-som.jpg` (/som/), com `og:image:width/height/alt`, `og:locale` e `twitter:image`. Foram geradas com Pillow a partir de `capa_itch.jpg` e de uma onda sonora desenhada; para refazer, rode o mesmo tipo de script (texto em Arial Black do Windows).
+- **SEO**: `sitemap.xml`, `robots.txt` e `404.html` (bilíngue, `noindex`). Removi os `hreflang` com `?lang=` porque conflitavam com o `canonical`; só voltam se existirem páginas estáticas separadas (`/en/`).
+- **Acessibilidade**: `aria-label` agora é traduzido junto com o idioma (atributo `data-i18n-label="chave"` + chave no objeto `en`). Os três "H2" do bloco de áreas da home viraram `<strong>` (não são seções). Botões e links ganharam altura de toque de 36 a 44 px; ficaram só links dentro de texto.
+- **Categorias da filmografia**: continuam `<details>/<summary>` com `<h3>` dentro. Esse é o padrão nativo e funciona sem JavaScript, mas leitores de tela não listam as categorias na navegação por títulos. Trocar exigiria um acordeão com botões e JS; decidi não fazer.
+- **Botão de contato no topo do /som/** ("Fale sobre o seu filme").
+- **Reel no /som/**: a seção já existe e fica oculta. Para ligar, coloque o ID do vídeo do YouTube (11 caracteres) em `<section id="reel" ... data-youtube="">` no `som/index.html`. O vídeo só carrega ao clicar (youtube-nocookie).
+
 ## Pendências e ideias
 
 1. Conferir o site no ar depois do último push (nunca foi aberto em rocpaingames.com, só em localhost).
@@ -45,7 +54,8 @@ Registro de como o site novo foi montado e do que ficou em aberto. Atualizado em
 4. Se tiver link oficial ou trailer de É Quase Verdade (Globoplay ou canal da produtora), trocar o da chamada.
 5. Médias, séries e curtas são listas só de texto (com botão "Assistir"), sem miniaturas; dá para acrescentar imagens se quiser.
 6. Remover da pasta raiz, quando não precisar mais: `rocpain-site-novo.patch`, `INSTRUCOES_CLAUDE_CODE.md`, `debug.log`, `index_backup.html`, `index portfolio.html`, `FelipeMattar.html` (arquivos antigos; confirmar antes de apagar qualquer um).
-7. O Git avisa que `som/index.html` vai trocar LF por CRLF; é inofensivo, mas dá para fixar com um `.gitattributes`.
+7. Falta o item 6 da revisão: imagens pesadas (`favicon.png` 512 px/387 KB, `icon2048.png` 3 MB), capas da Steam hospedadas fora, 9 imagens sem `width`/`height` e Google Fonts externas (hospedar localmente).
+8. O Git avisa que `som/index.html` vai trocar LF por CRLF; é inofensivo, mas dá para fixar com um `.gitattributes`.
 
 ## Fora do escopo desta sessão
 

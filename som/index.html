@@ -4,14 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felipe Mattar — edição, desenho e mixagem de som</title>
-<meta name="description" content="Portfólio de Felipe Mattar: edição de som, desenho de som e mixagem para cinema e audiovisual. Mar Negro, A Mata Negra, O Cemitério das Almas Perdidas, Das Águas que Passam (Melhor Edição de Som, Cine PE 2016).">
+<meta name="description" content="Portfólio de Felipe Mattar: edição de som, desenho de som e mixagem para cinema e audiovisual. É Quase Verdade (Tela Quente, TV Globo), Corredores, Águas do Itapemirim, O Cemitério das Almas Perdidas, Mar Negro e Das Águas que Passam (Melhor Edição de Som, Cine PE 2016).">
 <meta name="theme-color" content="#0F1F1D">
 <link rel="icon" type="image/png" href="../imagens/favicon.png">
 <link rel="canonical" href="https://rocpaingames.com/som/">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Felipe Mattar — som para cinema">
 <meta property="og:description" content="Edição de som, desenho de som e mixagem para longas, curtas, documentários e séries.">
-<meta property="og:image" content="https://i.ytimg.com/vi/EkAeb4XFsaE/hqdefault.jpg">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:image" content="https://rocpaingames.com/som/imagens/og-som.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Felipe Mattar — edição, desenho e mixagem de som">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rocpaingames.com/som/imagens/og-som.jpg">
 <meta property="og:url" content="https://rocpaingames.com/som/">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,6 +198,24 @@ footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--m
 footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
 footer a { color: var(--muted); }
 
+/* Touch targets */
+.lang button { min-width: 44px; min-height: 36px; }
+.menu-btn { min-height: 40px; }
+.watch { display: inline-flex; align-items: center; min-height: 40px; }
+.hero-cta { margin: 28px 0 0; }
+.nav-links a, #pesquisa a { display: inline-block; padding: 10px 0; }
+footer a { display: inline-block; padding: 10px 4px; }
+@media (max-width: 820px) { .lang button { min-height: 40px; } }
+
+/* Reel */
+.reel-player { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--raised); }
+.reel-play, .reel-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.reel-play { padding: 0; background: none; cursor: pointer; }
+.reel-play img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); }
+.reel-label { position: absolute; left: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 10px; background: var(--brass); color: var(--bg); font: 700 1rem var(--body); padding: 10px 20px; border-radius: 999px; }
+.reel-label::before { content: ""; border-style: solid; border-width: 7px 0 7px 12px; border-color: transparent transparent transparent var(--bg); }
+.reel-play:hover .reel-label { background: var(--text); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .wave rect { animation: none; }
@@ -224,6 +249,7 @@ footer a { color: var(--muted); }
     <div class="wrap">
       <h1 class="name">Felipe Mattar</h1>
       <p class="lede" data-i18n-html="hero.lede">Edição, desenho e mixagem de som para cinema, documentário e séries. Mais de quinze anos em longas de ficção, documentários e curtas, com <strong>Melhor Edição de Som no Cine PE</strong> e passagem pela Berlinale.</p>
+      <p class="hero-cta"><a class="watch" href="#contato" data-i18n="hero.cta">Fale sobre o seu filme</a></p>
       <svg class="wave" viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true"><rect x="2" y="35.7" width="6" height="28.6" rx="3" style="--i:0"/><rect x="12" y="36.3" width="6" height="27.4" rx="3" style="--i:1"/><rect x="22" y="29.9" width="6" height="40.3" rx="3" style="--i:2"/><rect x="32" y="35.1" width="6" height="29.8" rx="3" style="--i:3"/><rect x="42" y="28.4" width="6" height="43.2" rx="3" style="--i:4"/><rect x="52" y="29.3" width="6" height="41.4" rx="3" style="--i:5"/><rect x="62" y="32.4" width="6" height="35.3" rx="3" style="--i:6"/><rect x="72" y="25.0" width="6" height="50.1" rx="3" style="--i:7"/><rect x="82" y="30.9" width="6" height="38.2" rx="3" style="--i:8"/><rect x="92" y="23.8" width="6" height="52.3" rx="3" style="--i:9"/><rect x="102" y="28.8" width="6" height="42.4" rx="3" style="--i:10"/><rect x="112" y="27.8" width="6" height="44.5" rx="3" style="--i:11"/><rect x="122" y="21.3" width="6" height="57.4" rx="3" style="--i:12"/><rect x="132" y="13.4" width="6" height="73.2" rx="3" style="--i:13"/><rect x="142" y="25.5" width="6" height="49.1" rx="3" style="--i:14"/><rect x="152" y="23.2" width="6" height="53.5" rx="3" style="--i:15"/><rect x="162" y="15.4" width="6" height="69.3" rx="3" style="--i:16"/><rect x="172" y="9.1" width="6" height="81.8" rx="3" style="--i:17"/><rect x="182" y="16.0" width="6" height="68.0" rx="3" style="--i:18"/><rect x="192" y="19.5" width="6" height="61.1" rx="3" style="--i:19"/><rect x="202" y="8.8" width="6" height="82.3" rx="3" style="--i:20"/><rect x="212" y="26.5" width="6" height="46.9" rx="3" style="--i:21"/><rect x="222" y="12.2" width="6" height="75.7" rx="3" style="--i:22"/><rect x="232" y="23.1" width="6" height="53.8" rx="3" style="--i:23"/><rect x="242" y="26.4" width="6" height="47.2" rx="3" style="--i:24"/><rect x="252" y="27.6" width="6" height="44.7" rx="3" style="--i:25"/><rect x="262" y="25.5" width="6" height="49.1" rx="3" style="--i:26"/><rect x="272" y="18.9" width="6" height="62.3" rx="3" style="--i:27"/><rect x="282" y="29.7" width="6" height="40.5" rx="3" style="--i:28"/><rect x="292" y="25.6" width="6" height="48.8" rx="3" style="--i:29"/><rect x="302" y="26.6" width="6" height="46.8" rx="3" style="--i:30"/><rect x="312" y="31.6" width="6" height="36.8" rx="3" style="--i:31"/><rect x="322" y="31.5" width="6" height="37.0" rx="3" style="--i:32"/><rect x="332" y="38.0" width="6" height="23.9" rx="3" style="--i:33"/><rect x="342" y="39.6" width="6" height="20.8" rx="3" style="--i:34"/><rect x="352" y="40.1" width="6" height="19.8" rx="3" style="--i:35"/><rect x="362" y="39.2" width="6" height="21.6" rx="3" style="--i:36"/><rect x="372" y="38.8" width="6" height="22.5" rx="3" style="--i:37"/><rect x="382" y="37.6" width="6" height="24.8" rx="3" style="--i:38"/><rect x="392" y="33.2" width="6" height="33.7" rx="3" style="--i:39"/><rect x="402" y="32.3" width="6" height="35.4" rx="3" style="--i:40"/><rect x="412" y="32.1" width="6" height="35.8" rx="3" style="--i:41"/><rect x="422" y="23.9" width="6" height="52.2" rx="3" style="--i:42"/><rect x="432" y="22.9" width="6" height="54.2" rx="3" style="--i:43"/><rect x="442" y="27.7" width="6" height="44.6" rx="3" style="--i:44"/><rect x="452" y="20.8" width="6" height="58.3" rx="3" style="--i:45"/><rect x="462" y="19.9" width="6" height="60.1" rx="3" style="--i:46"/><rect x="472" y="12.0" width="6" height="76.0" rx="3" style="--i:47"/><rect x="482" y="13.0" width="6" height="73.9" rx="3" style="--i:48"/><rect x="492" y="20.3" width="6" height="59.4" rx="3" style="--i:49"/><rect x="502" y="5.2" width="6" height="89.6" rx="3" style="--i:50"/><rect x="512" y="22.0" width="6" height="56.0" rx="3" style="--i:51"/><rect x="522" y="15.0" width="6" height="70.1" rx="3" style="--i:52"/><rect x="532" y="7.0" width="6" height="86.0" rx="3" style="--i:53"/><rect x="542" y="19.8" width="6" height="60.4" rx="3" style="--i:54"/><rect x="552" y="12.1" width="6" height="75.7" rx="3" style="--i:55"/><rect x="562" y="22.0" width="6" height="56.0" rx="3" style="--i:56"/><rect x="572" y="8.2" width="6" height="83.6" rx="3" style="--i:57"/><rect x="582" y="6.4" width="6" height="87.3" rx="3" style="--i:58"/><rect x="592" y="11.0" width="6" height="77.9" rx="3" style="--i:59"/><rect x="602" y="5.2" width="6" height="89.6" rx="3" style="--i:60"/><rect x="612" y="17.9" width="6" height="64.2" rx="3" style="--i:61"/><rect x="622" y="11.0" width="6" height="78.1" rx="3" style="--i:62"/><rect x="632" y="14.2" width="6" height="71.7" rx="3" style="--i:63"/><rect x="642" y="15.7" width="6" height="68.6" rx="3" style="--i:64"/><rect x="652" y="19.4" width="6" height="61.3" rx="3" style="--i:65"/><rect x="662" y="14.1" width="6" height="71.8" rx="3" style="--i:66"/><rect x="672" y="14.2" width="6" height="71.5" rx="3" style="--i:67"/><rect x="682" y="23.6" width="6" height="52.7" rx="3" style="--i:68"/><rect x="692" y="22.6" width="6" height="54.9" rx="3" style="--i:69"/><rect x="702" y="32.7" width="6" height="34.7" rx="3" style="--i:70"/><rect x="712" y="26.1" width="6" height="47.9" rx="3" style="--i:71"/><rect x="722" y="28.7" width="6" height="42.5" rx="3" style="--i:72"/><rect x="732" y="27.2" width="6" height="45.5" rx="3" style="--i:73"/><rect x="742" y="31.2" width="6" height="37.6" rx="3" style="--i:74"/><rect x="752" y="37.8" width="6" height="24.4" rx="3" style="--i:75"/><rect x="762" y="38.7" width="6" height="22.6" rx="3" style="--i:76"/><rect x="772" y="38.7" width="6" height="22.6" rx="3" style="--i:77"/><rect x="782" y="42.2" width="6" height="15.6" rx="3" style="--i:78"/><rect x="792" y="37.8" width="6" height="24.5" rx="3" style="--i:79"/><rect x="802" y="38.6" width="6" height="22.8" rx="3" style="--i:80"/><rect x="812" y="37.8" width="6" height="24.4" rx="3" style="--i:81"/><rect x="822" y="37.3" width="6" height="25.5" rx="3" style="--i:82"/><rect x="832" y="28.7" width="6" height="42.7" rx="3" style="--i:83"/><rect x="842" y="34.6" width="6" height="30.9" rx="3" style="--i:84"/><rect x="852" y="32.2" width="6" height="35.5" rx="3" style="--i:85"/><rect x="862" y="29.6" width="6" height="40.9" rx="3" style="--i:86"/><rect x="872" y="22.4" width="6" height="55.2" rx="3" style="--i:87"/><rect x="882" y="32.3" width="6" height="35.5" rx="3" style="--i:88"/><rect x="892" y="26.6" width="6" height="46.7" rx="3" style="--i:89"/><rect x="902" y="24.7" width="6" height="50.5" rx="3" style="--i:90"/><rect x="912" y="19.5" width="6" height="61.0" rx="3" style="--i:91"/><rect x="922" y="20.1" width="6" height="59.7" rx="3" style="--i:92"/><rect x="932" y="19.3" width="6" height="61.4" rx="3" style="--i:93"/><rect x="942" y="27.9" width="6" height="44.2" rx="3" style="--i:94"/><rect x="952" y="26.0" width="6" height="48.0" rx="3" style="--i:95"/></svg>
     </div>
   </div>
@@ -237,13 +263,22 @@ footer a { color: var(--muted); }
     </ul>
   </div>
 
+  <section id="reel" class="reel" hidden data-youtube="">
+    <div class="wrap">
+      <h2 class="section-title" data-i18n="reel.t">Reel</h2>
+      <div class="reel-player">
+        <button type="button" class="reel-play"><img alt="" width="480" height="360"><span class="reel-label" data-i18n="reel.play">Assistir ao reel</span></button>
+      </div>
+    </div>
+  </section>
+
   <section id="filmografia">
     <div class="wrap">
       <h2 class="section-title" data-i18n="films.t">Filmografia</h2>
       <p class="section-lede" data-i18n="films.d">Trabalhos de som em longas, médias, curtas e séries desde 2009. Os links levam aos trailers e filmes disponíveis online.</p>
 
       <article class="spotlight" aria-labelledby="spot-equase">
-        <a class="feature-media" href="https://youtu.be/KesjlGJNiGw" target="_blank" rel="noopener" aria-label="Chamada de É Quase Verdade na Tela Quente"><img src="https://i.ytimg.com/vi/KesjlGJNiGw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+        <a class="feature-media" href="https://youtu.be/KesjlGJNiGw" target="_blank" rel="noopener" aria-label="Chamada de É Quase Verdade na Tela Quente" data-i18n-label="al.1"><img src="https://i.ytimg.com/vi/KesjlGJNiGw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
         <div>
           <p class="eyebrow" data-i18n="spot.eye">Destaque · Tela Quente, TV Globo</p>
           <h3 id="spot-equase">É Quase Verdade</h3>
@@ -259,7 +294,7 @@ footer a { color: var(--muted); }
         <summary><h3 class="group-title"><span data-i18n="films.longas">Longas-metragens</span> <span class="count"></span></h3></summary>
       <div class="features clamped" data-limit="6">
 <article class="feature">
-  <a class="feature-media poster" href="https://www.instagram.com/lacuna.filme/" target="_blank" rel="noopener" aria-label="Lacuna no Instagram"><img src="imagens/lacuna.webp" alt="Lacuna: coprodução Horizonte Líquido e Livres Filmes" loading="lazy" width="1280" height="720"></a>
+  <a class="feature-media poster" href="https://www.instagram.com/lacuna.filme/" target="_blank" rel="noopener" aria-label="Lacuna no Instagram" data-i18n-label="al.2"><img src="imagens/lacuna.webp" alt="Lacuna: coprodução Horizonte Líquido e Livres Filmes" loading="lazy" width="1280" height="720"></a>
   <div class="feature-body">
     <p class="year" data-i18n="yr.post">Em finalização</p>
     <h4>Lacuna</h4>
@@ -269,7 +304,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://www.youtube.com/watch?v=WN8q2DdPlyE" target="_blank" rel="noopener" aria-label="Trailer de Águas do Itapemirim"><img src="https://i.ytimg.com/vi/WN8q2DdPlyE/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://www.youtube.com/watch?v=WN8q2DdPlyE" target="_blank" rel="noopener" aria-label="Trailer de Águas do Itapemirim" data-i18n-label="al.3"><img src="https://i.ytimg.com/vi/WN8q2DdPlyE/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2025</p>
     <h4>Águas do Itapemirim</h4>
@@ -279,7 +314,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://youtu.be/Wei6ujBgdYc" target="_blank" rel="noopener" aria-label="Trailer de Corredores: Da Pedra Azul ao Forno Grande"><img src="https://i.ytimg.com/vi/Wei6ujBgdYc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://youtu.be/Wei6ujBgdYc" target="_blank" rel="noopener" aria-label="Trailer de Corredores: Da Pedra Azul ao Forno Grande" data-i18n-label="al.4"><img src="https://i.ytimg.com/vi/Wei6ujBgdYc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2024</p>
     <h4>Corredores: Da Pedra Azul ao Forno Grande</h4>
@@ -289,7 +324,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://youtu.be/SJv66w4hPDU" target="_blank" rel="noopener" aria-label="Trailer de O Cemitério das Almas Perdidas"><img src="https://i.ytimg.com/vi/SJv66w4hPDU/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://youtu.be/SJv66w4hPDU" target="_blank" rel="noopener" aria-label="Trailer de O Cemitério das Almas Perdidas" data-i18n-label="al.5"><img src="https://i.ytimg.com/vi/SJv66w4hPDU/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2020</p>
     <h4>O Cemitério das Almas Perdidas</h4>
@@ -299,7 +334,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://youtu.be/m798QAphoKM" target="_blank" rel="noopener" aria-label="Trailer de A Mata Negra"><img src="https://i.ytimg.com/vi/m798QAphoKM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://youtu.be/m798QAphoKM" target="_blank" rel="noopener" aria-label="Trailer de A Mata Negra" data-i18n-label="al.6"><img src="https://i.ytimg.com/vi/m798QAphoKM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2018</p>
     <h4>A Mata Negra</h4>
@@ -309,7 +344,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://vimeo.com/286784205" target="_blank" rel="noopener" aria-label="Trailer de Destino das Sombras"><img src="imagens/destino-das-sombras.webp" alt="" loading="lazy" width="1280" height="720"></a>
+  <a class="feature-media" href="https://vimeo.com/286784205" target="_blank" rel="noopener" aria-label="Trailer de Destino das Sombras" data-i18n-label="al.7"><img src="imagens/destino-das-sombras.webp" alt="" loading="lazy" width="1280" height="720"></a>
   <div class="feature-body">
     <p class="year">2018</p>
     <h4>Destino das Sombras</h4>
@@ -319,7 +354,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://youtu.be/SssmQ4Oeivw" target="_blank" rel="noopener" aria-label="Trailer de Punhal"><img src="https://i.ytimg.com/vi/SssmQ4Oeivw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://youtu.be/SssmQ4Oeivw" target="_blank" rel="noopener" aria-label="Trailer de Punhal" data-i18n-label="al.8"><img src="https://i.ytimg.com/vi/SssmQ4Oeivw/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2015</p>
     <h4>Punhal</h4>
@@ -329,7 +364,7 @@ footer a { color: var(--muted); }
   </div>
 </article>
 <article class="feature">
-  <a class="feature-media" href="https://www.youtube.com/watch?v=EkAeb4XFsaE" target="_blank" rel="noopener" aria-label="Trailer de Mar Negro"><img src="https://i.ytimg.com/vi/EkAeb4XFsaE/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
+  <a class="feature-media" href="https://www.youtube.com/watch?v=EkAeb4XFsaE" target="_blank" rel="noopener" aria-label="Trailer de Mar Negro" data-i18n-label="al.9"><img src="https://i.ytimg.com/vi/EkAeb4XFsaE/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></a>
   <div class="feature-body">
     <p class="year">2013</p>
     <h4>Mar Negro</h4>
@@ -642,6 +677,8 @@ footer a { color: var(--muted); }
   var en = {
     "r.ed": "Sound editing", "r.ds": "Sound design", "r.mx": "Mixing", "r.tr": "Soundtrack", "r.cap": "Sound recording", "r.dsab": "Opening sound design", "yr.post": "In post-production", "f.lacuna.k": "Fiction · Horror", "f.aguasdoitapemiri.k": "Documentary", "m.equaseverdade.k": "TV movie · Comedy", "aw.equase": "Co-produced with Globo Filmes and broadcast nationwide on TV Globo's Tela Quente in 2026.", "spot.eye": "Highlight · Tela Quente, TV Globo", "spot.watch": "Watch the promo", "f.corredoresdapedr.k": "Documentary","f.ocemitriodasalma.k": "Fiction", "f.amatanegra.k": "Fiction", "aw.matanegra": "Best Ibero-American Film and press honourable mention at Macabro Film Festival, Mexico, 2018.", "f.destinodassombra.k": "Fiction", "f.punhal.k": "Fiction", "aw.punhal": "Aired on Canal Brasil.", "f.marnegro.k": "Fiction", "aw.marnegro": "Sitges 2013, opening film of Fantaspoa 2013, Festival do Rio 2013. Distribution award at Ventana Sur 2013; released on DVD and Blu-ray in Germany and Japan.", "m.gustavomacackode.k": "Documentary", "watch": "Watch", "m.dasguasquepassam.k": "Documentary", "aw.aguas": "Best Sound Editing at the 20th Cine PE, 2016. Official selection, Berlinale 2016. Best Documentary at Mostra ABD Capixaba.", "m.joo.k": "Fiction", "aw.joao": "Premiered at Festival de Cinema de Vitória 2015.", "m.estradasdebrbara.k": "Experimental", "aw.barbara": "Premiered at Cine Rua 7, 2015.", "m.ltimosrefgiosres.k": "Documentary", "m.redescobrindoama.k": "Fiction", "m.ltimosrefgioston.k": "Documentary", "m.ltimosrefgiospar.k": "Documentary", "s.ernestooextermin.k": "TV series · TV Brasil", "s.palavranegra.k": "Web series", "s.meineweltwunderi.k": "Series pilot", "c.meninas.k": "Fiction", "c.dinossauros.k": "Fiction", "aw.dinos": "Best Short at Festival de Cinema de Vitória 2015.", "c.vinillisfrutferi.k": "Fiction", "c.confinpolis.k": "Fiction", "aw.confin": "Best Short at FEST 2012 (Portugal) and Mostra Capixaba 2011.", "c.milagre.k": "Fiction", "aw.milagre": "Selected for BOMMER festival, Ukraine, 2010.",
     "skip": "Skip to content", "menu": "Menu",
+    "al.1": "Promo for É Quase Verdade on Tela Quente", "al.2": "Lacuna on Instagram", "al.3": "Trailer for Águas do Itapemirim", "al.4": "Trailer for Corredores: Da Pedra Azul ao Forno Grande", "al.5": "Trailer for O Cemitério das Almas Perdidas", "al.6": "Trailer for A Mata Negra", "al.7": "Trailer for Destino das Sombras", "al.8": "Trailer for Punhal", "al.9": "Trailer for Mar Negro",
+    "hero.cta": "Tell us about your film", "reel.t": "Reel", "reel.play": "Watch the reel",
     "nav.films": "Filmography", "nav.highlights": "Highlights", "nav.research": "Research", "nav.contact": "Contact",
     "hero.lede": "Sound editing, sound design and mixing for film, documentary and series. Over fifteen years on fiction features, documentaries and shorts, with <strong>Best Sound Editing at Cine PE</strong> and a Berlinale selection.",
     "sv.1.t": "Sound editing", "sv.1.d": "Dialogue, ambiences and effects cleaned and organised for the mix.",
@@ -671,7 +708,9 @@ footer a { color: var(--muted); }
 
   var nodes = document.querySelectorAll("[data-i18n]");
   var htmlNodes = document.querySelectorAll("[data-i18n-html]");
+  var labelNodes = document.querySelectorAll("[data-i18n-label]");
   var pt = {};
+  labelNodes.forEach(function (n) { pt[n.getAttribute("data-i18n-label")] = n.getAttribute("aria-label"); });
   nodes.forEach(function (n) { pt[n.getAttribute("data-i18n")] = n.textContent; });
   htmlNodes.forEach(function (n) { pt[n.getAttribute("data-i18n-html")] = n.innerHTML; });
 
@@ -682,6 +721,10 @@ footer a { color: var(--muted); }
     var dict = lang === "en" ? en : pt;
     nodes.forEach(function (n) { var v = dict[n.getAttribute("data-i18n")]; if (v) n.textContent = v; });
     htmlNodes.forEach(function (n) { var v = dict[n.getAttribute("data-i18n-html")]; if (v) n.innerHTML = v; });
+    labelNodes.forEach(function (n) {
+      var v = dict[n.getAttribute("data-i18n-label")];
+      if (v) n.setAttribute("aria-label", v);
+    });
     document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
     document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
     store("lang", lang);
@@ -707,6 +750,21 @@ footer a { color: var(--muted); }
       if (!open) list.parentElement.scrollIntoView({ block: "start" });
     });
   });
+
+  var reel = document.getElementById("reel");
+  if (reel && /^[\w-]{11}$/.test(reel.dataset.youtube)) {
+    var vid = reel.dataset.youtube, play = reel.querySelector(".reel-play");
+    play.querySelector("img").src = "https://i.ytimg.com/vi/" + vid + "/hqdefault.jpg";
+    play.addEventListener("click", function () {
+      var fr = document.createElement("iframe");
+      fr.src = "https://www.youtube-nocookie.com/embed/" + vid + "?autoplay=1&rel=0";
+      fr.title = "Reel";
+      fr.allow = "autoplay; encrypted-media; picture-in-picture";
+      fr.allowFullscreen = true;
+      play.replaceWith(fr);
+    });
+    reel.hidden = false;
+  }
 
   var btn = document.querySelector(".menu-btn"), menu = document.getElementById("menu");
   btn.addEventListener("click", function () { var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });

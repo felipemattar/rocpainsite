@@ -8,16 +8,20 @@
 <meta name="theme-color" content="#2A0811">
 <link rel="icon" type="image/png" href="imagens/favicon.png">
 <link rel="canonical" href="https://rocpaingames.com/">
-<link rel="alternate" hreflang="pt-BR" href="https://rocpaingames.com/?lang=pt">
-<link rel="alternate" hreflang="en" href="https://rocpaingames.com/?lang=en">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ROCPAIN Games">
 <meta property="og:title" content="ROCPAIN Games — jogos, aplicativos e IA">
 <meta property="og:description" content="Jogos para PC e celular, aplicativos sob medida e soluções com inteligência artificial, feitos no Espírito Santo.">
-<meta property="og:image" content="https://rocpaingames.com/imagens/capa_itch.jpg">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:image" content="https://rocpaingames.com/imagens/og-rocpain.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ROCPAIN Games — jogos, aplicativos e IA">
 <meta property="og:url" content="https://rocpaingames.com/">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rocpaingames.com/imagens/og-rocpain.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -190,7 +194,8 @@ a:hover { color: var(--text); }
 .areas li { padding: 28px 24px 30px 0; }
 .areas li + li { padding-left: 24px; border-left: 1px solid var(--line); }
 .areas a { text-decoration: none; color: var(--text); display: block; }
-.areas h2 {
+.areas .area-t {
+  display: block;
   font-family: var(--display); font-weight: 800; font-stretch: 120%;
   font-size: 1.5rem; margin: 0 0 6px; color: var(--gold);
 }
@@ -308,6 +313,17 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: 
 footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; }
 footer a { color: var(--muted); }
 
+/* Touch targets */
+.lang button { min-width: 44px; min-height: 36px; }
+.menu-btn { min-height: 40px; }
+.contact-list a { padding: 7px 0; }
+footer ul { gap: 0 10px; }
+footer ul a { display: inline-block; padding: 12px 8px; }
+@media (max-width: 820px) { .lang button { min-height: 40px; } }
+.brand { display: inline-flex; align-items: center; min-height: 44px; }
+.game > a { display: inline-flex; align-items: center; min-height: 44px; }
+.about a { display: inline-block; padding: 10px 0; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .wordmark { animation: none; }
@@ -349,12 +365,12 @@ footer a { color: var(--muted); }
     </div>
   </div>
 
-  <nav class="areas" aria-label="Áreas">
+  <nav class="areas" aria-label="Áreas" data-i18n-label="areas.nav">
     <div class="wrap">
       <ul>
-        <li><a href="#jogos"><h2 data-i18n="areas.games.t">Jogos</h2><p data-i18n="areas.games.d">Títulos próprios e sob encomenda na Steam, do shoot 'em up 2D ao jogo de cartas.</p></a></li>
-        <li><a href="#apps"><h2 data-i18n="areas.apps.t">Aplicativos</h2><p data-i18n="areas.apps.d">Apps Android e web, jogos educativos e ferramentas internas.</p></a></li>
-        <li><a href="#ia"><h2 data-i18n="areas.ai.t">Soluções com IA</h2><p data-i18n="areas.ai.d">Catalogação inteligente de imagem e som e IA em áudio, jogos e apps.</p></a></li>
+        <li><a href="#jogos"><strong class="area-t" data-i18n="areas.games.t">Jogos</strong><p data-i18n="areas.games.d">Títulos próprios e sob encomenda na Steam, do shoot 'em up 2D ao jogo de cartas.</p></a></li>
+        <li><a href="#apps"><strong class="area-t" data-i18n="areas.apps.t">Aplicativos</strong><p data-i18n="areas.apps.d">Apps Android e web, jogos educativos e ferramentas internas.</p></a></li>
+        <li><a href="#ia"><strong class="area-t" data-i18n="areas.ai.t">Soluções com IA</strong><p data-i18n="areas.ai.d">Catalogação inteligente de imagem e som e IA em áudio, jogos e apps.</p></a></li>
       </ul>
     </div>
   </nav>
@@ -414,10 +430,10 @@ footer a { color: var(--muted); }
       <div class="trailers">
         <h3 data-i18n="games.trailers">Trailers e gameplay</h3>
         <div class="trailer-row">
-          <a href="https://www.youtube.com/watch?v=z8QFfksfJeY" target="_blank" rel="noopener" aria-label="Vídeo 1 no YouTube"><img src="https://i.ytimg.com/vi/z8QFfksfJeY/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=DEoo5GehR-k" target="_blank" rel="noopener" aria-label="Vídeo 2 no YouTube"><img src="https://i.ytimg.com/vi/DEoo5GehR-k/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=kysvOg-nxdY" target="_blank" rel="noopener" aria-label="Vídeo 3 no YouTube"><img src="https://i.ytimg.com/vi/kysvOg-nxdY/hqdefault.jpg" alt="" loading="lazy"></a>
-          <a href="https://www.youtube.com/watch?v=-sBfFRd1yMw" target="_blank" rel="noopener" aria-label="Vídeo 4 no YouTube"><img src="https://i.ytimg.com/vi/-sBfFRd1yMw/hqdefault.jpg" alt="" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=z8QFfksfJeY" target="_blank" rel="noopener" aria-label="Vídeo 1 no YouTube" data-i18n-label="vid.1"><img src="https://i.ytimg.com/vi/z8QFfksfJeY/hqdefault.jpg" alt="" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=DEoo5GehR-k" target="_blank" rel="noopener" aria-label="Vídeo 2 no YouTube" data-i18n-label="vid.2"><img src="https://i.ytimg.com/vi/DEoo5GehR-k/hqdefault.jpg" alt="" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=kysvOg-nxdY" target="_blank" rel="noopener" aria-label="Vídeo 3 no YouTube" data-i18n-label="vid.3"><img src="https://i.ytimg.com/vi/kysvOg-nxdY/hqdefault.jpg" alt="" loading="lazy"></a>
+          <a href="https://www.youtube.com/watch?v=-sBfFRd1yMw" target="_blank" rel="noopener" aria-label="Vídeo 4 no YouTube" data-i18n-label="vid.4"><img src="https://i.ytimg.com/vi/-sBfFRd1yMw/hqdefault.jpg" alt="" loading="lazy"></a>
         </div>
       </div>
     </div>
@@ -521,6 +537,7 @@ footer a { color: var(--muted); }
   var en = {
     "skip": "Skip to content", "hero.sub": "Games · Apps · AI",
     "menu": "Menu",
+    "areas.nav": "Areas", "vid.1": "Video 1 on YouTube", "vid.2": "Video 2 on YouTube", "vid.3": "Video 3 on YouTube", "vid.4": "Video 4 on YouTube",
     "nav.games": "Games", "nav.apps": "Apps", "nav.ai": "AI", "nav.about": "About", "nav.contact": "Contact",
     "hero.lede": "We make games for PC and mobile, custom apps and AI-powered tools. A small studio from Espírito Santo, Brazil, that treats sound and image with the care of people who came from film.",
     "hero.cta1": "See the games", "hero.cta2": "Tell us about your project",
@@ -576,7 +593,9 @@ footer a { color: var(--muted); }
 
   var nodes = document.querySelectorAll("[data-i18n]");
   var htmlNodes = document.querySelectorAll("[data-i18n-html]");
+  var labelNodes = document.querySelectorAll("[data-i18n-label]");
   var pt = {};
+  labelNodes.forEach(function (n) { pt[n.getAttribute("data-i18n-label")] = n.getAttribute("aria-label"); });
   nodes.forEach(function (n) { pt[n.getAttribute("data-i18n")] = n.textContent; });
   htmlNodes.forEach(function (n) { pt[n.getAttribute("data-i18n-html")] = n.innerHTML; });
 
@@ -592,6 +611,10 @@ footer a { color: var(--muted); }
     htmlNodes.forEach(function (n) {
       var v = dict[n.getAttribute("data-i18n-html")];
       if (v) n.innerHTML = v;
+    });
+    labelNodes.forEach(function (n) {
+      var v = dict[n.getAttribute("data-i18n-label")];
+      if (v) n.setAttribute("aria-label", v);
     });
     document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
     document.querySelectorAll(".lang button").forEach(function (b) {
