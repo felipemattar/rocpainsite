@@ -1,0 +1,6 @@
+#!/bin/sh
+# Roda testes + checagem de traduções antes de cada commit.
+# Para pular numa emergência: git commit --no-verify
+PY=python
+command -v $PY >/dev/null 2>&1 || PY=py
+exec $PY .ia/checar.py
