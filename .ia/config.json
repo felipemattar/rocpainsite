@@ -1,0 +1,11 @@
+{
+  "teste": "",
+  "pastas_traducao": [
+    "locales",
+    "src/locales"
+  ],
+  "ia_local": {
+    "usar": "auto",
+    "modelo": "llama-local/qwen3-coder"
+  }
+}
