@@ -1,10 +1,10 @@
 // Página da diária: frentes (local, horários, equipe, carros) e "ciente".
 // Os equipamentos do dia ficam numa tela à parte (#/projeto/ID/diaria/DATA/equipamentos), só para quem vê equipamentos.
 import { S, can, canEditProject, canEditEquip } from '../store.js';
-import { DEFAULT_TIMES, PLACE_SEARCH } from '../config.js';
+import { DEFAULT_TIMES, PLACE_SEARCH, NOTIFY_URL } from '../config.js';
 import { esc, fmtD, fmtDM, wday, wdayLong, todayStr, toast, armButton, $$ } from '../utils.js';
 import { getDay, projectDays, blockOf, blocks, newFront, dailyVehicles, vehName, sortPeople, personName, ackState, dayPeople, projItems, gName, destinations, carPlan, unseat, placeFromPhoton, isMapsLink, mapsSearchURL, dayShareText, whatsappURL, gcalURL } from '../logic.js';
-import { saveDay, setAck } from '../actions.js';
+import { saveDay, setAck, notifyTeam } from '../actions.js';
 import { personLine, timelineHTML, thumbHTML, emptyHTML, carsHTML, placeHTML, ackPanelHTML } from '../components.js';
 import { stepper } from './project.js';
 import { openItem } from './inventory.js';
@@ -51,6 +51,7 @@ export function renderDiaria(el, pid, date, sub = '') {
     <div class="bar share">
       <a class="btn sm" id="shareWa" href="${esc(whatsappURL(dayShareText(p, date, day)))}" target="_blank" rel="noopener">Enviar no WhatsApp</a>
       <a class="btn sm" id="addCal" href="${esc(gcalURL(p, date, day, S.me))}" target="_blank" rel="noopener">Adicionar à minha agenda</a>
+      ${E && NOTIFY_URL ? '<button class="btn sm" id="notifyTeam">Avisar equipe</button>' : ''}
     </div>
     ${E && !day.saved ? '<div class="banner">Rascunho com os valores padrão. Qualquer alteração já salva a diária.</div>' : ''}
     <div class="section">${ackPanelHTML(p, date, day)}</div>
@@ -70,6 +71,11 @@ export function renderDiaria(el, pid, date, sub = '') {
 
   // ---- edição ----
   el.querySelector('#d-info').addEventListener('change', e => commit(d => { d.info = e.target.value.trim(); }));
+  const nt = el.querySelector('#notifyTeam');
+  nt && armButton(nt, 'Enviar convites à equipe', async () => {
+    if (nt.disabled) return; nt.disabled = true; nt.textContent = 'Enviando…';
+    await notifyTeam(p, date, day); nt.disabled = false; delete nt.dataset.armed; nt.classList.remove('solid'); nt.textContent = 'Avisar equipe';
+  });
   el.querySelector('#copyPrev')?.addEventListener('click', () => {
     const src = getDay(p, prev); const d = clone(src); delete d.saved; d.fronts.forEach(f => { f.extra = f.extra || []; });
     if (!EE) d.items = clone(day.items); // quem não edita equipamentos mantém os do dia

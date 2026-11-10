@@ -1,7 +1,7 @@
 // Inventário de equipamentos + ficha do item
 import { S, can } from '../store.js';
 import { CONDITIONS, ITEM_STATUS } from '../config.js';
-import { esc, fmtD, ls, openSheet, closeSheet, toast, armButton, qrSVG, photoToDataURL, $$ } from '../utils.js';
+import { esc, fmtD, ls, openSheet, closeSheet, toast, armButton, qrSVG, photoToDataURL, downloadText, $$ } from '../utils.js';
 import { itemsSorted, groupsSorted, gName, matchesFilter, nextItemId, blocks } from '../logic.js';
 import { saveItem, deleteItem } from '../actions.js';
 import { thumbHTML, itemPills, emptyHTML } from '../components.js';
@@ -9,25 +9,27 @@ import { downloadLabels } from './labels.js';
 
 const FILTERS = [['all', 'Todos', null], ['free', 'Livre', 'var(--ok)'], ['inuse', 'Em uso', 'var(--use)'], ['needs', 'Precisa de manutenção', 'var(--warn)'],
   ['repair', 'Em manutenção', 'var(--bad)'], ['ordered', 'Encomendado', 'var(--accent)'], ['tobuy', 'A comprar', 'var(--idle)']];
-const V = { filter: 'all', group: '', q: '' };
+const V = { filter: 'all', group: '', q: '', sort: ls.get('iur.invSort', 'name') };
 export const itemLink = id => `${location.origin}${location.pathname}#/item/${id}`;
 export const showPhotos = () => ls.get('iur.photos', true);
 
 export function renderInventory(el) {
   const E = can('edit');
   el.innerHTML = `
-    <div class="pagehead"><h2>Inventário</h2>${E ? '<button class="btn pri" id="addItem">+ Equipamento</button>' : ''}</div>
+    <div class="pagehead"><h2>Inventário</h2><div style="display:flex;gap:6px"><button class="btn" id="expItems">Exportar planilha</button>${E ? '<button class="btn pri" id="addItem">+ Equipamento</button>' : ''}</div></div>
     <div class="bar">
       <input class="search" id="q" type="search" placeholder="Buscar por nome, ID, local…" autocomplete="off" value="${esc(V.q)}">
       <select class="sel" id="fgroup" aria-label="Filtrar por grupo"><option value="">Todos os grupos</option>${groupsSorted().map(g => `<option value="${esc(g.id)}" ${g.id === V.group ? 'selected' : ''}>${esc(g.name)}</option>`).join('')}</select>
+      <select class="sel" id="fsort" aria-label="Ordenar por"><option value="name" ${V.sort === 'name' ? 'selected' : ''}>Ordenar: Nome</option><option value="id" ${V.sort === 'id' ? 'selected' : ''}>Ordenar: ID</option></select>
       <label class="toggle"><input type="checkbox" id="showPhotos" ${showPhotos() ? 'checked' : ''}> Fotos</label>
     </div>
     <div class="chips" id="fchips"></div><div id="list"></div>`;
+  let shown = [];
   const draw = () => {
     const all = itemsSorted(), q = V.q.trim().toLowerCase();
     const base = all.filter(it => (!V.group || it.group === V.group) && (!q || [it.id, it.name, it.location, it.notes, it.accessories, gName(it.group)].join(' ').toLowerCase().includes(q)));
     el.querySelector('#fchips').innerHTML = FILTERS.map(([k, t, c]) => `<button class="chip" data-f="${k}" aria-pressed="${V.filter === k}">${c ? `<span class="dot" style="background:${c}"></span>` : ''}${t} <b>${base.filter(it => matchesFilter(it, k)).length}</b></button>`).join('');
-    const list = base.filter(it => matchesFilter(it, V.filter));
+    const list = base.filter(it => matchesFilter(it, V.filter)).sort((a, b) => (V.sort === 'name' ? a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base', numeric: true }) : 0) || a.id.localeCompare(b.id, undefined, { numeric: true })); shown = list;
     const L = el.querySelector('#list');
     if (!S.loaded.items) { L.innerHTML = emptyHTML('Carregando o inventário…'); return; }
     if (!all.length) { L.innerHTML = emptyHTML('Nenhum equipamento cadastrado.'); return; }
@@ -42,9 +44,23 @@ export function renderInventory(el) {
   el.querySelector('#fchips').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { V.filter = b.dataset.f; draw(); } });
   el.querySelector('#q').addEventListener('input', e => { V.q = e.target.value; draw(); });
   el.querySelector('#fgroup').addEventListener('change', e => { V.group = e.target.value; draw(); });
+  el.querySelector('#fsort').addEventListener('change', e => { V.sort = e.target.value; ls.set('iur.invSort', V.sort); draw(); });
   el.querySelector('#showPhotos').addEventListener('change', e => { ls.set('iur.photos', e.target.checked); document.body.classList.toggle('nophotos', !e.target.checked); });
   el.querySelector('#list').addEventListener('click', e => { const r = e.target.closest('[data-item]'); if (r) openItem(r.dataset.item); });
   el.querySelector('#addItem')?.addEventListener('click', () => openItem(null));
+  el.querySelector('#expItems').addEventListener('click', () => { if (!shown.length) return toast('Nenhum equipamento para exportar.'); exportItems(shown); });
+}
+
+// CSV com ";" e BOM UTF-8: o Excel/Planilhas em português abrem direto, com acentos e colunas certas (sem a foto).
+export function exportItems(list) {
+  const cell = v => { const s = String(v ?? '').replace(/\r?\n/g, ' '); return /[;"]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const head = ['ID', 'Nome', 'Grupo', 'Quantidade', 'Situação', 'Condição', 'Previsão de retorno', 'Localização', 'Acessórios', 'Observações', 'Projetos'];
+  const rows = list.map(it => [it.id, it.name, gName(it.group), it.qty ?? 1, ITEM_STATUS[it.status]?.t || it.status || '', CONDITIONS[it.condition]?.t || it.condition || '',
+    it.returnDate || '', it.location || '', it.accessories || '', it.notes || '',
+    [...S.projects.values()].filter(p => (p.items || []).some(e => e.id === it.id)).map(p => p.name).join(' | ')]);
+  const d = new Date(), p2 = n => String(n).padStart(2, '0');
+  downloadText(`inventario-IUR-${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}.csv`, '﻿' + [head, ...rows].map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+  toast(`${list.length} equipamento${list.length > 1 ? 's' : ''} exportado${list.length > 1 ? 's' : ''}`);
 }
 export const setInventoryGroup = g => { V.group = g; V.filter = 'all'; };
 

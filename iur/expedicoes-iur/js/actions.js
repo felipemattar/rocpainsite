@@ -1,7 +1,8 @@
 // Ações que gravam dados. As telas chamam estas funções, nunca o Firebase direto.
-import { save, merge, remove, newId } from './firebase.js';
+import { save, merge, remove, newId, idToken } from './firebase.js';
 import { S } from './store.js';
-import { conflictsFor, scheduleSig, personName } from './logic.js';
+import { conflictsFor, scheduleSig, personName, dayInvites } from './logic.js';
+import { NOTIFY_URL, NOTIFY_REMINDERS } from './config.js';
 import { esc, fmtD, openSheet, closeSheet, toast } from './utils.js';
 
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -45,6 +46,25 @@ export function saveDay(pid, date, day) {
 export function setAck(pid, date, on) {
   const path = `projects/${pid}/acks/${date}__${S.me}`;
   if (on) save(path, { email: S.me, date, at: new Date().toISOString() }); else remove(path);
+}
+// "Avisar equipe": manda os convites da diária para o Apps Script (cria/atualiza/apaga eventos no Google Agenda).
+// Precisa de sinal (não fica na fila offline). Devolve true se deu certo.
+export async function notifyTeam(p, date, day) {
+  const invites = dayInvites(p, date, day);
+  if (!invites.length) { toast('Ninguém na equipe desta diária para avisar.'); return false; }
+  try {
+    const body = { idToken: await idToken(), projectId: p.id, date, reminders: NOTIFY_REMINDERS, invites };
+    const r = await fetch(NOTIFY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+    const res = await r.json();
+    if (!res.ok) { toast('Não foi possível avisar: ' + (res.error || 'erro no script')); return false; }
+    const parts = [[res.created, 'novo', 'novos'], [res.updated, 'atualizado', 'atualizados'], [res.removed, 'removido', 'removidos']]
+      .filter(([n]) => n).map(([n, a, b]) => `${n} ${n > 1 ? b : a}`);
+    toast('Equipe avisada' + (parts.length ? ` (convites: ${parts.join(', ')})` : ''));
+    return true;
+  } catch (e) {
+    toast(navigator.onLine === false ? 'Sem sinal: avise a equipe quando tiver internet.' : 'Não foi possível avisar a equipe agora. Tente de novo.');
+    return false;
+  }
 }
 
 // ---------- inventário ----------

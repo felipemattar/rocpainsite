@@ -54,6 +54,12 @@ export const DEFAULT_TIMES = [
 // Fuso dos horários das diárias (usado no botão "Adicionar à agenda")
 export const TIMEZONE = 'America/Sao_Paulo';
 
+// Botão "Avisar equipe": URL do Google Apps Script implantado (tools/apps-script/Code.gs).
+// Vazio = botão escondido. Trocar ao mudar a conta que envia os convites.
+export const NOTIFY_URL = '';
+// Lembretes dos convites, em minutos antes da saída (noite anterior ≈ 12 h antes de uma saída às 7h; 1 h antes).
+export const NOTIFY_REMINDERS = [720, 60];
+
 // A partir desta hora, o resumo do projeto mostra a diária do dia seguinte.
 export const NEXT_DAY_FROM_HOUR = 20;
 

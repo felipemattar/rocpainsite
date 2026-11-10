@@ -151,22 +151,36 @@ export function dayShareText(p, date, day) {
   return out.join('\n');
 }
 export const whatsappURL = text => 'https://wa.me/?text=' + encodeURIComponent(text);
+// Horário do evento de uma frente: da saída até a volta; sem horários, null (dia inteiro).
+function frontSpan(f) {
+  const tl = timeline(f).filter(x => /^\d\d:\d\d$/.test(x.t || ''));
+  if (!tl.length) return null;
+  const start = f.times?.saida || tl[0].t; let end = f.times?.volta || tl[tl.length - 1].t;
+  if (end <= start) { const h = Math.min(23, +start.slice(0, 2) + 1); end = `${String(h).padStart(2, '0')}:${start.slice(3)}`; }
+  return { start, end };
+}
+const eventTitle = (p, day, f) => `${p.name} · ${f.local || (day.fronts.length > 1 ? f.name : 'Diária')}`;
 // Link que abre o Google Agenda com o evento preenchido. Usa a frente de quem está vendo (ou a primeira).
 // Do horário de saída até a volta; sem horários, vira evento de dia inteiro.
 export function gcalURL(p, date, day, me) {
   const f = day.fronts.find(x => (x.people || []).includes(me)) || day.fronts[0];
-  const tl = timeline(f).filter(x => /^\d\d:\d\d$/.test(x.t || ''));
-  const ymd = date.replace(/-/g, '');
-  let dates;
-  if (!tl.length) dates = `${ymd}/${addDays(date, 1).replace(/-/g, '')}`;
-  else {
-    const start = f.times?.saida || tl[0].t; let end = f.times?.volta || tl[tl.length - 1].t;
-    if (end <= start) { const h = Math.min(23, +start.slice(0, 2) + 1); end = `${String(h).padStart(2, '0')}:${start.slice(3)}`; }
-    dates = `${ymd}T${start.replace(':', '')}00/${ymd}T${end.replace(':', '')}00`;
-  }
-  const title = `${p.name} · ${f.local || (day.fronts.length > 1 ? f.name : 'Diária')}`;
-  const q = new URLSearchParams({ action: 'TEMPLATE', text: title, dates, ctz: TIMEZONE, details: dayShareText(p, date, day), location: placeText(f) || '' });
+  const sp = frontSpan(f), ymd = date.replace(/-/g, '');
+  const dates = sp ? `${ymd}T${sp.start.replace(':', '')}00/${ymd}T${sp.end.replace(':', '')}00` : `${ymd}/${addDays(date, 1).replace(/-/g, '')}`;
+  const q = new URLSearchParams({ action: 'TEMPLATE', text: eventTitle(p, day, f), dates, ctz: TIMEZONE, details: dayShareText(p, date, day), location: placeText(f) || '' });
   return 'https://calendar.google.com/calendar/render?' + q.toString();
+}
+
+// Convites do "Avisar equipe": um evento por frente, convidados = pessoas da frente.
+// Contrato com tools/apps-script/Code.gs. Frente sem ninguém não gera convite (o script apaga o evento dela).
+// [{ key: 'PID__AAAA-MM-DD__FRENTE', title, date: 'AAAA-MM-DD', start: 'HH:MM'|'', end: 'HH:MM'|'',
+//    location, description, guests: [emails] }]  — start vazio = dia inteiro; mesma regra de horário do gcalURL.
+export function dayInvites(p, date, day) {
+  const description = dayShareText(p, date, day);
+  return day.fronts.map(f => {
+    const sp = frontSpan(f), guests = [...new Set((f.people || []).filter(e => /@/.test(e)))];
+    return { key: `${p.id}__${date}__${f.id}`, title: eventTitle(p, day, f), date, start: sp?.start || '', end: sp?.end || '',
+      location: placeText(f) || '', description, guests };
+  }).filter(x => x.guests.length);
 }
 
 export const dayPeople = day => [...new Set(day.fronts.flatMap(f => f.people || []))];

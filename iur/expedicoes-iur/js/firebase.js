@@ -27,6 +27,8 @@ export async function signIn() {
 }
 export const redirectResult = () => getRedirectResult(auth);
 export const signOutUser = () => signOut(auth);
+// Token do usuário logado, enviado ao Apps Script do "Avisar equipe" (ele confere no Firestore).
+export const idToken = () => auth.currentUser ? auth.currentUser.getIdToken() : Promise.resolve(null);
 
 // ---------- leitura ----------
 // listen('items', cb) ou listen('projects', cb, {where:['team','array-contains', email]})
