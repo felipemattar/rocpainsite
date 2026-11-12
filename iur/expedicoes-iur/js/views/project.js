@@ -3,7 +3,7 @@ import { S, can, canEditProject, canEditEquip } from '../store.js';
 import { esc, fmtD, fmtDM, wday, todayStr, openSheet, closeSheet, toast, armButton, $$ } from '../utils.js';
 import { FUNCTIONS, DEFAULT_TIMES } from '../config.js';
 import { blocks, projectStatus, featuredDay, getDay, conflictsFor, warningsFor, sortPeople, personName, personFuncs, funcLabel,
-  vehiclesOf, projItems, stockOf, groupsSorted, gName, itemsSorted, allMembers, dayPeople, ackState, ITEM_STATUS, CONDITIONS, timeline } from '../logic.js';
+  vehiclesOf, projItems, stockOf, groupsSorted, gName, itemsSorted, containerTree, containerItems, allMembers, dayPeople, ackState, ITEM_STATUS, CONDITIONS, timeline } from '../logic.js';
 import { projBody, setProject, saveProjectChecked, deleteProject, setAck } from '../actions.js';
 import { dayCardHTML, personLine, thumbHTML, emptyHTML, funcsText } from '../components.js';
 import { openItem } from './inventory.js';
@@ -49,7 +49,7 @@ function tabResumo(el, p) {
     ${fd ? (S.proj.loaded ? dayCardHTML(p, p.id, fd.date, getDay(p, fd.date), { kind: fd.kind, button: true, ack: true }) : emptyHTML('Carregando diária…'))
       : `<div class="empty">${bl.length ? 'As diárias deste projeto já passaram.' : 'Defina as datas na aba Diárias.'}</div>`}
     ${conf.length ? `<div class="section"><div class="alert bad"><strong>⚠ Conflito de equipamento</strong><ul>${conf.map(c => `<li><span class="id">${esc(c.itemId)}</span> ${esc(S.items.get(c.itemId)?.name || '')} — ${fmtD(c.date)}: também em ${c.others.map(o => `<a href="#/projeto/${esc(o)}/equipamentos">${esc(S.projects.get(o)?.name || '')}</a>`).join(', ')} (precisa ${c.need}, há ${c.have})</li>`).join('')}</ul></div></div>` : ''}
-    ${warn.length ? `<div class="section"><div class="alert warn"><strong>Equipamentos com atenção</strong><ul>${warn.map(w => `<li><span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name || '')} — ${esc(w.t)}</li>`).join('')}</ul></div></div>` : ''}
+    ${warn.length ? `<div class="section"><div class="alert warn"><strong>Equipamentos com atenção</strong><ul>${warn.map(w => `<li>${w.itemId ? `<span class="id">${esc(w.itemId)}</span> ${esc(S.items.get(w.itemId)?.name || '')} — ` : ''}${esc(w.t)}</li>`).join('')}</ul></div></div>` : ''}
 `;
   el.querySelector('[data-ack]')?.addEventListener('click', () => { const day = getDay(p, fd.date); setAck(p.id, fd.date, ackState(p.id, fd.date, S.me, day).k !== 'ok'); });
 }
@@ -132,7 +132,7 @@ function tabEquip(el, p) {
     ${vehiclesHTML(p, canEditProject(p))}
     <div class="section"><h3>Lista geral · carregamento na sede ${nk}/${items.length}</h3>
       <div class="prog" style="margin-bottom:10px"><i style="width:${items.length ? Math.round(nk / items.length * 100) : 0}%"></i></div>
-      ${E ? `<div class="bar" style="margin-top:0"><button class="btn pri" id="padd">+ Equipamentos</button>
+      ${E ? `<div class="bar" style="margin-top:0"><button class="btn pri" id="padd">+ Equipamentos</button><button class="btn" id="padd-c">+ Recipiente</button>
         <select class="sel" id="pgsel" aria-label="Grupo para adicionar"><option value="">Adicionar grupo inteiro…</option>${groupsSorted().map(g => `<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('')}</select>
         <label class="toggle"><input type="checkbox" id="pgall"> incluir encomendados / a comprar</label>
         <span style="flex:1"></span>${nk ? '<button class="btn sm" id="punchk">Desmarcar todos</button>' : ''}</div>` : ''}
@@ -152,6 +152,7 @@ function tabEquip(el, p) {
   if (!E) return;
   const upd = fn => { const np = projBody(pid); fn(np); setProject(pid, np); };
   el.querySelector('#padd').addEventListener('click', () => pickItems(pid));
+  el.querySelector('#padd-c').addEventListener('click', () => pickContainers(pid));
   el.querySelector('#pgsel').addEventListener('change', e => { const g = e.target.value; if (!g) return; e.target.value = '';
     const incl = el.querySelector('#pgall').checked; const np = projBody(pid); const have = new Set(np.items.map(x => x.id));
     const add = itemsSorted().filter(it => it.group === g && !have.has(it.id) && (incl || it.status === 'owned') && (it.qty || 0) > 0);
@@ -210,6 +211,30 @@ function pickItems(pid) {
     sh.querySelector('#pok').addEventListener('click', () => { if (!sel.size) { closeSheet(); return; } const np = projBody(pid);
       np.items = [...(np.items || []), ...[...sel].map(([id, qty]) => ({ id, qty }))]; closeSheet(); saveProjectChecked(pid, np, `${sel.size} equipamento${sel.size > 1 ? 's' : ''} adicionado${sel.size > 1 ? 's' : ''}`); });
     draw();
+  });
+}
+
+// Adiciona recipientes (mochila, case...) ao projeto: copia os equipamentos deles para a lista (instantâneo, ver docs/decisions/0001)
+function pickContainers(pid) {
+  const p = { id: pid, ...S.projects.get(pid) }; const have = new Set((p.items || []).map(x => x.id)); const sel = new Set();
+  const missing = cid => containerItems(cid).filter(it => !have.has(it.id) && (it.qty || 0) > 0);
+  const problems = cid => { const miss = missing(cid); if (!miss.length) return 0;
+    const busy = (p.dates || []).length ? new Set(conflictsFor({ ...p, items: [...(p.items || []), ...miss.map(it => ({ id: it.id, qty: it.qty || 1 }))] }).map(c => c.itemId)) : new Set();
+    return miss.filter(it => busy.has(it.id) || it.status !== 'owned' || it.condition !== 'ok').length; };
+  openSheet(`<div class="sheet-h"><div><span class="hint">${esc(p.name)}</span><h2>Adicionar recipiente</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <p class="hint">Os equipamentos do recipiente (e dos que estão dentro dele) entram na lista do projeto.</p>
+    <div id="clist"></div>
+    <div class="actions stickyfoot"><span class="hint" id="ccount">Nenhum selecionado</span><div class="r"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="cok">Adicionar</button></div></div>`, sh => {
+    const tree = containerTree();
+    sh.querySelector('#clist').innerHTML = !tree.length ? emptyHTML('Nenhum recipiente cadastrado. Crie na aba Armazenamento.') : tree.map(({ c, depth }) => { const n = containerItems(c.id).length, m = missing(c.id).length, bad = problems(c.id);
+      return `<div class="pick" style="margin-left:${Math.min(depth, 4) * 14}px"><input type="checkbox" data-pc="${esc(c.id)}" id="pc-${esc(c.id)}"><label class="main" for="pc-${esc(c.id)}"><span class="name">${esc(c.name)}</span> <span class="qty">· ${n} ${n === 1 ? 'item' : 'itens'}${m < n ? `, ${n - m} já na lista` : ''}</span>
+        ${bad ? `<div class="meta"><span style="color:var(--bad)">⚠ ${bad} ${bad === 1 ? 'item ocupado/indisponível' : 'itens ocupados/indisponíveis'}</span></div>` : ''}</label></div>`; }).join('');
+    $$('[data-pc]', sh).forEach(c => c.addEventListener('change', () => { c.checked ? sel.add(c.dataset.pc) : sel.delete(c.dataset.pc); sh.querySelector('#ccount').textContent = sel.size ? `${sel.size} selecionado${sel.size > 1 ? 's' : ''}` : 'Nenhum selecionado'; }));
+    sh.querySelector('#cok').addEventListener('click', () => { if (!sel.size) { closeSheet(); return; } const np = projBody(pid);
+      const ids = new Set((np.items || []).map(x => x.id)), add = [];
+      for (const cid of sel) for (const it of containerItems(cid)) if (!ids.has(it.id) && (it.qty || 0) > 0) { ids.add(it.id); add.push({ id: it.id, qty: it.qty || 1 }); }
+      np.items = [...(np.items || []), ...add]; np.containers = [...new Set([...(np.containers || []), ...sel])];
+      closeSheet(); saveProjectChecked(pid, np, `${add.length} equipamento${add.length === 1 ? '' : 's'} adicionado${add.length === 1 ? '' : 's'}`); });
   });
 }
 

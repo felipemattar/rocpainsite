@@ -8,6 +8,7 @@ import { renderProject } from './views/project.js';
 import { renderDiaria } from './views/diaria.js';
 import { renderInventory, openItem } from './views/inventory.js';
 import { renderGroups } from './views/groups.js';
+import { renderStorage } from './views/storage.js';
 import { renderLabels } from './views/labels.js';
 import { renderTeam } from './views/team.js';
 import { personName } from './logic.js';
@@ -16,10 +17,11 @@ import { personName } from './logic.js';
 // #/                         projetos
 // #/projeto/ID[/aba]         resumo | diarias | equipamentos | equipe
 // #/projeto/ID/diaria/DATA   página da diária (+ /equipamentos: só os equipamentos do dia)
-// #/inventario  #/grupos  #/etiquetas  #/equipe   #/item/ID (QR code)
+// #/inventario  #/armazenamento  #/grupos  #/etiquetas  #/equipe   #/item/ID (QR code)
 const NAV = [
   { href: '#/', label: 'Projetos', match: r => r.view === 'home' || r.view === 'project' || r.view === 'diaria' },
   { href: '#/inventario', label: 'Inventário', match: r => r.view === 'inventory', cap: 'equip' },
+  { href: '#/armazenamento', label: 'Armazenamento', match: r => r.view === 'storage', cap: 'equip' },
   { href: '#/grupos', label: 'Grupos', match: r => r.view === 'groups', cap: ['equip', 'edit'] },
   { href: '#/etiquetas', label: 'Etiquetas QR', match: r => r.view === 'labels', cap: 'qr' },
   { href: '#/equipe', label: 'Equipe', match: r => r.view === 'team', cap: 'team' },
@@ -32,6 +34,7 @@ function route() {
     case 'projeto': return parts[2] === 'diaria' ? { view: 'diaria', pid: parts[1], date: parts[3], sub: parts[4] || '' } : { view: 'project', pid: parts[1], tab: parts[2] || 'resumo' };
     case 'inventario': return { view: 'inventory' };
     case 'item': return { view: 'inventory', item: parts[1] };
+    case 'armazenamento': return { view: 'storage' };
     case 'grupos': return { view: 'groups' };
     case 'etiquetas': return { view: 'labels' };
     case 'equipe': return { view: 'team' };
@@ -67,6 +70,7 @@ function render() {
     case 'project': renderProject(v, r.pid, r.tab); break;
     case 'diaria': renderDiaria(v, r.pid, r.date, r.sub); break;
     case 'inventory': can('equip') ? renderInventory(v) : renderHome(v); break;
+    case 'storage': can('equip') ? renderStorage(v) : renderHome(v); break;
     case 'groups': can('equip') && can('edit') ? renderGroups(v) : renderHome(v); break;
     case 'labels': can('qr') ? renderLabels(v) : renderHome(v); break;
     case 'team': renderTeam(v); break;

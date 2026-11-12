@@ -4,8 +4,8 @@ import { OWNERS, ROLES } from './config.js';
 
 export const S = {
   user: null, me: '', role: null,          // role: 'admin' | 'editor' | 'producer' | 'member' | 'none' | null (carregando)
-  items: new Map(), groups: new Map(), team: new Map(), projects: new Map(),
-  loaded: { items: false, groups: false, team: false, projects: false },
+  items: new Map(), groups: new Map(), containers: new Map(), team: new Map(), projects: new Map(),
+  loaded: { items: false, groups: false, containers: false, team: false, projects: false },
   proj: { pid: null, days: new Map(), acks: new Map(), loaded: false },
   error: '',
 };
@@ -44,6 +44,7 @@ function subscribeData() {
   if (!S.role || S.role === 'none') return;
   if (!subs.items) sub('items', 'items', {}, m => { S.items = m; S.loaded.items = true; });
   if (!subs.groups) sub('groups', 'groups', {}, m => { S.groups = m; S.loaded.groups = true; });
+  if (!subs.containers) sub('containers', 'containers', {}, m => { S.containers = m; S.loaded.containers = true; });
   const mode = can('allProjects') ? 'all' : 'mine';
   if (mode !== projectsMode) {
     projectsMode = mode;
@@ -69,8 +70,8 @@ export function start(user) {
 }
 export function stop() {
   unsubAll(); projectsMode = null;
-  Object.assign(S, { user: null, me: '', role: null, items: new Map(), groups: new Map(), team: new Map(), projects: new Map(), error: '' });
-  S.loaded = { items: false, groups: false, team: false, projects: false };
+  Object.assign(S, { user: null, me: '', role: null, items: new Map(), groups: new Map(), containers: new Map(), team: new Map(), projects: new Map(), error: '' });
+  S.loaded = { items: false, groups: false, containers: false, team: false, projects: false };
   S.proj = { pid: null, days: new Map(), acks: new Map(), loaded: false };
 }
 

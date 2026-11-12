@@ -237,6 +237,13 @@ export function warningsFor(p) {
     else if (it.condition === 'needs') w.push({ itemId: e.id, t: 'Precisa de manutenção' + (it.notes ? ` — ${it.notes}` : '') });
     if ((e.qty || 1) > stockOf(e.id)) w.push({ itemId: e.id, t: `Na lista ${e.qty}, no inventário ${stockOf(e.id)}`, bad: true });
   }
+  // recipientes reservados no projeto: avisa se faltam itens que hoje estão neles (a lista verdadeira é p.items)
+  const have = new Set((p.items || []).map(e => e.id));
+  for (const cid of (p.containers || [])) {
+    if (!S.containers.has(cid)) continue;
+    const n = containerItems(cid).filter(it => !have.has(it.id) && (it.qty || 0) > 0).length;
+    if (n) w.push({ t: `Faltam ${n} ${n === 1 ? 'item' : 'itens'} do recipiente ${S.containers.get(cid).name}` });
+  }
   return w;
 }
 export function itemFlags(it) {
@@ -251,4 +258,42 @@ export function matchesFilter(it, f) {
     case 'ordered': return it.status === 'ordered'; case 'tobuy': return it.status === 'tobuy'; default: return true;
   }
 }
+// ---------- recipientes (mochilas, cases, caixas) ----------
+export const containersSorted = () => [...S.containers.entries()].map(([id, c]) => ({ id, ...c })).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+// Pai válido (existe e não é o próprio); senão é raiz
+const parentOf = id => { const p = S.containers.get(id)?.parent; return p && p !== id && S.containers.has(p) ? p : ''; };
+// Árvore em lista plana [{c, depth}], em profundidade. Recipientes presos em ciclo aparecem na raiz.
+export function containerTree() {
+  const all = containersSorted(), kids = new Map(), out = [], seen = new Set();
+  for (const c of all) { const p = parentOf(c.id); if (!kids.has(p)) kids.set(p, []); kids.get(p).push(c); }
+  const walk = (c, depth) => { if (seen.has(c.id)) return; seen.add(c.id); out.push({ c, depth }); (kids.get(c.id) || []).forEach(k => walk(k, depth + 1)); };
+  (kids.get('') || []).forEach(c => walk(c, 0));
+  all.forEach(c => walk(c, 0)); // sobras de ciclo
+  return out;
+}
+// Caminho [{id, name}] da raiz até o id (para se achar ciclo)
+export function containerPath(id) {
+  const path = [], seen = new Set();
+  for (let cur = id; cur && S.containers.has(cur) && !seen.has(cur); cur = parentOf(cur)) { seen.add(cur); path.unshift({ id: cur, name: S.containers.get(cur).name || '' }); }
+  return path;
+}
+export const containerLabel = id => containerPath(id).map(x => x.name).join(' › ');
+// Ids do recipiente e de todos os descendentes
+export function containerDescendants(id) {
+  const out = new Set([id]); let grew = true;
+  while (grew) { grew = false; for (const cid of S.containers.keys()) if (!out.has(cid) && out.has(parentOf(cid))) { out.add(cid); grew = true; } }
+  return out;
+}
+// Equipamentos guardados no recipiente e nos filhos (mesmo formato de itemsSorted)
+export function containerItems(id) {
+  const ids = containerDescendants(id);
+  return itemsSorted().filter(it => it.container && ids.has(it.container));
+}
+// Pode colocar o recipiente id dentro de parentId? ('' = raiz). Recusa si mesmo e descendentes.
+export function canMoveContainer(id, parentId) {
+  if (!parentId) return true;
+  if (!S.containers.has(parentId)) return false;
+  return !containerDescendants(id).has(parentId);
+}
+
 export { ITEM_STATUS, CONDITIONS, parseD, dateStr };

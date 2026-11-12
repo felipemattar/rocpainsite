@@ -1,6 +1,6 @@
 // Ações que gravam dados. As telas chamam estas funções, nunca o Firebase direto.
 import { save, merge, remove, newId, idToken } from './firebase.js';
-import { S } from './store.js';
+import { S, can } from './store.js';
 import { conflictsFor, scheduleSig, personName, dayInvites } from './logic.js';
 import { NOTIFY_URL, NOTIFY_REMINDERS } from './config.js';
 import { esc, fmtD, openSheet, closeSheet, toast } from './utils.js';
@@ -81,6 +81,34 @@ export const saveGroup = (id, data) => save('groups/' + id, data);
 export function deleteGroup(id, moveTo) {
   for (const [iid, it] of S.items) if (it.group === id) save('items/' + iid, { ...it, group: moveTo });
   remove('groups/' + id);
+}
+
+// ---------- recipientes (mochilas, cases, caixas) ----------
+// cor só no formato #rrggbb (vai para style= na tela)
+const containerBody = d => ({ name: d.name || '', kind: d.kind || '', parent: d.parent || '', color: /^#[0-9a-f]{6}$/i.test(d.color || '') ? d.color : '', notes: d.notes || '' });
+export function createContainer(data) {
+  const id = newId('containers');
+  save('containers/' + id, containerBody(data));
+  return id;
+}
+export const saveContainer = (id, data) => save('containers/' + id, containerBody(data));
+// Exclui sem apagar equipamento: filhos e itens sobem para o pai do excluído; o id sai dos projetos.
+export function deleteContainer(id) {
+  if (!can('edit')) return;
+  const up = S.containers.get(id)?.parent || '';
+  for (const [cid, c] of S.containers) if (cid !== id && c.parent === id) save('containers/' + cid, { ...c, parent: up === cid ? '' : up });
+  for (const [iid] of S.items) if (S.items.get(iid).container === id) setItemContainer(iid, up);
+  for (const [pid, p] of S.projects) if ((p.containers || []).includes(id)) {
+    const np = clone(p); np.containers = np.containers.filter(x => x !== id);
+    setProject(pid, np);
+  }
+  remove('containers/' + id);
+}
+// Guarda o equipamento no recipiente (vazio = sem recipiente, sem o campo)
+export function setItemContainer(itemId, cid) {
+  const it = S.items.get(itemId); if (!it) return;
+  const body = { ...it }; if (cid) body.container = cid; else delete body.container;
+  save('items/' + itemId, body);
 }
 
 // ---------- equipe (acesso ao app) ----------

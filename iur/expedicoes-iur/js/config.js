@@ -88,6 +88,14 @@ export const CONDITIONS = {
   repair: { t: 'Em manutenção',         c: 'p-bad',  s: 's-bad' },
 };
 
+// Recipientes de armazenamento (aba Armazenamento): tipos, com nome e ícone. O "id" é o que fica salvo no banco.
+export const CONTAINER_KINDS = {
+  mochila: { t: 'Mochila', ic: '🎒' },
+  case:    { t: 'Case',    ic: '🧳' },
+  caixa:   { t: 'Caixa',   ic: '📦' },
+  kit:     { t: 'Kit',     ic: '🧰' },
+};
+
 // Foto do equipamento: lado maior em px e qualidade JPEG (fica gravada no próprio item)
 export const PHOTO_MAX_PX = 360;
 export const PHOTO_QUALITY = 0.72;

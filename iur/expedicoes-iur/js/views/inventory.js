@@ -2,7 +2,7 @@
 import { S, can } from '../store.js';
 import { CONDITIONS, ITEM_STATUS } from '../config.js';
 import { esc, fmtD, ls, openSheet, closeSheet, toast, armButton, qrSVG, photoToDataURL, downloadText, $$ } from '../utils.js';
-import { itemsSorted, groupsSorted, gName, matchesFilter, nextItemId, blocks } from '../logic.js';
+import { itemsSorted, groupsSorted, gName, matchesFilter, nextItemId, blocks, containerTree, containerLabel } from '../logic.js';
 import { saveItem, deleteItem } from '../actions.js';
 import { thumbHTML, itemPills, emptyHTML } from '../components.js';
 import { downloadLabels } from './labels.js';
@@ -38,7 +38,7 @@ export function renderInventory(el) {
     L.innerHTML = [...byG.entries()].map(([g, arr]) => `<div class="gsec"><div class="ghead"><h2>${esc(gName(g))}</h2><small>${arr.length}</small></div>
       <div class="rows">${arr.map(it => `<button class="row" data-item="${esc(it.id)}">${thumbHTML(it)}<span class="id">${esc(it.id)}</span>
         <span class="main"><span class="name">${esc(it.name)}</span>${(it.qty || 1) > 1 ? ` <span class="qty">× ${it.qty}</span>` : ''}
-        ${it.location || it.notes ? `<div class="meta">${[it.location ? '📍 ' + esc(it.location) : '', it.notes ? esc(it.notes) : ''].filter(Boolean).join(' · ')}</div>` : ''}</span>${itemPills(it)}</button>`).join('')}</div></div>`).join('');
+        ${it.location || it.notes || it.container ? `<div class="meta">${[it.location ? '📍 ' + esc(it.location) : '', it.container && S.containers.has(it.container) ? '🎒 ' + esc(containerLabel(it.container)) : '', it.notes ? esc(it.notes) : ''].filter(Boolean).join(' · ')}</div>` : ''}</span>${itemPills(it)}</button>`).join('')}</div></div>`).join('');
   };
   draw();
   el.querySelector('#fchips').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { V.filter = b.dataset.f; draw(); } });
@@ -54,9 +54,9 @@ export function renderInventory(el) {
 // CSV com ";" e BOM UTF-8: o Excel/Planilhas em português abrem direto, com acentos e colunas certas (sem a foto).
 export function exportItems(list) {
   const cell = v => { const s = String(v ?? '').replace(/\r?\n/g, ' '); return /[;"]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
-  const head = ['ID', 'Nome', 'Grupo', 'Quantidade', 'Situação', 'Condição', 'Previsão de retorno', 'Localização', 'Acessórios', 'Observações', 'Projetos'];
+  const head = ['ID', 'Nome', 'Grupo', 'Quantidade', 'Situação', 'Condição', 'Previsão de retorno', 'Localização', 'Acessórios', 'Observações', 'Guardado em', 'Projetos'];
   const rows = list.map(it => [it.id, it.name, gName(it.group), it.qty ?? 1, ITEM_STATUS[it.status]?.t || it.status || '', CONDITIONS[it.condition]?.t || it.condition || '',
-    it.returnDate || '', it.location || '', it.accessories || '', it.notes || '',
+    it.returnDate || '', it.location || '', it.accessories || '', it.notes || '', it.container ? containerLabel(it.container) : '',
     [...S.projects.values()].filter(p => (p.items || []).some(e => e.id === it.id)).map(p => p.name).join(' | ')]);
   const d = new Date(), p2 = n => String(n).padStart(2, '0');
   downloadText(`inventario-IUR-${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}.csv`, '﻿' + [head, ...rows].map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
@@ -73,6 +73,7 @@ export function openItem(id) {
   const ro = E ? '' : 'disabled';
   openSheet(`
     <div class="sheet-h"><div>${isNew ? '<span class="hint">Novo equipamento</span>' : `<span class="id">${esc(id)}</span>`}<h2>${isNew ? 'Cadastrar equipamento' : esc(it.name)}</h2></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    ${!isNew && it.container && S.containers.has(it.container) ? `<div class="hint" id="f-cpath">🎒 ${esc(containerLabel(it.container))}</div>` : ''}
     <form class="form" id="itemForm">
       <div class="photo-box"><span class="photo-big" id="pbig">${it.photo ? `<img src="${esc(it.photo)}" alt="">` : esc((it.group || '?').slice(0, 3))}</span>
         ${E ? `<div style="display:flex;flex-direction:column;gap:6px"><label class="btn sm" style="cursor:pointer"><input type="file" id="photoIn" accept="image/*" hidden>${it.photo ? 'Trocar foto' : 'Adicionar foto'}</label>
@@ -86,6 +87,7 @@ export function openItem(id) {
       <label>Condição<div class="seg" id="segCond">${Object.entries(CONDITIONS).map(([k, v]) => `<button type="button" class="${v.s}" data-v="${k}" aria-pressed="${it.condition === k}" ${ro}>${v.t}</button>`).join('')}</div></label>
       <label id="retWrap" ${it.condition === 'repair' ? '' : 'hidden'}>Previsão de retorno da manutenção<input type="date" id="f-ret" value="${esc(it.returnDate)}" ${ro}></label>
       <div class="two"><label>Localização<input type="text" id="f-loc" value="${esc(it.location)}" ${ro}></label><label>Acessórios<input type="text" id="f-acc" value="${esc(it.accessories)}" ${ro}></label></div>
+      <label>Guardado em<select id="f-container" ${ro}><option value="">Sem recipiente</option>${containerTree().map(({ c, depth }) => `<option value="${esc(c.id)}" ${c.id === it.container ? 'selected' : ''}>${'  '.repeat(depth)}${esc(c.name)}</option>`).join('')}</select></label>
       <label>Pendência / observações<textarea id="f-notes" ${ro}>${esc(it.notes)}</textarea></label>
       ${isNew ? '' : `<div class="section" style="margin-top:4px"><h3>Projetos com este item</h3><div class="uses">${uses.length ? uses.map(([pid, p]) => `<a href="#/projeto/${esc(pid)}/equipamentos" data-close>${esc(p.name)}</a> <span class="hint">${blocks({ id: pid, ...p }).map(b => fmtD(b.start)).join(' · ') || 'sem datas'}</span>`).join('<br>') : '<span class="hint">Nenhum projeto.</span>'}</div></div>
       ${can('qr') ? `<div class="qrbox"><div class="qr">${qrSVG(itemLink(id), 3)}</div><div><b>QR code</b><div class="hint">Escaneie com a câmera do celular para abrir esta ficha.</div><button type="button" class="btn sm" id="qrDl" style="margin-top:6px">Baixar etiqueta</button></div></div>` : ''}`}
@@ -107,6 +109,7 @@ export function openItem(id) {
       const data = { name: sh.querySelector('#f-name').value.trim(), group: sh.querySelector('#f-group').value, qty: Math.max(0, parseInt(sh.querySelector('#f-qty').value) || 0),
         accessories: sh.querySelector('#f-acc').value.trim(), status: st.status, condition: st.condition, returnDate: st.condition === 'repair' ? sh.querySelector('#f-ret').value : '',
         location: sh.querySelector('#f-loc').value.trim(), notes: sh.querySelector('#f-notes').value.trim(), photo: st.photo || '' };
+      const cont = sh.querySelector('#f-container').value; if (cont) data.container = cont;
       if (!data.name) return sh.querySelector('#f-name').focus();
       if (!data.group) return toast('Crie um grupo antes.');
       if (data.condition === 'repair' && !data.returnDate) { sh.querySelector('#f-ret').focus(); return toast('Informe a previsão de retorno.'); }
