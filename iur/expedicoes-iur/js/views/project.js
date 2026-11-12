@@ -3,7 +3,7 @@ import { S, can, canEditProject, canEditEquip } from '../store.js';
 import { esc, fmtD, fmtDM, wday, todayStr, openSheet, closeSheet, toast, armButton, $$ } from '../utils.js';
 import { FUNCTIONS, DEFAULT_TIMES } from '../config.js';
 import { blocks, projectStatus, featuredDay, getDay, conflictsFor, warningsFor, sortPeople, personName, personFuncs, funcLabel,
-  vehiclesOf, projItems, stockOf, groupsSorted, gName, itemsSorted, containerTree, containerItems, allMembers, dayPeople, ackState, ITEM_STATUS, CONDITIONS, timeline } from '../logic.js';
+  vehiclesOf, projItems, stockOf, groupsSorted, gName, itemsSorted, containerTree, containerItems, containerDescendants, containerPath, allMembers, dayPeople, ackState, ITEM_STATUS, CONDITIONS, timeline } from '../logic.js';
 import { projBody, setProject, saveProjectChecked, deleteProject, setAck } from '../actions.js';
 import { dayCardHTML, personLine, thumbHTML, emptyHTML, funcsText } from '../components.js';
 import { openItem } from './inventory.js';
@@ -229,11 +229,18 @@ function pickContainers(pid) {
     sh.querySelector('#clist').innerHTML = !tree.length ? emptyHTML('Nenhum recipiente cadastrado. Crie na aba Armazenamento.') : tree.map(({ c, depth }) => { const n = containerItems(c.id).length, m = missing(c.id).length, bad = problems(c.id);
       return `<div class="pick" style="margin-left:${Math.min(depth, 4) * 14}px"><input type="checkbox" data-pc="${esc(c.id)}" id="pc-${esc(c.id)}"><label class="main" for="pc-${esc(c.id)}"><span class="name">${esc(c.name)}</span> <span class="qty">· ${n} ${n === 1 ? 'item' : 'itens'}${m < n ? `, ${n - m} já na lista` : ''}</span>
         ${bad ? `<div class="meta"><span style="color:var(--bad)">⚠ ${bad} ${bad === 1 ? 'item ocupado/indisponível' : 'itens ocupados/indisponíveis'}</span></div>` : ''}</label></div>`; }).join('');
-    $$('[data-pc]', sh).forEach(c => c.addEventListener('change', () => { c.checked ? sel.add(c.dataset.pc) : sel.delete(c.dataset.pc); sh.querySelector('#ccount').textContent = sel.size ? `${sel.size} selecionado${sel.size > 1 ? 's' : ''}` : 'Nenhum selecionado'; }));
+    // marcar um recipiente marca os de dentro; desmarcar desmarca os de dentro e os de fora (pais)
+    const mark = (id, on) => { const box = sh.querySelector(`[data-pc="${CSS.escape(id)}"]`); if (box) box.checked = on; on ? sel.add(id) : sel.delete(id); };
+    $$('[data-pc]', sh).forEach(c => c.addEventListener('change', () => { const id = c.dataset.pc;
+      containerDescendants(id).forEach(d => mark(d, c.checked));
+      if (!c.checked) containerPath(id).forEach(a => mark(a.id, false));
+      sh.querySelector('#ccount').textContent = sel.size ? `${sel.size} selecionado${sel.size > 1 ? 's' : ''}` : 'Nenhum selecionado'; }));
     sh.querySelector('#cok').addEventListener('click', () => { if (!sel.size) { closeSheet(); return; } const np = projBody(pid);
       const ids = new Set((np.items || []).map(x => x.id)), add = [];
       for (const cid of sel) for (const it of containerItems(cid)) if (!ids.has(it.id) && (it.qty || 0) > 0) { ids.add(it.id); add.push({ id: it.id, qty: it.qty || 1 }); }
-      np.items = [...(np.items || []), ...add]; np.containers = [...new Set([...(np.containers || []), ...sel])];
+      // grava só o topo da seleção: os de dentro já estão nele (evita aviso "Faltam" repetido)
+      const top = [...sel].filter(cid => !containerPath(cid).slice(0, -1).some(a => sel.has(a.id)));
+      np.items = [...(np.items || []), ...add]; np.containers = [...new Set([...(np.containers || []), ...top])];
       closeSheet(); saveProjectChecked(pid, np, `${add.length} equipamento${add.length === 1 ? '' : 's'} adicionado${add.length === 1 ? '' : 's'}`); });
   });
 }

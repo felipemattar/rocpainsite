@@ -1,6 +1,6 @@
 // Armazenamento: mochilas, cases e caixas (recipientes aninhados) e os equipamentos guardados em cada um
 import { S, can } from '../store.js';
-import { esc, openSheet, closeSheet, toast, armButton, $$ } from '../utils.js';
+import { esc, openSheet, closeSheet, toast, armButton, ls, $$ } from '../utils.js';
 import { containerTree, containerItems, containerLabel, canMoveContainer, itemsSorted } from '../logic.js';
 import { createContainer, saveContainer, deleteContainer } from '../actions.js';
 import { CONTAINER_KINDS } from '../config.js';
@@ -18,17 +18,29 @@ export function renderStorage(el) {
   $$('[data-cedit]', el).forEach(b => b.addEventListener('click', () => editContainer(b.dataset.cedit)));
   $$('[data-citem]', el).forEach(b => b.addEventListener('click', () => openItem(b.dataset.citem)));
   el.querySelector('#addContainer')?.addEventListener('click', () => editContainer(null));
+  $$('[data-ctog]', el).forEach(b => b.addEventListener('click', () => { const id = b.dataset.ctog;
+    open.has(id) ? open.delete(id) : open.add(id); ls.set(OPEN_KEY, [...open]); renderStorage(el); }));
 }
+
+// Recipientes com outros dentro começam fechados; os abertos ficam lembrados no aparelho
+const OPEN_KEY = 'iur.storageOpen';
+const open = new Set(ls.get(OPEN_KEY, []));
 
 function treeHTML(E) {
   const tree = containerTree();
   if (!tree.length) return emptyHTML('Nenhum recipiente cadastrado.');
-  const items = itemsSorted();
+  const items = itemsSorted(), kids = new Map();
+  for (const { c, depth } of tree) if (depth) kids.set(c.parent, (kids.get(c.parent) || 0) + 1);
+  let hideBelow = -1; // profundidade do recipiente fechado acima (-1 = nenhum)
   return tree.map(({ c, depth }) => {
-    const k = kindOf(c.kind), n = containerItems(c.id).length, own = items.filter(i => i.container === c.id);
-    return `<div class="card" data-cid="${esc(c.id)}" style="margin:0 0 8px ${Math.min(depth, 4) * 14}px;cursor:default;${c.color ? `border-left:6px solid ${esc(c.color)};` : ''}">
-      <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${k.ic} ${esc(c.name)}</h3><span class="pill p-idle">${n} ${n === 1 ? 'item' : 'itens'}</span></div>
-      <div class="meta">${esc(k.t)}${depth ? ' · em ' + esc(containerLabel(c.parent)) : ''}${c.notes ? ' · ' + esc(c.notes) : ''}</div>
+    if (hideBelow >= 0 && depth <= hideBelow) hideBelow = -1;
+    const hidden = hideBelow >= 0, nk = kids.get(c.id) || 0, shut = nk > 0 && !open.has(c.id);
+    if (shut && !hidden) hideBelow = depth;
+    const k = kindOf(c.kind), n = containerItems(c.id).length, own = shut ? [] : items.filter(i => i.container === c.id);
+    const title = `${nk ? `<span aria-hidden="true">${shut ? '▸' : '▾'}</span> ` : ''}${k.ic} ${esc(c.name)}`;
+    return `<div class="card" data-cid="${esc(c.id)}" ${hidden ? 'hidden ' : ''}style="margin:0 0 8px ${Math.min(depth, 4) * 14}px;cursor:default;${c.color ? `border-left:6px solid ${esc(c.color)};` : ''}">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${nk ? `<button type="button" data-ctog="${esc(c.id)}" aria-expanded="${!shut}" style="all:unset;cursor:pointer">${title}</button>` : title}</h3><span class="pill p-idle">${n} ${n === 1 ? 'item' : 'itens'}</span></div>
+      <div class="meta">${esc(k.t)}${depth ? ' · em ' + esc(containerLabel(c.parent)) : ''}${nk ? ` · ${nk} ${nk === 1 ? 'recipiente' : 'recipientes'} dentro${shut ? ' (toque para abrir)' : ''}` : ''}${c.notes ? ' · ' + esc(c.notes) : ''}</div>
       ${own.length ? `<div class="rows">${own.map(it => `<button class="row static" style="cursor:pointer;grid-template-columns:auto 1fr" data-citem="${esc(it.id)}"><span class="id">${esc(it.id)}</span><span class="main"><span class="name">${esc(it.name)}</span>${(it.qty || 1) > 1 ? ` <span class="qty">× ${it.qty}</span>` : ''}</span></button>`).join('')}</div>` : ''}
       ${E ? `<div><button class="btn sm" data-cedit="${esc(c.id)}">Editar</button></div>` : ''}</div>`;
   }).join('');
